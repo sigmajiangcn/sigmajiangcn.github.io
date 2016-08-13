@@ -1,14 +1,458 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>一数一世界</title>
+    <title>进无止境</title>
     <description>专注数学，机器学习和数据挖掘应用
 </description>
     <link>http://sigmajiangcn.github.io/</link>
     <atom:link href="http://sigmajiangcn.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 13 Aug 2016 20:16:34 +0800</pubDate>
-    <lastBuildDate>Sat, 13 Aug 2016 20:16:34 +0800</lastBuildDate>
+    <pubDate>Sat, 13 Aug 2016 21:58:53 +0800</pubDate>
+    <lastBuildDate>Sat, 13 Aug 2016 21:58:53 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>攻略推荐流程简介</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;业务简介&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;本文目的&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;攻略特征生成&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;数据源准备&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;数据源&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#xml&quot; id=&quot;markdown-toc-xml&quot;&gt;何从xml网页文档提取中文&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;构建词库&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;词性过滤&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;攻略关键词提取&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#tf-idf&quot; id=&quot;markdown-toc-tf-idf&quot;&gt;$TF-IDF$关键词提取原理&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;具体实现&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#tcaplus&quot; id=&quot;markdown-toc-tcaplus&quot;&gt;生成特征并写入Tcaplus&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;用户特征生成&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;用户自然人属性计算&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#dummy&quot; id=&quot;markdown-toc-dummy&quot;&gt;离散Dummy化&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#tcaplus-1&quot; id=&quot;markdown-toc-tcaplus-1&quot;&gt;生成特征并写入Tcaplus&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#storm&quot; id=&quot;markdown-toc-storm&quot;&gt;Storm实时统计与样本拼接&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;日志接入与样本拼接&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#storm-1&quot; id=&quot;markdown-toc-storm-1&quot;&gt;Storm实现方法&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#pb&quot; id=&quot;markdown-toc-pb&quot;&gt;广告pb定义&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;样本拼接&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-13&quot; id=&quot;markdown-toc-section-13&quot;&gt;逻辑回归模型训练&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-14&quot; id=&quot;markdown-toc-section-14&quot;&gt;在线训练&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-15&quot; id=&quot;markdown-toc-section-15&quot;&gt;参数调优&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-16&quot; id=&quot;markdown-toc-section-16&quot;&gt;效果对比&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-17&quot; id=&quot;markdown-toc-section-17&quot;&gt;推荐系统&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#epr&quot; id=&quot;markdown-toc-epr&quot;&gt;EPR页面生成&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-18&quot; id=&quot;markdown-toc-section-18&quot;&gt;监控告警&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-19&quot; id=&quot;markdown-toc-section-19&quot;&gt;待优化点&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-20&quot; id=&quot;markdown-toc-section-20&quot;&gt;致谢&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-21&quot; id=&quot;markdown-toc-section-21&quot;&gt;参考文献&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-22&quot; id=&quot;markdown-toc-section-22&quot;&gt;方案&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-23&quot; id=&quot;markdown-toc-section-23&quot;&gt;资料&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-24&quot; id=&quot;markdown-toc-section-24&quot;&gt;我的示例&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#inline&quot; id=&quot;markdown-toc-inline&quot;&gt;行内inline&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-25&quot; id=&quot;markdown-toc-section-25&quot;&gt;矩阵和向量&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;业务简介&lt;/h2&gt;
+&lt;p&gt;针对掌盟和王者荣耀手机助手等应用，提供个性化的攻略推荐，有助于优化用户体验。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;本文目的&lt;/h2&gt;
+&lt;p&gt;简要介绍攻略推荐处理流程，便于后期业务复用和细节优化&lt;/p&gt;
+
+&lt;p&gt;介绍攻略和用户属性的特征工程化处理&lt;/p&gt;
+
+&lt;p&gt;介绍逻辑回归模型的使用&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;攻略特征生成&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;数据源准备&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-4&quot;&gt;数据源&lt;/h4&gt;
+&lt;p&gt;一般各个业务方面的攻略存储有差异，例如有放在cdb中或者redis中。攻略推荐的原始数据主要需要下面几个字段：攻略Id、中文标题、作者、攻略内容、发布时间、播放次数等其他字段。攻略内容大都以原始的xml形式给出，例如：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;&amp;lt;strong style=&quot;white-space: normal;&quot;&amp;gt;&amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp;——&amp;lt;/strong&amp;gt;解析&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;&amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp;1.线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了！&amp;lt;br/&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;&amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp;2.如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！&amp;lt;/p&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;xml&quot;&gt;何从xml网页文档提取中文&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from bs4 import BeautifulSoup
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这个库可以有效提取xml网页中的中文，在爬虫中比较常用。提取中文之后如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;——解析 1.线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了！    2.如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-5&quot;&gt;构建词库&lt;/h4&gt;
+&lt;p&gt;分别为作者、标题、内容构建词库，为后期的dummy化特征作准备。
+#### 构建英雄字典
+这个在提取标题关键词和攻略文本分词时比较重要，例如在LOL中的英雄盖伦，盖伦是名字，德玛西亚是称号，草丛伦是外号，这个都应被判定为盖伦。
+#### 分词与自定义字典
+&lt;a href=&quot;http://www.oschina.net/p/jieba&quot;&gt;Jieba&lt;/a&gt;分词简单易用，效率高。在利用Jieba分词时，需要预先加载一个自定义分词字典。这个字段主要包括英雄的称号、名字、技能、符文、天赋以及常见的游戏解说名字等。例如如下自定义字典:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;德玛西亚
+盖伦
+草丛伦
+多兰盾
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;在分词之前预加载自定义的字典，则可以保持“草丛伦”不会被分成“草丛”和“伦”。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-6&quot;&gt;词性过滤&lt;/h4&gt;
+&lt;p&gt;分词之后需要对词性进行标注并进行词性过滤。&lt;/p&gt;
+
+&lt;p&gt;词性标注如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import jieba.posseg as pseg
+words =pseg.cut(&quot;线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了!如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！&quot;,HMM=True)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;对于词性过滤一般要求如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;对分词结果，删除停用词、频繁无用词、单字词，只保留以下词性的词语：
+（1）名词类：n（名词），nr（人名），ns（地名），nt（机构团体名），nz（其他专用名），ng（名词性词素）
+（2）动词类：v（动词），vn（名动词），vl（动词性惯用语），vg（动词性语素）
+（3）形容词类：a（形容词），an（名形词），ag（形容词性语素），al（形容词性惯用语）
+（4）英文：eng（英文）
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;最后会剩下以下词语:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;续航 能力 技能 配合 出门 多兰盾 还有 防御 天赋 愈合 知道 德玛西亚 盖伦 恶心
+舍弃 补兵 草丛 经验 草丛伦
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;实践过程中需要注意到unicode、utf8以及gbk等编码之间的转化&lt;/p&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;攻略关键词提取&lt;/h3&gt;
+&lt;p&gt;经过上面的分词和词性过滤，每篇攻略将过滤得到比较重要的词语，接下来需要对几千篇攻略分析，应用$TF-IDF$来提取每篇攻略的关键词。&lt;/p&gt;
+
+&lt;h4 id=&quot;tf-idf&quot;&gt;$TF-IDF$关键词提取原理&lt;/h4&gt;
+&lt;p&gt;$TF-IDF$($Term frequency-inverse document frequency$ ) 是文本挖掘中一种广泛使用的特征向量化方法。&lt;/p&gt;
+
+&lt;p&gt;假设单词用$t$表示，文档用$d$表示，语料用$D$表示，那么文档频度$DF(t, D)$是包含单词$t$的文档数。如果我们只是使用词频度量重要性，就会很容易过分强调重复次数多但携带信息少的单词，例如：“a”, “the”以及“of”。如果某个单词在整个语料库中高频出现，意味着它没有携带专门针对某特殊文档的信息。&lt;/p&gt;
+
+&lt;p&gt;其中词频$TF$指的是某一个给定的词语在该文件中出现的次数。$TF$通常要被归一化（区别于下面的$IDF$，分子小于分母）：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$$ TF(t,d) = \frac{t}{d} $$
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;逆文档频度$IDF$是单词携带信息量的数值度量:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;IDF(t,D) = \log \frac&lt;/script&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;其中$&lt;/td&gt;
+      &lt;td&gt;D&lt;/td&gt;
+      &lt;td&gt;$是语料中的文档总数。由于使用了$log$计算，如果单词在所有文档中出现，那么$IDF$就等于0。注意这里做了平滑处理（+1操作），防止单词没有在语料中出现时IDF计算中除0。$TF-IDF$度量是$TF$和$IDF$的简单相乘：&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D)&lt;/script&gt;
+
+&lt;h4 id=&quot;section-8&quot;&gt;具体实现&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from  sklearn import feature_extraction
+from  sklearn.feature_extraction.text import TfidfTransformer
+from  sklearn.feature_extraction.text import CountVectorizer
+vectorizer=CountVectorizer(min_df=0.005,max_df=0.6)
+transformer=TfidfTransformer()
+tfidf=transformer.fit_transform(vectorizer.fit_transform(Corpus))
+word=vectorizer.get_feature_names()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;经过$TF-IDF$之后，我们会为每一篇攻略内容保留至多10个关键词。关键词在词库索引中查找对应的编号，则每篇攻略就由不超过10个关键词的索引构成，例如某篇攻略关键词提取之后包含“多兰盾  防御  盖伦”，则根据词库可能会被编码成“237 896  145”。具体$TF-IDF$计算时需要注意设置合适的文档频DF阈值。
+### 离散Dummy化
+上面得到每篇攻略的关键词索引可以直接Dummy化。然而每篇攻略上线之后的统计数据，例如点击率、播放次数等特征则需要进行离散Dummy化，具体公式如下：
+&lt;script type=&quot;math/tex&quot;&gt;id=\dfrac{x_i-x_{min}}{x_{max}-x_{min}}*dummyRange&lt;/script&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;tcaplus&quot;&gt;生成特征并写入Tcaplus&lt;/h3&gt;
+&lt;p&gt;为了后面Storm实时拼接样本以及推荐系统生成用户特征提供高速存储。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;TCaplus是互娱研发部结合游戏特点、平衡性能和成本，开发的一款高速分布式Key-Values模型的NoSql存储系统。与之类似的是Redis，这是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;section-9&quot;&gt;用户特征生成&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-10&quot;&gt;用户自然人属性计算&lt;/h3&gt;
+&lt;p&gt;构建用户自然人属性宽表 ，主要包括用户基本信息、登录、活跃、付费、最近常玩英雄以及实力表现等数据。用户自然人属性和攻略属性的差异在于，基本来自结构化的数据处理，不再需要通过分析xml内容去提取关键词特征。&lt;/p&gt;
+
+&lt;h3 id=&quot;dummy&quot;&gt;离散Dummy化&lt;/h3&gt;
+&lt;p&gt;将之前的宽表各个字段根据要求分别进行离散Dummy化。&lt;/p&gt;
+
+&lt;h3 id=&quot;tcaplus-1&quot;&gt;生成特征并写入Tcaplus&lt;/h3&gt;
+&lt;p&gt;类似攻略属性。&lt;/p&gt;
+
+&lt;h2 id=&quot;storm&quot;&gt;Storm实时统计与样本拼接&lt;/h2&gt;
+&lt;p&gt;### 什么是Storm
+ Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和ETL等领域。Storm的部署管理非常简单，而且，在同类的流式计算工具，Storm的性能也是非常出众的。&lt;/p&gt;
+
+&lt;p&gt;Storm主要分为两种组件Nimbus和Supervisor。这两种组件都是快速失败的，没有状态。任务状态和心跳信息等都保存在Zookeeper上的，提交的代码资源都在本地机器的硬盘上。&lt;/p&gt;
+
+&lt;p&gt;Storm的常见关键词简介如下：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Nimbus负责在集群里面发送代码，分配工作给机器，并且监控状态。全局只有一个。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Supervisor会监听分配给它那台机器的工作，根据需要启动/关闭工作进程Worker。每一个要运行Storm的机器上都要部署一个。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Zookeeper是Storm重点依赖的外部资源。Nimbus和Supervisor甚至实际运行的Worker都是把心跳保存在Zookeeper上的。Nimbus也是根据Zookeerper上的心跳和任务运行状况，进行调度和任务分配的。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Storm提交运行的程序称为Topology。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Topology处理的最小的消息单位是一个Tuple，也就是一个任意对象的数组。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Topology由Spout和Bolt构成。Spout是发出Tuple的结点。Bolt可以随意订阅某个Spout或者Bolt发出的Tuple。Spout和Bolt都统称为component。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;section-11&quot;&gt;日志接入与样本拼接&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;./1469452773370.png&quot; alt=&quot;Alt text&quot; /&gt;
+一方面由于客户端上报给我们的日志可能有多种形式，例如Probuf、Json或者Tlog等形式，另一方面由于考虑到后面Storm的处理能力，例如节假日一般数倍于平时的日志量。我们通过几乎透明的中转把数据发送到Tdbank数据银行，它既可以起到后面缓冲消费的作用，并且可以将数据共享给其他合作的业务部门消费，起到了充分利用数据的目的。&lt;/p&gt;
+
+&lt;p&gt;接下来通过Storm来消费Tdbank 的数据，主要有以下几个目的：&lt;/p&gt;
+
+&lt;p&gt;1、PV统计：主要包括曝光总量、点击总量、免费领用总量、购买总量、购买流水&lt;/p&gt;
+
+&lt;p&gt;2、UV统计：主要包括曝光、点击、购买等对用户进行去重的数据&lt;/p&gt;
+
+&lt;p&gt;3、Filter：这个主要是用来在业务上线或者调试时，方便对关注的用户进行过滤，校验数据协议的准确性&lt;/p&gt;
+
+&lt;p&gt;4、Sample：这个是用来拼接模型训练样本，每条样本包括用户特征、广告特征以及交叉特征&lt;/p&gt;
+
+&lt;p&gt;5、Save：对部分数据保存至tdw，方便后续的深入分析&lt;/p&gt;
+
+&lt;p&gt;更加深入的可以参考我的同事文章&lt;a href=&quot;http://km.oa.com/group/25372/articles/show/232795&quot;&gt;《图灵系统介绍（十）- 实时日志处理平台》&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;storm-1&quot;&gt;Storm实现方法&lt;/h4&gt;
+&lt;p&gt;在execute方法中，传入的参数是一个Tuple，该Tuple就包含了上游（Upstream）组件ProduceRecordSpout所emit的数据，直接取出数据进行处理。上面代码中，我们将取出的数据，按照空格进行的split，得到一个一个的单词，然后在emit到下一个组件，声明的输出schema为2个Field：word和count，当然这里面count的值都为1。&lt;/p&gt;
+
+&lt;h4 id=&quot;pb&quot;&gt;广告pb定义&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```java
+package gpm;
+option java_package = &quot;gpm.logprocess.proto&quot;;
+option java_outer_classname = &quot;TrainingProto&quot;;
+
+enum Constants {
+    SPEED_MAX_ITEM_ID = 100000;
+}
+
+enum ValueType {
+    DISCRETE = 0;
+    DUMMY    = 1;
+}
+
+message IDValuePair
+{
+    required int64     id = 1;
+    optional float     value = 2 [ default  = 1.0 ];
+    optional ValueType value_type = 3 [default  =  DUMMY];
+}
+
+message Features
+{
+    repeated IDValuePair features = 1;
+    repeated int64       feature_group_ids = 2; // 有feature值的group id集合
+}
+
+message TrainingSample
+{
+    repeated IDValuePair features  = 1;
+    required float       y_value   = 2;
+    required int32       timestamp = 3;
+    optional int64       id        = 4;
+}
+
+message TrainingResult
+{
+    required float       theta_zero = 1;
+    repeated IDValuePair thetas = 2;
+}
+
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-12&quot;&gt;样本拼接&lt;/h3&gt;
+&lt;p&gt;LR模型比较简单，需要交叉特征提升模型表达能力。
+在前面已经将用户属性和攻略属性分别离散Dummy化存储至KV系统Tcaplus，在拼接样本的bolt中，对来自spout的每条点击流数据判断是曝光还是点击，如果是点击则标记为正样本，否则为负样本。接下来对该条数据的uin去缓存查有无该用户数据，没有则至Tcaplus中去查询用户数据，得到uin的特征之后则查询攻略的特征，也是优先从缓存去查，然后去Tcaplus查询特征，接下来根据高阶交叉规则拼接模型样本。
+大部分情况下，待推荐的有效攻略不过几千，而用户量是远大于攻略数目的，例如掌盟的日均曝光UV可达500万，所以实际情况下，每条点击流数据主要是去Tcaplus去查询用户特征，而攻略特征在bolt运行一段时间之后大部分已经保存在Cache中。&lt;/p&gt;
+
+&lt;p&gt;这里还要注意一点，在机器学习的模型训练中，正负样本的比例控制很重要。点击流中的曝光，也就是负样本远比正样本多，所以对负样本要做一定的筛选，使正负样本比例在一个合理的阈值范围之内，保证模型训练的有效性。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-13&quot;&gt;逻辑回归模型训练&lt;/h2&gt;
+&lt;p&gt;在计算广告中，常使用逻辑回归模型，因为LR模型比较简单，易于大规模并行化。另外需要注意在特征工程中关注有效提取特征，特征的维度如果过高，后续的计算复杂度将会提高，需要考虑正则化。
+### 最大似然法ML
+逻辑回归其实仅为在线性回归的基础上，套用了一个逻辑函数，但也就由于这个逻辑函数，逻辑回归成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。
+\begin{align}
+ &amp;amp; y=f(x)=w^Tx\tag{1} &lt;br /&gt;
+  &amp;amp; y=f(x)=sign(w^Tx)\tag{2} &lt;br /&gt;
+  &amp;amp; y=f(x)=\dfrac{1}{1+\exp(-w^Tx)} \tag{3}
+\end{align}&lt;/p&gt;
+
+&lt;p&gt;假设$x\in R^d$  为$d$维输入向量，$y\in {0,1}$为输出标签，$w\in R^d$是参数。
+ 则有
+\begin{align}
+ &amp;amp; p(y_i=1|x_i,w)=\dfrac{\exp(w^Tx)}{1+\exp(w^Tx)}=P_i\tag{4} &lt;br /&gt;
+  &amp;amp; p(y_i=0|x_i,w)=\dfrac{1}{1+\exp(w^Tx)}=1-P_i \tag{5}
+\end{align}
+ 然后有：
+\begin{align}
+ &amp;amp; w^*=arg \  \underset{w}{max}P(D|w)\tag{16} &lt;br /&gt;
+&amp;amp;\hspace {6mm}  =arg \  \underset{w}{max}\prod_{i=1}^NP_i^{y_i}(1-P_i)^{1-y_i} \tag{6} &lt;br /&gt;
+&amp;amp; \hspace {6mm}  =arg \ \underset{w}{max}\sum_{i=1}^Ny_i\log{P_i}+(1-y_i)\log{(1-P_i)} \tag{7} &lt;br /&gt;
+&amp;amp; \hspace {6mm}  =arg \  \underset{w}{max}\sum_{i=1}^Ny_i\log{\dfrac{P_i}{1-P_i}}+\log{(1-P_i)} \tag{8} &lt;br /&gt;
+&amp;amp; \hspace {6mm}  =arg \  \underset{w}{max}=\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{9}
+\end{align}
+ 据Andrew Ng关于最大似然函数与最小损失函数的关系: 
+\begin{align}
+ &amp;amp;  $J(\theta)=-\dfrac{1}{m}L(\theta) \tag{10}&lt;br /&gt;
+\end{align}
+ 这里取:
+\begin{align}
+ &amp;amp;  J(w)=-L(w)=-\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{11}&lt;br /&gt;
+\end{align}
+ 因此&lt;/p&gt;
+
+&lt;p&gt;\begin{align}
+ &amp;amp; J(w)}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} &lt;br /&gt;
+  &amp;amp;  =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
+\end{align}&lt;/p&gt;
+
+&lt;p&gt;\begin{align}
+ &amp;amp; \dfrac{\partial J(w)}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} &lt;br /&gt;
+  &amp;amp; \hspace {14mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
+\end{align}
+ 因此有参数的迭代如下：
+ \begin{align}
+&amp;amp; w_{j+1}=w_j-\alpha\cdot\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
+\end{align}				
+### 最大后验估计MAP与正则化&lt;/p&gt;
+
+&lt;p&gt;避免过拟合，降低server负担
+ \begin{align}
+ &amp;amp; w^*=arg \  \underset{w}{max}P(w|D) \tag{14} &lt;br /&gt;
+  &amp;amp; \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D)\tag{15} &lt;br /&gt;
+   &amp;amp; \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w)\tag{16} &lt;br /&gt;
+    &amp;amp; \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{17} &lt;br /&gt;
+\end{align}&lt;/p&gt;
+
+&lt;h3 id=&quot;section-14&quot;&gt;在线训练&lt;/h3&gt;
+&lt;p&gt;spark mllib, tmllib&lt;/p&gt;
+
+&lt;h3 id=&quot;section-15&quot;&gt;参数调优&lt;/h3&gt;
+
+&lt;h3 id=&quot;section-16&quot;&gt;效果对比&lt;/h3&gt;
+&lt;p&gt;上面的工作目的都只有一个，把合适的内容推荐给用户，提高点击率。一般我们把请求服务器的用户分成一定比例的对照用户，对比算法的实际效果。典型的例如在算法、强规则、随机包、热销榜之间的点击流对比。&lt;/p&gt;
+
+&lt;p&gt;随机包就是指用户请求我们时，随机推荐攻略给用户；&lt;/p&gt;
+
+&lt;p&gt;强规则在各个业务中有所差异，例如在掌盟中将用户最近对局常失败的英雄对应的攻略推荐给用户；&lt;/p&gt;
+
+&lt;p&gt;热销榜则是根据最近12小时内的攻略点击率排行榜给用户推荐，热销榜具有很强的时效性，另外需要衡量点击率的指标需要略做优化。例如攻略A的曝光量是200，点击量是100，点击率是50%；同时攻略B的曝光量是2000，而点击量是900，点击率是45%，攻略A和B该怎么排序？这个也是需要注意的。
+### 贝叶斯平滑
+预估互联网广告的点击率一个重要的技术手段是logistic regression 模型，这个模型非常依赖特征的设计。每个广告的反馈ctr作为特征能极大地提升预估的准确性，所以每个广告的反馈ctr非常重要。
+目前用得比较多的获取反馈ctr的方式是直接计算每个广告的历史ctr，这样的问题就是当该广告投放量比较少的时候（如新广告），历史ctr与实际ctr相差很大。如一个广告投放了100次，有2次点击，那么ctr就是2%，但是当这个广告投放量到了1000次的时候，点击只有10次，点击率是1%，这里就相差了一倍了。产生这种问题的的原因是投放量太少，数据有偏，所以如果每个广告在开始投放前就有了默认的一个展示数和点击数，即分子分母都加上一个比较大的常数，这样计算起ctr来就不会有那么大的偏差。这种方法叫做ctr平滑，通用的方法是在展示数和点击上面各自加一个常数，缓解低投放量带来的不准确性，使其接近其实际的CTR。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-17&quot;&gt;推荐系统&lt;/h2&gt;
+&lt;p&gt;实时推荐系统方面，我的同事在&lt;a href=&quot;http://km.oa.com/group/25372/articles/show/238608&quot;&gt;《游戏广告推荐服务器原理介绍和实现总结》&lt;/a&gt;中形象的介绍了实现的流程，在与推荐系统对接时，需要添加一些人工规则，例如最近的攻略，或者对模型的参数进行变化，来降低实时推荐系统的计算压力。能离线计算好的部分尽量先行计算，然后异步更新到Cache中，方便后续的计算、排序和推荐。&lt;/p&gt;
+
+&lt;h3 id=&quot;epr&quot;&gt;EPR页面生成&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;./1469454293150.png&quot; alt=&quot;Alt text&quot; /&gt;
+EPR是互娱运营部数据中心推出的一套报表系统，旨在通过在EPR配置端创建报表和配置报表参数，可以将结构化的数据转换成成可视化报表并展现给用户。通过对报表页参数不同的配置，用户可以在浏览器中看到丰富的报表展现形式，如折线图、柱状图、表格等。具体使用方法可以参考&lt;a href=&quot;http://km.oa.com/group/18997/articles/show/220812?kmref=search&amp;amp;from_page=1&amp;amp;no=2&amp;amp;is_from_iso=1&quot;&gt;《使用“TDW+洛子系统+EPR”完成数据展示》&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-18&quot;&gt;监控告警&lt;/h3&gt;
+&lt;p&gt;集群托管&lt;/p&gt;
+
+&lt;p&gt;不仅仅是在攻略推荐，还有各种游戏内的精准营销活动。&lt;/p&gt;
+
+&lt;p&gt;玩家的每一条日志数据对我们都很重要，在后续的拉新、拉活跃、拉付费、拉留存与防流失等各个环节中，玩家的每一个行为都很重要，玩家的每一次点击和付费行为数据都需要可靠保存和分析。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-19&quot;&gt;待优化点&lt;/h2&gt;
+&lt;p&gt;处理流程较长，&lt;/p&gt;
+
+&lt;p&gt;*目前用户属性是洛子调度写入tdw，然后出库至hdfs，配置mapreduce命令行进行离散化和dummy化并生成用户特征，然后批量写入tcaplus。由于用户量通常比较大，计算任务之间的依赖在洛子调度的时延可能会被放大，后面计划将用户属性部分改成spark来计算。&lt;/p&gt;
+
+&lt;p&gt;*针对攻略属性，细节特征。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-20&quot;&gt;致谢&lt;/h2&gt;
+&lt;p&gt;本文提及的攻略推荐工作是在数据挖掘组很多同事大量前期工作和丰富经验的基础上才得以完成。主要是在杜博、caron、sophie和woli等的帮助和指导下，不断发现和解决一个又一个细节问题。总结本文的目的在于梳理工作、找出潜在问题并推广至其他的业务。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-21&quot;&gt;参考文献&lt;/h2&gt;
+&lt;p&gt;[1、&lt;a href=&quot;http://km.oa.com/knowledge/2074&quot;&gt;《图灵系统文集》&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-22&quot;&gt;方案&lt;/h2&gt;
+&lt;p&gt;使用TeX(LaTeX)编写公式，使用MathJax在线实时渲染公式。网上可以找到很多TeX资料，在学术界已经流行了几十年，所以可以很方便上手，下面给出了一些TeX资料。MathJax是一个在线的公式渲染引擎，集成非常方便，只需要在header中加入一段js代码即可，免费（如果用的好，可以捐点），由MIT和美国数学委员会资助，技术和维护应该不成问题。所以选取这套方案。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-23&quot;&gt;资料&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://web.ift.uib.no/Teori/KURS/WRK/TeX/symALL.html&quot;&gt;LaTeX Math Symbols&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference&quot;&gt;TeX快速常用示例&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://tex.stackexchange.com/&quot;&gt;TeX问答&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.mathjax.org/en/v2.6-latest/start.html#putting-mathematics-in-a-web-page&quot;&gt;MathJax官方使用文档&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-24&quot;&gt;我的示例&lt;/h2&gt;
+
+&lt;h3 id=&quot;inline&quot;&gt;行内inline&lt;/h3&gt;
+
+&lt;p&gt;When $a \ne 0$, there are two solutions to $(ax^2 + bx + c = 0)$ and they are
+&lt;script type=&quot;math/tex&quot;&gt;x = {-b \pm \sqrt{b^2-4ac} \over 2a}.&lt;/script&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-25&quot;&gt;矩阵和向量&lt;/h3&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{bmatrix}
+a &amp; b \\ c &amp; d
+\end{bmatrix}
+\vec{x} = \vec{b} %]]&gt;&lt;/script&gt;
+</description>
+        <pubDate>Fri, 05 Aug 2016 11:31:28 +0800</pubDate>
+        <link>http://sigmajiangcn.github.io/adrecommend/2016/08/05/adrecommend-gamesadrecommend.html</link>
+        <guid isPermaLink="true">http://sigmajiangcn.github.io/adrecommend/2016/08/05/adrecommend-gamesadrecommend.html</guid>
+        
+        
+        <category>adRecommend</category>
+        
+      </item>
     
       <item>
         <title>LaTeX和MathJax在博客中集成数学公式</title>
