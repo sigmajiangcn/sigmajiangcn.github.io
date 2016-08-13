@@ -23,62 +23,63 @@ categories: [LaTeX]
 #### 数据源
 一般各个业务方面的攻略存储有差异，例如有放在cdb中或者redis中。攻略推荐的原始数据主要需要下面几个字段：攻略Id、中文标题、作者、攻略内容、发布时间、播放次数等其他字段。攻略内容大都以原始的xml形式给出，例如：
 
-	p><strong><strong style="white-space: normal;">&nbsp; &nbsp; &nbsp; &nbsp;——</strong>解析</strong></p><p>&nbsp; &nbsp; &nbsp; &nbsp;1.线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了！<br/></p><p>&nbsp; &nbsp; &nbsp; &nbsp;2.如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！</p>
+	<p><strong><strong style="white-space: normal;">&nbsp; &nbsp; &nbsp; &nbsp;——</strong>解析</strong></p><p>&nbsp; &nbsp; &nbsp; &nbsp;1.线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了！<br/></p><p>&nbsp; &nbsp; &nbsp; &nbsp;2.如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！</p>
 
 #### 何从xml网页文档提取中文
-```python
-from bs4 import BeautifulSoup
-```
+	from bs4 import BeautifulSoup
+
 这个库可以有效提取xml网页中的中文，在爬虫中比较常用。提取中文之后如下：
-```text
-——解析 1.线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了！    2.如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！
-```
-####构建词库
+
+	——解析 1.线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了！    2.如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！
+
+#### 构建词库
 分别为作者、标题、内容构建词库，为后期的dummy化特征作准备。
-####构建英雄字典
+#### 构建英雄字典
 这个在提取标题关键词和攻略文本分词时比较重要，例如在LOL中的英雄盖伦，盖伦是名字，德玛西亚是称号，草丛伦是外号，这个都应被判定为盖伦。
-####分词与自定义字典
+#### 分词与自定义字典
 [Jieba](http://www.oschina.net/p/jieba)分词简单易用，效率高。在利用Jieba分词时，需要预先加载一个自定义分词字典。这个字段主要包括英雄的称号、名字、技能、符文、天赋以及常见的游戏解说名字等。例如如下自定义字典:
-```text
-德玛西亚
-盖伦
-草丛伦
-多兰盾
-```
+
+	德玛西亚
+	盖伦
+	草丛伦
+	多兰盾
+
 在分词之前预加载自定义的字典，则可以保持“草丛伦”不会被分成“草丛”和“伦”。
 
-####词性过滤
+#### 词性过滤
 分词之后需要对词性进行标注并进行词性过滤。
+
 词性标注如下：
-```python
-import jieba.posseg as pseg
-words =pseg.cut("线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了!如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！",HMM=True)
-```
+
+	import jieba.posseg as pseg
+	words =pseg.cut("线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了!如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！",HMM=True)
+
 对于词性过滤一般要求如下：
-```python
-对分词结果，删除停用词、频繁无用词、单字词，只保留以下词性的词语：
-（1）名词类：n（名词），nr（人名），ns（地名），nt（机构团体名），nz（其他专用名），ng（名词性词素）
-（2）动词类：v（动词），vn（名动词），vl（动词性惯用语），vg（动词性语素）
-（3）形容词类：a（形容词），an（名形词），ag（形容词性语素），al（形容词性惯用语）
-（4）英文：eng（英文）
-```
+
+	对分词结果，删除停用词、频繁无用词、单字词，只保留以下词性的词语：
+	（1）名词类：n（名词），nr（人名），ns（地名），nt（机构团体名），nz（其他专用名），ng（名词性词素）
+	（2）动词类：v（动词），vn（名动词），vl（动词性惯用语），vg（动词性语素）
+	（3）形容词类：a（形容词），an（名形词），ag（形容词性语素），al（形容词性惯用语）
+	（4）英文：eng（英文）
+
 最后会剩下以下词语:
-```text
-续航 能力 技能 配合 出门 多兰盾 还有 防御 天赋 愈合 知道 德玛西亚 盖伦 恶心
-舍弃 补兵 草丛 经验 草丛伦
-```
+
+	续航 能力 技能 配合 出门 多兰盾 还有 防御 天赋 愈合 知道 德玛西亚 盖伦 恶心
+	舍弃 补兵 草丛 经验 草丛伦
+
 实践过程中需要注意到unicode、utf8以及gbk等编码之间的转化
 
 ###  攻略关键词提取
 经过上面的分词和词性过滤，每篇攻略将过滤得到比较重要的词语，接下来需要对几千篇攻略分析，应用$TF-IDF$来提取每篇攻略的关键词。
-####$TF-IDF$关键词提取原理
+
+#### $TF-IDF$关键词提取原理
 $TF-IDF$($Term frequency-inverse document frequency$ ) 是文本挖掘中一种广泛使用的特征向量化方法。
 
 假设单词用$t$表示，文档用$d$表示，语料用$D$表示，那么文档频度$DF(t, D)$是包含单词$t$的文档数。如果我们只是使用词频度量重要性，就会很容易过分强调重复次数多但携带信息少的单词，例如：“a”, “the”以及“of”。如果某个单词在整个语料库中高频出现，意味着它没有携带专门针对某特殊文档的信息。
 
 其中词频$TF$指的是某一个给定的词语在该文件中出现的次数。$TF$通常要被归一化（区别于下面的$IDF$，分子小于分母）：
 
-$$TF(t,d) = \frac{t}{d}$$
+	$$TF(t,d) = \frac{t}{d}$$
 
 逆文档频度$IDF$是单词携带信息量的数值度量:
 
@@ -89,15 +90,15 @@ $$IDF(t,D) = \log \frac{{|D| + 1}}{{DF(t,D) + 1}}$$
 $$TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D)$$
 
 ####具体实现
-```python
-from  sklearn import feature_extraction
-from  sklearn.feature_extraction.text import TfidfTransformer
-from  sklearn.feature_extraction.text import CountVectorizer
-vectorizer=CountVectorizer(min_df=0.005,max_df=0.6)
-transformer=TfidfTransformer()
-tfidf=transformer.fit_transform(vectorizer.fit_transform(Corpus))
-word=vectorizer.get_feature_names()
-```
+
+	from  sklearn import feature_extraction
+	from  sklearn.feature_extraction.text import TfidfTransformer
+	from  sklearn.feature_extraction.text import CountVectorizer
+	vectorizer=CountVectorizer(min_df=0.005,max_df=0.6)
+	transformer=TfidfTransformer()
+	tfidf=transformer.fit_transform(vectorizer.fit_transform(Corpus))
+	word=vectorizer.get_feature_names()
+
 经过$TF-IDF$之后，我们会为每一篇攻略内容保留至多10个关键词。关键词在词库索引中查找对应的编号，则每篇攻略就由不超过10个关键词的索引构成，例如某篇攻略关键词提取之后包含“多兰盾  防御  盖伦”，则根据词库可能会被编码成“237 896  145”。具体$TF-IDF$计算时需要注意设置合适的文档频DF阈值。
 ### 离散Dummy化
 上面得到每篇攻略的关键词索引可以直接Dummy化。然而每篇攻略上线之后的统计数据，例如点击率、播放次数等特征则需要进行离散Dummy化，具体公式如下：
