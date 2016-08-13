@@ -87,9 +87,11 @@ $$IDF(t,D) = \log \frac{{|D| + 1}}{{DF(t,D) + 1}}$$
 
 其中$|D|$是语料中的文档总数。由于使用了$log$计算，如果单词在所有文档中出现，那么$IDF$就等于0。注意这里做了平滑处理（+1操作），防止单词没有在语料中出现时IDF计算中除0。$TF-IDF$度量是$TF$和$IDF$的简单相乘：
 
-$$TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D)$$
+$$
+TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D)
+$$
 
-####具体实现
+#### 具体实现
 
 	from  sklearn import feature_extraction
 	from  sklearn.feature_extraction.text import TfidfTransformer
@@ -122,7 +124,7 @@ $$id=\dfrac{x_i-x_{min}}{x_{max}-x_{min}}*dummyRange$$
 
 
 ## Storm实时统计与样本拼接
-###什么是Storm
+### 什么是Storm
  Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和ETL等领域。Storm的部署管理非常简单，而且，在同类的流式计算工具，Storm的性能也是非常出众的。
  
 Storm主要分为两种组件Nimbus和Supervisor。这两种组件都是快速失败的，没有状态。任务状态和心跳信息等都保存在Zookeeper上的，提交的代码资源都在本地机器的硬盘上。
@@ -130,111 +132,123 @@ Storm主要分为两种组件Nimbus和Supervisor。这两种组件都是快速�
 Storm的常见关键词简介如下：
 	
 >Nimbus负责在集群里面发送代码，分配工作给机器，并且监控状态。全局只有一个。
+
 >Supervisor会监听分配给它那台机器的工作，根据需要启动/关闭工作进程Worker。每一个要运行Storm的机器上都要部署一个。
+
 >Zookeeper是Storm重点依赖的外部资源。Nimbus和Supervisor甚至实际运行的Worker都是把心跳保存在Zookeeper上的。Nimbus也是根据Zookeerper上的心跳和任务运行状况，进行调度和任务分配的。
+
 >Storm提交运行的程序称为Topology。
+
 >Topology处理的最小的消息单位是一个Tuple，也就是一个任意对象的数组。
+
 >Topology由Spout和Bolt构成。Spout是发出Tuple的结点。Bolt可以随意订阅某个Spout或者Bolt发出的Tuple。Spout和Bolt都统称为component。
 
-###日志接入与样本拼接
+### 日志接入与样本拼接
 ![Alt text](./1469452773370.png)
 一方面由于客户端上报给我们的日志可能有多种形式，例如Probuf、Json或者Tlog等形式，另一方面由于考虑到后面Storm的处理能力，例如节假日一般数倍于平时的日志量。我们通过几乎透明的中转把数据发送到Tdbank数据银行，它既可以起到后面缓冲消费的作用，并且可以将数据共享给其他合作的业务部门消费，起到了充分利用数据的目的。
+
 接下来通过Storm来消费Tdbank 的数据，主要有以下几个目的：
+
 1、PV统计：主要包括曝光总量、点击总量、免费领用总量、购买总量、购买流水
+
 2、UV统计：主要包括曝光、点击、购买等对用户进行去重的数据
+
 3、Filter：这个主要是用来在业务上线或者调试时，方便对关注的用户进行过滤，校验数据协议的准确性
+
 4、Sample：这个是用来拼接模型训练样本，每条样本包括用户特征、广告特征以及交叉特征
+
 5、Save：对部分数据保存至tdw，方便后续的深入分析
+
 更加深入的可以参考我的同事文章[《图灵系统介绍（十）- 实时日志处理平台》](http://km.oa.com/group/25372/articles/show/232795)
 
-####Storm实现方法
+#### Storm实现方法
 在execute方法中，传入的参数是一个Tuple，该Tuple就包含了上游（Upstream）组件ProduceRecordSpout所emit的数据，直接取出数据进行处理。上面代码中，我们将取出的数据，按照空格进行的split，得到一个一个的单词，然后在emit到下一个组件，声明的输出schema为2个Field：word和count，当然这里面count的值都为1。
-```java
-public static class WordSplitterBolt extends BaseRichBolt {
-     private static final long serialVersionUID = 1L;
-     private static final Log LOG = LogFactory.getLog(WordSplitterBolt.class);
-     private OutputCollector collector;
-    
-     @Override
-     public void prepare(Map stormConf, TopologyContext context,
-               OutputCollector collector) {
-          this.collector = collector;              
-     }
 
-     @Override
-     public void execute(Tuple input) {
-          String record = input.getString(0);
-          if(record != null && !record.trim().isEmpty()) {
-               for(String word : record.split("\\s+")) {
-                    collector.emit(input, new Values(word, 1));
-                    LOG.info("Emitted: word=" + word);
-                    collector.ack(input);
-               }
-          }
-     }
+	public static class WordSplitterBolt extends BaseRichBolt {
+	     private static final long serialVersionUID = 1L;
+	     private static final Log LOG = LogFactory.getLog(WordSplitterBolt.class);
+	     private OutputCollector collector;
+	    
+	     @Override
+	     public void prepare(Map stormConf, TopologyContext context,
+	               OutputCollector collector) {
+	          this.collector = collector;              
+	     }
+	
+	     @Override
+	     public void execute(Tuple input) {
+	          String record = input.getString(0);
+	          if(record != null && !record.trim().isEmpty()) {
+	               for(String word : record.split("\\s+")) {
+	                    collector.emit(input, new Values(word, 1));
+	                    LOG.info("Emitted: word=" + word);
+	                    collector.ack(input);
+	               }
+	          }
+	     }
+	
+	     @Override
+	     public void declareOutputFields(OutputFieldsDeclarer declarer) {
+	          declarer.declare(new Fields("word", "count"));         
+	     }
+	    
+	}
 
-     @Override
-     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-          declarer.declare(new Fields("word", "count"));         
-     }
-    
-}
-```
-####广告pb定义
+#### 广告pb定义
 
-```java
-package gpm;
-option java_package = "gpm.logprocess.proto";
-option java_outer_classname = "TrainingProto";
+	```java
+	package gpm;
+	option java_package = "gpm.logprocess.proto";
+	option java_outer_classname = "TrainingProto";
+	
+	enum Constants {
+	    SPEED_MAX_ITEM_ID = 100000;
+	}
+	
+	enum ValueType {
+	    DISCRETE = 0;
+	    DUMMY    = 1;
+	}
+	
+	message IDValuePair
+	{
+	    required int64     id = 1;
+	    optional float     value = 2 [ default  = 1.0 ];
+	    optional ValueType value_type = 3 [default  =  DUMMY];
+	}
+	
+	message Features
+	{
+	    repeated IDValuePair features = 1;
+	    repeated int64       feature_group_ids = 2; // 有feature值的group id集合
+	}
+	
+	message TrainingSample
+	{
+	    repeated IDValuePair features  = 1;
+	    required float       y_value   = 2;
+	    required int32       timestamp = 3;
+	    optional int64       id        = 4;
+	}
+	
+	message TrainingResult
+	{
+	    required float       theta_zero = 1;
+	    repeated IDValuePair thetas = 2;
+	}
+	
+	```
 
-enum Constants {
-    SPEED_MAX_ITEM_ID = 100000;
-}
-
-enum ValueType {
-    DISCRETE = 0;
-    DUMMY    = 1;
-}
-
-message IDValuePair
-{
-    required int64     id = 1;
-    optional float     value = 2 [ default  = 1.0 ];
-    optional ValueType value_type = 3 [default  =  DUMMY];
-}
-
-message Features
-{
-    repeated IDValuePair features = 1;
-    repeated int64       feature_group_ids = 2; // 有feature值的group id集合
-}
-
-message TrainingSample
-{
-    repeated IDValuePair features  = 1;
-    required float       y_value   = 2;
-    required int32       timestamp = 3;
-    optional int64       id        = 4;
-}
-
-message TrainingResult
-{
-    required float       theta_zero = 1;
-    repeated IDValuePair thetas = 2;
-}
-
-```
-
-###样本拼接
+### 样本拼接
 LR模型比较简单，需要交叉特征提升模型表达能力。
 在前面已经将用户属性和攻略属性分别离散Dummy化存储至KV系统Tcaplus，在拼接样本的bolt中，对来自spout的每条点击流数据判断是曝光还是点击，如果是点击则标记为正样本，否则为负样本。接下来对该条数据的uin去缓存查有无该用户数据，没有则至Tcaplus中去查询用户数据，得到uin的特征之后则查询攻略的特征，也是优先从缓存去查，然后去Tcaplus查询特征，接下来根据高阶交叉规则拼接模型样本。
 大部分情况下，待推荐的有效攻略不过几千，而用户量是远大于攻略数目的，例如掌盟的日均曝光UV可达500万，所以实际情况下，每条点击流数据主要是去Tcaplus去查询用户特征，而攻略特征在bolt运行一段时间之后大部分已经保存在Cache中。
 这里还要注意一点，在机器学习的模型训练中，正负样本的比例控制很重要。点击流中的曝光，也就是负样本远比正样本多，所以对负样本要做一定的筛选，使正负样本比例在一个合理的阈值范围之内，保证模型训练的有效性。
 
 
-##逻辑回归模型训练
+## 逻辑回归模型训练
 在计算广告中，常使用逻辑回归模型，因为LR模型比较简单，易于大规模并行化。另外需要注意在特征工程中关注有效提取特征，特征的维度如果过高，后续的计算复杂度将会提高，需要考虑正则化。
-###最大似然法ML
+### 最大似然法ML
 逻辑回归其实仅为在线性回归的基础上，套用了一个逻辑函数，但也就由于这个逻辑函数，逻辑回归成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。
 \begin{align}
  & y=f(x)=w^Tx\tag{1} \\
@@ -286,43 +300,47 @@ LR模型比较简单，需要交叉特征提升模型表达能力。
 
 
 
-###在线训练
+### 在线训练
 spark mllib, tmllib
 
 
 ### 参数调优
 
-###效果对比
+### 效果对比
 上面的工作目的都只有一个，把合适的内容推荐给用户，提高点击率。一般我们把请求服务器的用户分成一定比例的对照用户，对比算法的实际效果。典型的例如在算法、强规则、随机包、热销榜之间的点击流对比。
 随机包就是指用户请求我们时，随机推荐攻略给用户；
 强规则在各个业务中有所差异，例如在掌盟中将用户最近对局常失败的英雄对应的攻略推荐给用户；
 热销榜则是根据最近12小时内的攻略点击率排行榜给用户推荐，热销榜具有很强的时效性，另外需要衡量点击率的指标需要略做优化。例如攻略A的曝光量是200，点击量是100，点击率是50%；同时攻略B的曝光量是2000，而点击量是900，点击率是45%，攻略A和B该怎么排序？这个也是需要注意的。
-###贝叶斯平滑
+### 贝叶斯平滑
 预估互联网广告的点击率一个重要的技术手段是logistic regression模型，这个模型非常依赖特征的设计。每个广告的反馈ctr作为特征能极大地提升预估的准确性，所以每个广告的反馈ctr非常重要。
 目前用得比较多的获取反馈ctr的方式是直接计算每个广告的历史ctr，这样的问题就是当该广告投放量比较少的时候（如新广告），历史ctr与实际ctr相差很大。如一个广告投放了100次，有2次点击，那么ctr就是2%，但是当这个广告投放量到了1000次的时候，点击只有10次，点击率是1%，这里就相差了一倍了。产生这种问题的的原因是投放量太少，数据有偏，所以如果每个广告在开始投放前就有了默认的一个展示数和点击数，即分子分母都加上一个比较大的常数，这样计算起ctr来就不会有那么大的偏差。这种方法叫做ctr平滑，通用的方法是在展示数和点击上面各自加一个常数，缓解低投放量带来的不准确性，使其接近其实际的CTR。
 
 
-##推荐系统
+## 推荐系统
 实时推荐系统方面，我的同事在[《游戏广告推荐服务器原理介绍和实现总结》](http://km.oa.com/group/25372/articles/show/238608)中形象的介绍了实现的流程，在与推荐系统对接时，需要添加一些人工规则，例如最近的攻略，或者对模型的参数进行变化，来降低实时推荐系统的计算压力。能离线计算好的部分尽量先行计算，然后异步更新到Cache中，方便后续的计算、排序和推荐。
 
-###EPR页面生成
+### EPR页面生成
 ![Alt text](./1469454293150.png)
 EPR是互娱运营部数据中心推出的一套报表系统，旨在通过在EPR配置端创建报表和配置报表参数，可以将结构化的数据转换成成可视化报表并展现给用户。通过对报表页参数不同的配置，用户可以在浏览器中看到丰富的报表展现形式，如折线图、柱状图、表格等。具体使用方法可以参考[《使用“TDW+洛子系统+EPR”完成数据展示》](http://km.oa.com/group/18997/articles/show/220812?kmref=search&from_page=1&no=2&is_from_iso=1)
 
-###监控告警
+### 监控告警
 集群托管
+
 不仅仅是在攻略推荐，还有各种游戏内的精准营销活动。
+
 玩家的每一条日志数据对我们都很重要，在后续的拉新、拉活跃、拉付费、拉留存与防流失等各个环节中，玩家的每一个行为都很重要，玩家的每一次点击和付费行为数据都需要可靠保存和分析。
 
-##待优化点
+## 待优化点
 处理流程较长，
+
 >目前用户属性是洛子调度写入tdw，然后出库至hdfs，配置mapreduce命令行进行离散化和dummy化并生成用户特征，然后批量写入tcaplus。由于用户量通常比较大，计算任务之间的依赖在洛子调度的时延可能会被放大，后面计划将用户属性部分改成spark来计算。
+
 >针对攻略属性，细节特征。
 
-##致谢
+## 致谢
 本文提及的攻略推荐工作是在数据挖掘组很多同事大量前期工作和丰富经验的基础上才得以完成。主要是在杜博、caron、sophie和woli等的帮助和指导下，不断发现和解决一个又一个细节问题。总结本文的目的在于梳理工作、找出潜在问题并推广至其他的业务。
 
-##参考文献
+## 参考文献
 [1、[《图灵系统文集》](http://km.oa.com/knowledge/2074)
 
 
