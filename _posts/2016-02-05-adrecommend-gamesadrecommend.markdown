@@ -22,10 +22,10 @@ categories: [LaTeX]
 
 #### 数据源
 一般各个业务方面的攻略存储有差异，例如有放在cdb中或者redis中。攻略推荐的原始数据主要需要下面几个字段：攻略Id、中文标题、作者、攻略内容、发布时间、播放次数等其他字段。攻略内容大都以原始的xml形式给出，例如：
-```xml
-<p><strong><strong style="white-space: normal;">&nbsp; &nbsp; &nbsp; &nbsp;——</strong>解析</strong></p><p>&nbsp; &nbsp; &nbsp; &nbsp;1.线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了！<br/></p><p>&nbsp; &nbsp; &nbsp; &nbsp;2.如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！</p>
-```
-####如何从xml网页文档提取中文
+
+	p><strong><strong style="white-space: normal;">&nbsp; &nbsp; &nbsp; &nbsp;——</strong>解析</strong></p><p>&nbsp; &nbsp; &nbsp; &nbsp;1.线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了！<br/></p><p>&nbsp; &nbsp; &nbsp; &nbsp;2.如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！</p>
+
+#### 何从xml网页文档提取中文
 ```python
 from bs4 import BeautifulSoup
 ```
