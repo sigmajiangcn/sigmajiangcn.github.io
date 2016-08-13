@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="ujianVerification" content="a37043dadd6e026d008e42f92eb1f47e" />
+  <title>PCA实验记要</title>
+  <meta name="description" content="PCA主要用于简化数据，去掉冗余部分（线性相关）。前提条件是数据中没有太多异类数据，否则会严重影响效果，因为异类数据会导致不相关的变量相关系数变高。使用之前，一般会剔除或限制异类数据。并且，原始数据中，需要有线性相关的部分，如果每个变量都是线性无关的，那么PCA基本上也没有什么作用。PCA简化后，可以用于数据可视...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://bourneli.github.io/pca/statistic/mva/r/2016/03/27/pca-experiments.html">
+  <link rel="alternate" type="application/rss+xml" title="一数一世界" href="http://bourneli.github.io/feed.xml">
+  
+  <!--MathJax数学公式-->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">一数一世界</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+        
+          
+          <a class="page-link" href="/category/">分类</a>
+          
+        
+          
+          <a class="page-link" href="/about/">关于</a>
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">PCA实验记要</h1>
+    <p class="post-meta"><time datetime="2016-03-27T00:00:00+08:00" itemprop="datePublished">Mar 27, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>PCA主要用于简化数据，去掉冗余部分（线性相关）。前提条件是数据中没有太多<strong>异类数据</strong>，否则会严重影响效果，因为异类数据会导致不相关的变量相关系数变高。使用之前，一般会剔除或限制异类数据。并且，原始数据中，需要有线性相关的部分，如果每个变量都是线性无关的，那么PCA基本上也没有什么作用。PCA简化后，可以用于数据可视化，方便数据解读。下面的试验，演示PCA的一些特性，便于理解，后面的试验全部基于R语言。</p>
+
+<h2 id="section">原始数据</h2>
+<p>随机生成1000个记录，每个记录有三个变量，都是基于正太分布随机生成，它们线性独立</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">## 原始数据
+</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1000</span><span class="w">
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">4546576</span><span class="p">)</span><span class="w">
+</span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="w"> 
+                   </span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">12</span><span class="p">,</span><span class="n">sd</span><span class="o">=</span><span class="m">5</span><span class="p">),</span><span class="w"> 
+                   </span><span class="n">x</span><span class="m">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="o">*</span><span class="n">rnorm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">-1</span><span class="p">,</span><span class="n">sd</span><span class="o">=</span><span class="m">3.5</span><span class="p">))</span><span class="w">
+</span><span class="n">cor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w">
+</span><span class="n">pairs</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">)</span></code></pre></figure>
+
+<p>生成的散点图中，可以发现都是水平的椭圆，并且关联系数基本为0，说明变量之间是线性无关的。这三个变量也是数据的“主成份”。相关系数如下：</p>
+
+<figure class="highlight"><pre><code class="language-raw" data-lang="raw">       x1      x2     x3
+x1 1.0000  0.0027  0.015
+x2 0.0027  1.0000 -0.028
+x3 0.0148 -0.0283  1.000</code></pre></figure>
+
+<h2 id="section-1">衍生数据</h2>
+<p>衍生数据基于主成份的线性组合，然后添加一些随机误差，避免完全的线性组合。可以发现，无论如何添加线性组合，只要进行适当处理，最后出来的结果都是前三个主成份可以表达99%+。</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">## 原始数据
+</span><span class="n">derive_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cbind</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w">
+                     </span><span class="n">x</span><span class="m">4</span><span class="o">=</span><span class="m">10</span><span class="o">*</span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="p">),</span><span class="w"> 
+                     </span><span class="n">x</span><span class="m">5</span><span class="o">=</span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2+0.6</span><span class="o">*</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">6</span><span class="o">=</span><span class="m">12</span><span class="o">*</span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="o">+</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">7</span><span class="o">=</span><span class="m">16</span><span class="o">*</span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">8</span><span class="o">=</span><span class="m">7</span><span class="o">*</span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="p">))</span><span class="w">
+</span><span class="n">cor</span><span class="p">(</span><span class="n">derive_data</span><span class="p">)</span></code></pre></figure>
+
+<p>相关系数上可以看到一定的关系，</p>
+
+<figure class="highlight"><pre><code class="language-raw" data-lang="raw">        x1      x2     x3     x4    x5     x6     x7     x8
+x1 1.0000  0.0027  0.015 1.0000 0.014  0.202 1.0000 1.0000
+x2 0.0027  1.0000 -0.028 0.0027 0.600  0.980 0.0027 0.0027
+x3 0.0148 -0.0283  1.000 0.0148 0.783 -0.025 0.0148 0.0148
+x4 1.0000  0.0027  0.015 1.0000 0.014  0.202 1.0000 1.0000
+x5 0.0136  0.5997  0.783 0.0136 1.000  0.590 0.0136 0.0136
+x6 0.2017  0.9800 -0.025 0.2017 0.590  1.000 0.2017 0.2017
+x7 1.0000  0.0027  0.015 1.0000 0.014  0.202 1.0000 1.0000
+x8 1.0000  0.0027  0.015 1.0000 0.014  0.202 1.0000 1.0000</code></pre></figure>
+
+<h2 id="pca">实验1：直接PCA</h2>
+<p>PCA计算方法是将协方差矩阵对角化，原理是找到一个线性转换矩阵，将原始数据转换到一个新的线性空间，使得其方差最大。因为方差越大，信息越大。但是由于异类数据也会生成非常大的方差，所以一般需要剔除掉异类数据（比如异类值全部设置为最大/小限制）。</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">m</span><span class="m">1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">derive_data</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">m</span><span class="m">1</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">m</span><span class="m">1</span><span class="p">)</span></code></pre></figure>
+
+<p>根据图像，可以发现主成份是前三个。PCA模型信息如下：</p>
+
+<figure class="highlight"><pre><code class="language-raw" data-lang="raw">&gt; summary(m1)
+Importance of components:
+                       Comp.1 Comp.2 Comp.3  Comp.4  Comp.5  Comp.6  Comp.7  Comp.8
+Standard deviation      60.17 19.534 12.156 1.7e-03 1.4e-03 9.2e-04 6.7e-04 6.7e-05
+Proportion of Variance   0.87  0.092  0.036 6.7e-10 4.7e-10 2.0e-10 1.1e-10 1.1e-12
+Cumulative Proportion    0.87  0.964  1.000 1.0e+00 1.0e+00 1.0e+00 1.0e+00 1.0e+00</code></pre></figure>
+
+<h2 id="pca-1">试验2：先将变量均值变化为0，然后PCA</h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">data_zero_mean</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">scale</span><span class="p">(</span><span class="n">derive_data</span><span class="p">,</span><span class="w"> 
+                                      </span><span class="n">center</span><span class="o">=</span><span class="nb">T</span><span class="p">,</span><span class="w">
+                                      </span><span class="n">scale</span><span class="o">=</span><span class="nb">F</span><span class="p">))</span><span class="w">
+</span><span class="n">model_zero_mean</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">data_zero_mean</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">model_zero_mean</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">model_zero_mean</span><span class="p">)</span></code></pre></figure>
+
+<p>根据之前的<a href="linear-algebra/statistic/mva/2016/03/20/covariance-linear-algebra-expression.html">协方差矩阵推导</a>，发现协方差矩阵其实是使用等幂矩阵将数据矩阵X转换到一个均值为0的空间中，然后相乘得到。所以，我们的原始数据在PCA之前处理均值为0，得到的结果和直接使用PCA一致。PCA模型信息如下：</p>
+
+<figure class="highlight"><pre><code class="language-raw" data-lang="raw">&gt; summary(model_zero_mean)
+Importance of components:
+                       Comp.1 Comp.2 Comp.3  Comp.4  Comp.5  Comp.6  Comp.7  Comp.8
+Standard deviation      60.17 19.534 12.156 1.7e-03 1.4e-03 9.2e-04 6.7e-04 6.7e-05
+Proportion of Variance   0.87  0.092  0.036 6.7e-10 4.7e-10 2.0e-10 1.1e-10 1.1e-12
+Cumulative Proportion    0.87  0.964  1.000 1.0e+00 1.0e+00 1.0e+00 1.0e+00 1.0e+00</code></pre></figure>
+
+<h2 id="pca-2">实验3：先正规化，然后PCA</h2>
+<p>由于不同变量的单位不同，导致一些单位较大的变量会主导整个主成份分布，数值较小的独立变量会被掩盖，所以需要将每个变量处理成相同的单位，然后PCA，下面将所有变量转成标准正在分布的Z值，</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">data_normal</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">scale</span><span class="p">(</span><span class="n">derive_data</span><span class="p">,</span><span class="w"> 
+                                  </span><span class="n">center</span><span class="o">=</span><span class="nb">T</span><span class="p">,</span><span class="w">
+                                  </span><span class="n">scale</span><span class="o">=</span><span class="nb">T</span><span class="p">))</span><span class="w">
+</span><span class="n">model_normal</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">data_normal</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">model_normal</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">model_normal</span><span class="p">)</span></code></pre></figure>
+
+<p>上面的PCA分布，可以发现第一主城分比之前低很多。</p>
+
+<h2 id="pca-3">试验4：基于相关系数PCA</h2>
+<p>将数据处理成Z值后再PCA有个等价的简化处理，即直接对角化关联矩阵R，而不是协方差矩阵S，R与S的关系参考<a href="linear-algebra/statistic/mva/2016/03/20/covariance-linear-algebra-expression.html">这里</a>。因为R是由方差为1的变量计算协方差矩阵得到，而z值的处理过程正是式每个变量的方差为1（减均值对PCA结果没有影响），所以两者效果等价，但是关联矩阵计算效率明显高于z值预处理。</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">model_corr</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">covmat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cor</span><span class="p">(</span><span class="n">derive_data</span><span class="p">))</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">model_corr</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">model_corr</span><span class="p">)</span></code></pre></figure>
+
+<p>可以发现，两者的效果完全一致。</p>
+
+<h2 id="pca-4">实现5：先01正规化，然后PCA</h2>
+<p>有时候，用正规化z值处理不太适合，那么使用01正规化，也是一个不错的选择，或者log正规化也可以，这里演示01正规化</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">minMaxScale</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">max_list</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">apply</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">max</span><span class="p">)</span><span class="w">
+  </span><span class="n">min_list</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">apply</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">min</span><span class="p">)</span><span class="w">
+  </span><span class="n">range_list</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">max_list</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">min_list</span><span class="w">
+  
+  </span><span class="n">scale_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="w">
+  </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">scale_data</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">scale_data</span><span class="p">[,</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">scale_data</span><span class="p">[,</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">min_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="n">range_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="n">scale_data</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="n">scale_data_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">minMaxScale</span><span class="p">(</span><span class="n">derive_data</span><span class="p">)</span><span class="w">
+</span><span class="n">m</span><span class="m">4</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">scale_data_2</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">m</span><span class="m">4</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">m</span><span class="m">4</span><span class="p">)</span></code></pre></figure>
+
+<p>得到的分布与z值正规化略有不同，但是前三个成分仍然是主成份。</p>
+
+<h2 id="section-2">总结</h2>
+<p>PCA用于剔除线性依赖数据，但是计算之前，需要处理有异类数据和归一化变量单位。归一化方法有很多，比如01归一化，log，z-值。z-值归一化的等价方法是关联矩阵对角化，可以极大提高计算效率。</p>
+
+<h2 id="section-3">实验脚本</h2>
+<p>直接将下面数据放到R中即可执行，推荐使用RStudio。</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">## 原始数据
+</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1000</span><span class="w">
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">4546576</span><span class="p">)</span><span class="w">
+</span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="w"> 
+                   </span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">12</span><span class="p">,</span><span class="n">sd</span><span class="o">=</span><span class="m">5</span><span class="p">),</span><span class="w"> 
+                   </span><span class="n">x</span><span class="m">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="o">*</span><span class="n">rnorm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">-1</span><span class="p">,</span><span class="n">sd</span><span class="o">=</span><span class="m">3.5</span><span class="p">))</span><span class="w">
+</span><span class="n">cor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w">
+</span><span class="n">pairs</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">)</span><span class="w">
+
+
+</span><span class="c1">## 衍生数据
+</span><span class="n">derive_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cbind</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w">
+                     </span><span class="n">x</span><span class="m">4</span><span class="o">=</span><span class="m">10</span><span class="o">*</span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="p">),</span><span class="w"> 
+                     </span><span class="n">x</span><span class="m">5</span><span class="o">=</span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2+0.6</span><span class="o">*</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">6</span><span class="o">=</span><span class="m">12</span><span class="o">*</span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="o">+</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">7</span><span class="o">=</span><span class="m">16</span><span class="o">*</span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">8</span><span class="o">=</span><span class="m">7</span><span class="o">*</span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="p">))</span><span class="w">
+</span><span class="n">cor</span><span class="p">(</span><span class="n">derive_data</span><span class="p">)</span><span class="w">
+
+
+
+</span><span class="c1"># 方法：直接pca
+</span><span class="n">m</span><span class="m">1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">derive_data</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">m</span><span class="m">1</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">m</span><span class="m">1</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># 方法：使用关联系数
+</span><span class="n">model_corr</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">covmat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cor</span><span class="p">(</span><span class="n">derive_data</span><span class="p">))</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">model_corr</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">model_corr</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># 方法：标准正规化，效果与关联系数一致
+</span><span class="n">data_normal</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">scale</span><span class="p">(</span><span class="n">derive_data</span><span class="p">,</span><span class="w"> 
+                                  </span><span class="n">center</span><span class="o">=</span><span class="nb">T</span><span class="p">,</span><span class="w">
+                                  </span><span class="n">scale</span><span class="o">=</span><span class="nb">T</span><span class="p">))</span><span class="w">
+</span><span class="n">model_normal</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">data_normal</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">model_normal</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">model_normal</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># 方法：仅将平均设置为1 结果与方案1一致
+</span><span class="n">data_zero_mean</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">scale</span><span class="p">(</span><span class="n">derive_data</span><span class="p">,</span><span class="w"> 
+                                      </span><span class="n">center</span><span class="o">=</span><span class="nb">T</span><span class="p">,</span><span class="w">
+                                      </span><span class="n">scale</span><span class="o">=</span><span class="nb">F</span><span class="p">))</span><span class="w">
+</span><span class="n">model_zero_mean</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">data_zero_mean</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">model_zero_mean</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">model_zero_mean</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># 方案4 01正规化
+</span><span class="n">minMaxScale</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">max_list</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">apply</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">max</span><span class="p">)</span><span class="w">
+  </span><span class="n">min_list</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">apply</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">min</span><span class="p">)</span><span class="w">
+  </span><span class="n">range_list</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">max_list</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">min_list</span><span class="w">
+  
+  </span><span class="n">scale_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="w">
+  </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">scale_data</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">scale_data</span><span class="p">[,</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">scale_data</span><span class="p">[,</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">min_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="n">range_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="n">scale_data</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="n">scale_data_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">minMaxScale</span><span class="p">(</span><span class="n">derive_data</span><span class="p">)</span><span class="w">
+</span><span class="n">m</span><span class="m">4</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">scale_data_2</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">m</span><span class="m">4</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">m</span><span class="m">4</span><span class="p">)</span></code></pre></figure>
+
+
+  </div>
+
+  <!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2094661"></script>
+<!-- UY END -->
+  <!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2094661" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  <!-- UJian Button BEGIN -->
+<div class="ujian-hook"></div>
+<script type="text/javascript">var ujian_config = {num:8,showType:3};</script>
+<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?uid=2094661"></script>
+<a href="http://www.ujian.cc" style="border:0;"><img src="http://img.ujian.cc/pixel.png" alt="友荐云推荐" style="border:0;padding:0;margin:0;" /></a>
+<!-- UJian Button END -->
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">一数一世界</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>一数一世界</li>
+          <li><a href="mailto:524052035@qq.com">524052035@qq.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/bourneli"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">bourneli</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/bourneli1"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">bourneli1</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>专注数学，机器学习和数据挖掘应用
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

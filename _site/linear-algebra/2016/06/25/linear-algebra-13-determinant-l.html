@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="ujianVerification" content="a37043dadd6e026d008e42f92eb1f47e" />
+  <title>线代随笔13-行列式及其相关性质</title>
+  <meta name="description" content="本博文主要回顾行列式的定义及其相关性质，介绍行列式与矩阵联系最紧的相关部分，大体结构如下：">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://bourneli.github.io/linear-algebra/2016/06/25/linear-algebra-13-determinant-l.html">
+  <link rel="alternate" type="application/rss+xml" title="一数一世界" href="http://bourneli.github.io/feed.xml">
+  
+  <!--MathJax数学公式-->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">一数一世界</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+        
+          
+          <a class="page-link" href="/category/">分类</a>
+          
+        
+          
+          <a class="page-link" href="/about/">关于</a>
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">线代随笔13-行列式及其相关性质</h1>
+    <p class="post-meta"><time datetime="2016-06-25T00:00:00+08:00" itemprop="datePublished">Jun 25, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>本博文主要回顾行列式的定义及其相关性质，介绍行列式与矩阵联系最紧的相关部分，大体结构如下：</p>
+
+<ul>
+  <li>行列式定义</li>
+  <li>3个基础性质</li>
+  <li>7个衍生性质</li>
+</ul>
+
+<h2 id="section">行列式的定义</h2>
+<p>矩阵A是n阶方阵，其行列式定义如下，</p>
+
+<script type="math/tex; mode=display">|A| = \sum_{j=1}^na_{1j}(-1)^{1+j}M_{1j} = \sum_{j=1}^na_{ij}(-1)^{i+j}M_{ij}</script>
+
+<p>其中，$M_{ij}$表示A去掉第i行和第j列后的矩阵的行列式，$(-1)^{i+j}M_{ij}$称为代数余子式。对任意行展开，得到的结果相同（可以通过数学归纳法证明，有点繁琐，这里略去）。行列式是一种计算规则，将n*n个实数映射为一个实数。如果按照基础定义，计算复杂度是$O(n!)$。所以，直接计算，显然不现实，下面通过定义，推导出一些性质，使得行列式的计算变得简单。</p>
+
+<h2 id="section-1">3个基础性质</h2>
+<p>根据定义，可以推导出三个行列式的基础性质，通过它们又可以推导出更多有用的衍生性质，下面先推导出这三个基本性质。</p>
+
+<h3 id="section-2">1.归一性</h3>
+
+<script type="math/tex; mode=display">|I_n|=\prod_{i=1}^n1=1</script>
+
+<p>直接按照定义展开即可。</p>
+
+<h3 id="section-3">2.行交换</h3>
+
+<p>任意两行交换，行列式值为原来的值乘以-1。使用数学归纳法证明，</p>
+
+<p>证明：</p>
+
+<p>当n=2的时候，很容易证明。</p>
+
+<p>假设n=k（k&gt;2）成立，</p>
+
+<p>当$n=k+1$时，令第$i$行与第$j$行交换，$i \ne j$。选取第$k$行展开，$m \ne i$且m!=j。令$D$为原行列式值，而$D’$为换行后的值，有</p>
+
+<script type="math/tex; mode=display">D = \sum_{q=1}^na_{kq}(-1)^{k+q}M_{kq}</script>
+
+<script type="math/tex; mode=display">D' = \sum_{q=1}^na_{kq}(-1)^{k+q}M_{kq}'</script>
+
+<p>经观察，$M_{kq}$ 和$M_{kq}’$是k阶行列式，且两者对应i，j列交换，根据假设有$M_{kq}’=-M_{kq}$，所以</p>
+
+<script type="math/tex; mode=display">D' = \sum_{q=1}^na_{kq}(-1)^{k+q}M_{kq}' = \sum_{q=1}^na_{kq}(-1)^{k+q}(-M_{kq}) = -\sum_{q=1}^na_{kq}(-1)^{k+q}M_{kq} = -D</script>
+
+<p>证毕！</p>
+
+<h3 id="section-4">3.线性计算</h3>
+
+<p>线性计算是线性代数的核心，也就是向量加法与常数乘法，详细代数也有类似性质。</p>
+
+<p><strong>加法性</strong></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+D = \begin{vmatrix}
+	\cdots & \cdots & \cdots \\
+	a_{k1} + b_{k1} & \cdots & a_{kn} + b_{kn} \\
+	\cdots & \cdots & \cdots \\
+	\end{vmatrix}
+	  = \begin{vmatrix}
+	\cdots & \cdots & \cdots \\
+	a_{k1} & \cdots & a_{kn} \\
+	\cdots & \cdots & \cdots \\
+	\end{vmatrix}
+	  + \begin{vmatrix}
+	\cdots & \cdots & \cdots \\
+	b_{k1} & \cdots & b_{kn} \\
+	\cdots & \cdots & \cdots \\
+	\end{vmatrix}
+	  = D_a + D_b %]]></script>
+
+<p>证明：
+直接按照定义，将第k行展开，</p>
+
+<script type="math/tex; mode=display">D = \sum_{q=1}^n(a_{kq}+b_{kq})(-1)^{k+q}M_{kq} 
+	  = \left(\sum_{q=1}^na_{kq}(-1)^{k+q}M_{kq}\right) + \left(\sum_{q=1}^nb_{kq}(-1)^{k+q}M_{kq}\right)
+	  = D_a + D_b</script>
+
+<p>证毕！</p>
+
+<p><strong>标量乘法</strong></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{vmatrix}
+	\cdots & \cdots & \cdots \\
+	ca_{k1} & \cdots & ca_{kn} \\
+	\cdots & \cdots & \cdots \\
+	\end{vmatrix} 
+	= c\begin{vmatrix}
+	\cdots & \cdots & \cdots \\
+	a_{k1} & \cdots & a_{kn} \\
+	\cdots & \cdots & \cdots \\
+	\end{vmatrix} %]]></script>
+
+<p>证明：
+直接按照定义，将第k行展开，</p>
+
+<script type="math/tex; mode=display">\sum_{q=1}^n ca_{kq} (-1)^{k+q} M_{kq} 
+	= c\sum_{q=1}^n a_{kq} (-1)^{k+q} M_{kq} = cD</script>
+
+<p>证毕！</p>
+
+<h2 id="section-5">7个衍生性质</h2>
+
+<h3 id="section-6">4.行相同</h3>
+<p>假设矩阵A第i,j行一样，那么按照第i行展开，得到行列式D，然后交换第i行与第j行，仍然按照第i行展开，由于两行一样，所以行列式的值仍为D，但是根据行交换，行列式反号定理，D=-D，最后得到D=0.</p>
+
+<h3 id="section-7">5.行减不改变行列式</h3>
+<p>令行列式D如下，k为任意常量</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+D = \begin{vmatrix}
+	\cdots & \cdots & \cdots \\
+	a_1 & \cdots & a_n \\
+	\cdots & \cdots & \cdots \\
+	b_1 & \cdots & b_n \\
+	\cdots & \cdots & \cdots \\
+	\end{vmatrix} %]]></script>
+
+<p>那么第a行减去k乘第b行，结果不变，如下推导</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{vmatrix}
+	\cdots & \cdots & \cdots \\
+	a_1-kb_1 & \cdots & a_n-kb_n \\
+	\cdots & \cdots & \cdots \\
+	b_1 & \cdots & b_n \\
+	\cdots & \cdots & \cdots \\
+	\end{vmatrix} =
+    \begin{vmatrix}
+	\cdots & \cdots & \cdots \\
+	a_1 & \cdots & a_n \\
+	\cdots & \cdots & \cdots \\
+	b_1 & \cdots & b_n \\
+	\cdots & \cdots & \cdots \\
+	\end{vmatrix} +
+    \begin{vmatrix}
+	\cdots & \cdots & \cdots \\
+	-kb_1 & \cdots & -kb_n \\
+	\cdots & \cdots & \cdots \\
+	b_1 & \cdots & b_n \\
+	\cdots & \cdots & \cdots \\
+	\end{vmatrix}	
+	= D - k\begin{vmatrix}
+	\cdots & \cdots & \cdots \\
+	b_1 & \cdots & b_n \\
+	\cdots & \cdots & \cdots \\
+	b_1 & \cdots & b_n \\
+	\cdots & \cdots & \cdots \\
+	\end{vmatrix} = D - k0 = D %]]></script>
+
+<p>证毕！</p>
+
+<h3 id="section-8">6.全0行</h3>
+<p>如果矩阵存在某一行全部为0，那么行列式为0。直接按照0行展开，即可得到结果。</p>
+
+<h3 id="section-9">7.三角矩阵的行列式</h3>
+<p>值为对角线元素乘积。使用定义，直接展开即可。</p>
+
+<h3 id="section-10">8.矩阵可逆 &lt;=&gt; 行列式不为0</h3>
+<p>证明：
+如果矩阵可逆，那么根据消元（不改变行列式），可以得到上三角矩阵，且对角元素不为0，那么行列式不为0。
+如果行列式不为0，仍然可以通过消元得到等价三角矩阵，由于行列式不为0，所以对角元素均不为0，所以矩阵可逆。
+证毕！</p>
+
+<h3 id="section-11">9.矩阵乘法的行列式</h3>
+
+<p>证明：
+基础矩阵：消元E，乘法D，替换P与B的效果如下。</p>
+
+<script type="math/tex; mode=display">|EB|=|B|</script>
+
+<script type="math/tex; mode=display">|DB|=\prod_{i=1}^nd_iB</script>
+
+<script type="math/tex; mode=display">|PB|=-|B|</script>
+
+<p>如果A可逆，那么$A=X_1 X_2…X_n$,其中X_i是基础矩阵，
+那么
+<script type="math/tex">|AB|=|X_1||X_2 \cdots X_nB|=|X_1X_2||X_3 \cdots X_nB| = |X_1 \cdots X_n||B| = |A||B|</script></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>如果A不可逆，那么A奇异，那么AB也是奇异的，通过消元，必然可以得到全0行，那么$</td>
+      <td>A</td>
+      <td>=</td>
+      <td>AB</td>
+      <td>=0$。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>证毕！</p>
+
+<h3 id="section-12">10.转置矩阵的行列式</h3>
+
+<p>转置矩阵的行列式与原行列式相等，即
+<script type="math/tex">|A|=|A^T|</script></p>
+
+<p>证明：</p>
+
+<p>如果$A$奇异（不可逆），那么$A^T$必然奇异，所以
+<script type="math/tex">|A^T|=|A|=0</script> 。</p>
+
+<p>若$A$可逆，那么$A$可以$LU$分解，即
+<script type="math/tex">|A|=|LU|=|L||U|=|U|=\prod_{i=1}^nu_{ii}</script> ，$L$是下三角矩阵，对角线为1，所以
+<script type="math/tex">|L|=1</script>。</p>
+
+<p>同理，
+<script type="math/tex">|A^T|=|U^T L^T|=|U^T ||L^T |=|U^T |=\prod_{i=1}^nu_ii=|U|=|A|</script>。</p>
+
+<p>证毕！</p>
+
+<h2 id="section-13">参考资料</h2>
+<ul>
+  <li>Introduction to Linear Algebra, 4th Edition, by Gilbert Strang, Chapter 5 Determinant</li>
+  <li><a href="http://www.math.lsa.umich.edu/~speyer/417/DetMult.pdf">行列式乘法证明</a></li>
+</ul>
+
+  </div>
+
+  <!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2094661"></script>
+<!-- UY END -->
+  <!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2094661" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  <!-- UJian Button BEGIN -->
+<div class="ujian-hook"></div>
+<script type="text/javascript">var ujian_config = {num:8,showType:3};</script>
+<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?uid=2094661"></script>
+<a href="http://www.ujian.cc" style="border:0;"><img src="http://img.ujian.cc/pixel.png" alt="友荐云推荐" style="border:0;padding:0;margin:0;" /></a>
+<!-- UJian Button END -->
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">一数一世界</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>一数一世界</li>
+          <li><a href="mailto:524052035@qq.com">524052035@qq.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/bourneli"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">bourneli</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/bourneli1"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">bourneli1</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>专注数学，机器学习和数据挖掘应用
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

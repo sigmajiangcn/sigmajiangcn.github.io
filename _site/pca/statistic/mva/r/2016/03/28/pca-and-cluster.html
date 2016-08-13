@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="ujianVerification" content="a37043dadd6e026d008e42f92eb1f47e" />
+  <title>PCA与聚类</title>
+  <meta name="description" content="最近一直在思考PCA是否可以辅助聚类（如kmeans），之前一直认为，如果数据集中如果有太多线性相关的数据，导致特征权重不平衡，会倾向线性相关的那些特征，导致掩盖其他特征。所以，如果通过PCA，是否找到背后关键的特征，避免这类问题。带者这个问题，开始了一次实验。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://bourneli.github.io/pca/statistic/mva/r/2016/03/28/pca-and-cluster.html">
+  <link rel="alternate" type="application/rss+xml" title="一数一世界" href="http://bourneli.github.io/feed.xml">
+  
+  <!--MathJax数学公式-->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">一数一世界</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+        
+          
+          <a class="page-link" href="/category/">分类</a>
+          
+        
+          
+          <a class="page-link" href="/about/">关于</a>
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">PCA与聚类</h1>
+    <p class="post-meta"><time datetime="2016-03-28T00:00:00+08:00" itemprop="datePublished">Mar 28, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>最近一直在思考PCA是否可以辅助聚类（如kmeans），之前一直认为，<strong>如果数据集中如果有太多线性相关的数据，导致特征权重不平衡，会倾向线性相关的那些特征，导致掩盖其他特征</strong>。所以，如果通过PCA，是否找到背后关键的特征，避免这类问题。带者这个问题，开始了一次实验。</p>
+
+<p>手动在3维空间中准备了4个类，数据生成代码如下，</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">set.seed</span><span class="p">(</span><span class="m">1234</span><span class="p">)</span><span class="w">
+</span><span class="n">group_size</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">100</span><span class="w">
+</span><span class="n">group1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">1</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">1</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">1</span><span class="p">),</span><span class="w">
+                     </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'red'</span><span class="p">)</span><span class="w">
+</span><span class="n">group2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">7</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">7</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">4.5</span><span class="p">),</span><span class="w">
+                     </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'green'</span><span class="p">)</span><span class="w">
+</span><span class="n">group3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">4</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">4.5</span><span class="p">),</span><span class="w">
+                     </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'blue'</span><span class="p">)</span><span class="w">
+</span><span class="n">group4</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">5</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">7</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">10</span><span class="p">),</span><span class="w">
+                     </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'black'</span><span class="p">)</span><span class="w">
+</span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rbind</span><span class="p">(</span><span class="n">group1</span><span class="p">,</span><span class="w"> </span><span class="n">group2</span><span class="p">,</span><span class="w"> </span><span class="n">group3</span><span class="p">,</span><span class="w"> </span><span class="n">group4</span><span class="p">)</span></code></pre></figure>
+
+<p>通过2d，3d或者MSD等可视化方法，可以清楚的观察到四个簇（下面是MSD绘图），</p>
+<div align="center"><img src="/img/pca_kmeans_data.png" /></div>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># 2d
+</span><span class="n">pairs</span><span class="p">(</span><span class="n">data</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">],</span><span class="n">col</span><span class="o">=</span><span class="n">data</span><span class="o">$</span><span class="n">group</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># 3d
+</span><span class="n">require</span><span class="p">(</span><span class="n">rgl</span><span class="p">)</span><span class="w">
+</span><span class="n">require</span><span class="p">(</span><span class="n">car</span><span class="p">)</span><span class="w">
+</span><span class="n">with</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w">
+     </span><span class="n">plot3d</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="p">,</span><span class="n">x</span><span class="m">2</span><span class="p">,</span><span class="n">x</span><span class="m">3</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="n">group</span><span class="p">))</span><span class="w">
+
+</span><span class="c1"># MSD
+</span><span class="n">dd</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist</span><span class="p">(</span><span class="n">data</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">])</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cmdscale</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span><span class="n">eig</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w">
+</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">points</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span><span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">points</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">group</span><span class="p">)</span></code></pre></figure>
+
+<p>所以，根据之前的设想，如果添加很多线性相关的列，是否会有更多的簇呢（多余4个）？</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">derive_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cbind</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> 
+                     </span><span class="n">x</span><span class="m">4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">7</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="o">*</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1.5</span><span class="o">*</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">9</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">11</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">12</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">13</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="o">*</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1.5</span><span class="o">*</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">))</span><span class="w">
+
+</span><span class="n">cor_dist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist</span><span class="p">(</span><span class="n">derive_data</span><span class="p">[,</span><span class="m">-4</span><span class="p">])</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cmdscale</span><span class="p">(</span><span class="n">cor_dist</span><span class="p">,</span><span class="n">eig</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w"> 
+</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">points</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span><span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">points</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">derive_data</span><span class="o">$</span><span class="n">group</span><span class="p">)</span></code></pre></figure>
+
+<p>结果显示，即使添加了9个冗余的数据，MSD仍然可以清楚显示4个簇，</p>
+<div align="center"><img src="/img/pca_kmeans_msd_reduncts.png" /></div>
+<p>所以，根据这个实验，可以否定假设“线性相关会添加多余簇”。</p>
+
+<p>下面试试PCA是否可以得到相关结果，</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">pca_mode</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">derive_data</span><span class="p">[,</span><span class="m">-4</span><span class="p">])</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">pca_mode</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">pca_mode</span><span class="p">)</span><span class="w">
+
+</span><span class="n">pca_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">pca_mode</span><span class="p">,</span><span class="n">derive_data</span><span class="p">[,</span><span class="m">-4</span><span class="p">])</span><span class="w">
+</span><span class="n">head</span><span class="p">(</span><span class="n">pca_data</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">pca_data</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="n">pca_data</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="n">col</span><span class="o">=</span><span class="n">derive_data</span><span class="o">$</span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">)</span></code></pre></figure>
+
+<p>根据PCA结果，只需要前2个组件就是解释99%+，</p>
+
+<figure class="highlight"><pre><code class="language-raw" data-lang="raw">&gt; summary(pca_mode)
+Importance of components:
+                           Comp.1     Comp.2      Comp.3       Comp.4       Comp.5
+Standard deviation     23.0256553 3.75789335 2.113610716 1.236550e-03 1.216225e-03
+Proportion of Variance  0.9661258 0.02573348 0.008140662 2.786332e-09 2.695490e-09
+Cumulative Proportion   0.9661258 0.99185932 0.999999982 1.000000e+00 1.000000e+00
+                             Comp.6       Comp.7       Comp.8       Comp.9
+Standard deviation     1.188481e-03 1.164855e-03 1.110159e-03 1.058104e-03
+Proportion of Variance 2.573915e-09 2.472598e-09 2.245845e-09 2.040172e-09
+Cumulative Proportion  1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00
+                            Comp.10      Comp.11      Comp.12      Comp.13
+Standard deviation     1.039415e-03 6.414794e-04 5.933439e-04 2.120504e-04
+Proportion of Variance 1.968737e-09 7.498514e-10 6.415385e-10 8.193849e-11
+Cumulative Proportion  1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</code></pre></figure>
+
+<p>绘制2维散点图，仍然可以解释4个簇，</p>
+<div align="center"><img src="/img/pca_kmeans_top_2_scattor.png" /></div>
+
+<h2 id="section">结论</h2>
+<p>根据这次结果，可以发现PCA与聚类结果没有直接的关系。可能的原因：PCA只是降低维度，簇并不一定与维度绑定，因为即使是1维空间，也可以明确的区分4个簇。PCA的作用顶多就是去掉噪音，减少计算量，并不会剔除簇信息，<a href="http://stats.stackexchange.com/">Cross Validated</a>问答站点上有个类似回答，可参考<strong><a href="http://stats.stackexchange.com/a/157625/31830">How PCA would help the K-mean clustering analysis?</a></strong>。同时，根据上面的结果，线性相关变量也不一定会生成多余的簇。</p>
+
+<h2 id="section-1">试验代码</h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># 随机生成聚类数据
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">1234</span><span class="p">)</span><span class="w">
+</span><span class="n">group_size</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">100</span><span class="w">
+</span><span class="n">group1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">1</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">1</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">1</span><span class="p">),</span><span class="w">
+                     </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'red'</span><span class="p">)</span><span class="w">
+</span><span class="n">group2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">7</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">7</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">4.5</span><span class="p">),</span><span class="w">
+                     </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'green'</span><span class="p">)</span><span class="w">
+</span><span class="n">group3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">4</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">4.5</span><span class="p">),</span><span class="w">
+                     </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'blue'</span><span class="p">)</span><span class="w">
+</span><span class="n">group4</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">5</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">7</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">10</span><span class="p">),</span><span class="w">
+                     </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'black'</span><span class="p">)</span><span class="w">
+</span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rbind</span><span class="p">(</span><span class="n">group1</span><span class="p">,</span><span class="w"> </span><span class="n">group2</span><span class="p">,</span><span class="w"> </span><span class="n">group3</span><span class="p">,</span><span class="w"> </span><span class="n">group4</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># 2d
+</span><span class="n">pairs</span><span class="p">(</span><span class="n">data</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">],</span><span class="n">col</span><span class="o">=</span><span class="n">data</span><span class="o">$</span><span class="n">group</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># 3d
+</span><span class="n">require</span><span class="p">(</span><span class="n">rgl</span><span class="p">)</span><span class="w">
+</span><span class="n">require</span><span class="p">(</span><span class="n">car</span><span class="p">)</span><span class="w">
+</span><span class="n">with</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w">
+     </span><span class="n">plot3d</span><span class="p">(</span><span class="n">x</span><span class="m">1</span><span class="p">,</span><span class="n">x</span><span class="m">2</span><span class="p">,</span><span class="n">x</span><span class="m">3</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="n">group</span><span class="p">))</span><span class="w">
+
+</span><span class="c1"># MSD
+</span><span class="n">dd</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist</span><span class="p">(</span><span class="n">data</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">])</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cmdscale</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span><span class="n">eig</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w">
+</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">points</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span><span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">points</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">group</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># 添加线性组合
+</span><span class="n">derive_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cbind</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> 
+                     </span><span class="n">x</span><span class="m">4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">7</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="o">*</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1.5</span><span class="o">*</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">9</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">11</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">12</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">),</span><span class="w">
+                     </span><span class="n">x</span><span class="m">13</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jitter</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="o">*</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1.5</span><span class="o">*</span><span class="n">data</span><span class="o">$</span><span class="n">x</span><span class="m">3</span><span class="p">))</span><span class="w">
+
+</span><span class="n">cor_dist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist</span><span class="p">(</span><span class="n">derive_data</span><span class="p">[,</span><span class="m">-4</span><span class="p">])</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cmdscale</span><span class="p">(</span><span class="n">cor_dist</span><span class="p">,</span><span class="n">eig</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w"> 
+</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">points</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span><span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">points</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">derive_data</span><span class="o">$</span><span class="n">group</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## pca
+</span><span class="n">pca_mode</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">derive_data</span><span class="p">[,</span><span class="m">-4</span><span class="p">])</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">pca_mode</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">pca_mode</span><span class="p">)</span><span class="w">
+
+</span><span class="n">pca_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">pca_mode</span><span class="p">,</span><span class="n">derive_data</span><span class="p">[,</span><span class="m">-4</span><span class="p">])</span><span class="w">
+</span><span class="n">head</span><span class="p">(</span><span class="n">pca_data</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">pca_data</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="n">pca_data</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="n">col</span><span class="o">=</span><span class="n">derive_data</span><span class="o">$</span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">)</span></code></pre></figure>
+
+  </div>
+
+  <!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2094661"></script>
+<!-- UY END -->
+  <!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2094661" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  <!-- UJian Button BEGIN -->
+<div class="ujian-hook"></div>
+<script type="text/javascript">var ujian_config = {num:8,showType:3};</script>
+<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?uid=2094661"></script>
+<a href="http://www.ujian.cc" style="border:0;"><img src="http://img.ujian.cc/pixel.png" alt="友荐云推荐" style="border:0;padding:0;margin:0;" /></a>
+<!-- UJian Button END -->
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">一数一世界</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>一数一世界</li>
+          <li><a href="mailto:524052035@qq.com">524052035@qq.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/bourneli"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">bourneli</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/bourneli1"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">bourneli1</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>专注数学，机器学习和数据挖掘应用
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
