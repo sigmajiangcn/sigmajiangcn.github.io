@@ -256,6 +256,17 @@ LR模型比较简单，需要交叉特征提升模型表达能力。
  &  J(w)=-L(w)=-\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{11}\\
 \end{align}
  因此
+ 
+ \begin{align}
+ & J(w)}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\
+  &  =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
+\end{align}
+ 
+ 
+ 
+ 
+ 
+ 
 \begin{align}
  & \dfrac{\partial J(w)}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\
   & \hspace {14mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
