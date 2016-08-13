@@ -2,7 +2,7 @@
 layout: post
 title:  "攻略推荐流程简介"
 date:   2016-08-05 11:31:28 +0800
-categories: [LaTeX]
+categories: [adrecommend]
 ---
 
 ## 业务简介
@@ -164,36 +164,6 @@ Storm的常见关键词简介如下：
 #### Storm实现方法
 在execute方法中，传入的参数是一个Tuple，该Tuple就包含了上游（Upstream）组件ProduceRecordSpout所emit的数据，直接取出数据进行处理。上面代码中，我们将取出的数据，按照空格进行的split，得到一个一个的单词，然后在emit到下一个组件，声明的输出schema为2个Field：word和count，当然这里面count的值都为1。
 
-	public static class WordSplitterBolt extends BaseRichBolt {
-	     private static final long serialVersionUID = 1L;
-	     private static final Log LOG = LogFactory.getLog(WordSplitterBolt.class);
-	     private OutputCollector collector;
-	    
-	     @Override
-	     public void prepare(Map stormConf, TopologyContext context,
-	               OutputCollector collector) {
-	          this.collector = collector;              
-	     }
-	
-	     @Override
-	     public void execute(Tuple input) {
-	          String record = input.getString(0);
-	          if(record != null && !record.trim().isEmpty()) {
-	               for(String word : record.split("\\s+")) {
-	                    collector.emit(input, new Values(word, 1));
-	                    LOG.info("Emitted: word=" + word);
-	                    collector.ack(input);
-	               }
-	          }
-	     }
-	
-	     @Override
-	     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-	          declarer.declare(new Fields("word", "count"));         
-	     }
-	    
-	}
-
 #### 广告pb定义
 
 	```java
@@ -243,6 +213,7 @@ Storm的常见关键词简介如下：
 LR模型比较简单，需要交叉特征提升模型表达能力。
 在前面已经将用户属性和攻略属性分别离散Dummy化存储至KV系统Tcaplus，在拼接样本的bolt中，对来自spout的每条点击流数据判断是曝光还是点击，如果是点击则标记为正样本，否则为负样本。接下来对该条数据的uin去缓存查有无该用户数据，没有则至Tcaplus中去查询用户数据，得到uin的特征之后则查询攻略的特征，也是优先从缓存去查，然后去Tcaplus查询特征，接下来根据高阶交叉规则拼接模型样本。
 大部分情况下，待推荐的有效攻略不过几千，而用户量是远大于攻略数目的，例如掌盟的日均曝光UV可达500万，所以实际情况下，每条点击流数据主要是去Tcaplus去查询用户特征，而攻略特征在bolt运行一段时间之后大部分已经保存在Cache中。
+
 这里还要注意一点，在机器学习的模型训练中，正负样本的比例控制很重要。点击流中的曝光，也就是负样本远比正样本多，所以对负样本要做一定的筛选，使正负样本比例在一个合理的阈值范围之内，保证模型训练的有效性。
 
 
@@ -308,11 +279,14 @@ spark mllib, tmllib
 
 ### 效果对比
 上面的工作目的都只有一个，把合适的内容推荐给用户，提高点击率。一般我们把请求服务器的用户分成一定比例的对照用户，对比算法的实际效果。典型的例如在算法、强规则、随机包、热销榜之间的点击流对比。
+
 随机包就是指用户请求我们时，随机推荐攻略给用户；
+
 强规则在各个业务中有所差异，例如在掌盟中将用户最近对局常失败的英雄对应的攻略推荐给用户；
+
 热销榜则是根据最近12小时内的攻略点击率排行榜给用户推荐，热销榜具有很强的时效性，另外需要衡量点击率的指标需要略做优化。例如攻略A的曝光量是200，点击量是100，点击率是50%；同时攻略B的曝光量是2000，而点击量是900，点击率是45%，攻略A和B该怎么排序？这个也是需要注意的。
 ### 贝叶斯平滑
-预估互联网广告的点击率一个重要的技术手段是logistic regression模型，这个模型非常依赖特征的设计。每个广告的反馈ctr作为特征能极大地提升预估的准确性，所以每个广告的反馈ctr非常重要。
+预估互联网广告的点击率一个重要的技术手段是logistic regression 模型，这个模型非常依赖特征的设计。每个广告的反馈ctr作为特征能极大地提升预估的准确性，所以每个广告的反馈ctr非常重要。
 目前用得比较多的获取反馈ctr的方式是直接计算每个广告的历史ctr，这样的问题就是当该广告投放量比较少的时候（如新广告），历史ctr与实际ctr相差很大。如一个广告投放了100次，有2次点击，那么ctr就是2%，但是当这个广告投放量到了1000次的时候，点击只有10次，点击率是1%，这里就相差了一倍了。产生这种问题的的原因是投放量太少，数据有偏，所以如果每个广告在开始投放前就有了默认的一个展示数和点击数，即分子分母都加上一个比较大的常数，这样计算起ctr来就不会有那么大的偏差。这种方法叫做ctr平滑，通用的方法是在展示数和点击上面各自加一个常数，缓解低投放量带来的不准确性，使其接近其实际的CTR。
 
 
@@ -333,9 +307,9 @@ EPR是互娱运营部数据中心推出的一套报表系统，旨在通过在EP
 ## 待优化点
 处理流程较长，
 
->目前用户属性是洛子调度写入tdw，然后出库至hdfs，配置mapreduce命令行进行离散化和dummy化并生成用户特征，然后批量写入tcaplus。由于用户量通常比较大，计算任务之间的依赖在洛子调度的时延可能会被放大，后面计划将用户属性部分改成spark来计算。
+*目前用户属性是洛子调度写入tdw，然后出库至hdfs，配置mapreduce命令行进行离散化和dummy化并生成用户特征，然后批量写入tcaplus。由于用户量通常比较大，计算任务之间的依赖在洛子调度的时延可能会被放大，后面计划将用户属性部分改成spark来计算。
 
->针对攻略属性，细节特征。
+*针对攻略属性，细节特征。
 
 ## 致谢
 本文提及的攻略推荐工作是在数据挖掘组很多同事大量前期工作和丰富经验的基础上才得以完成。主要是在杜博、caron、sophie和woli等的帮助和指导下，不断发现和解决一个又一个细节问题。总结本文的目的在于梳理工作、找出潜在问题并推广至其他的业务。
