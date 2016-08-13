@@ -2,7 +2,7 @@
 layout: post
 title:  "攻略推荐流程简介"
 date:   2016-08-05 11:31:28 +0800
-categories: [Latex]
+categories: [adRecommend]
 ---
 
 ## 业务简介
