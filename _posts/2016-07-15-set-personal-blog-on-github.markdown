@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "github+jekyll+DNS配置个人主页的总结"
+title:  "Github+Jekyll+DNS配置个人主页的总结"
 date:   2016-07-15 10:31:28 +0800
 categories:
 ---
