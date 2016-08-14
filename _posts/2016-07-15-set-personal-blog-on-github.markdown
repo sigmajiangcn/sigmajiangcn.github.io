@@ -30,9 +30,8 @@ github提供静态blog所需的一切，包括流量，空间，服务器托管�
 * 启动命令 ```bundle exec jekyll serve```,本地url:[http://localhost:4000](http://localhost:4000)
 * **_site**目录不要提交，在.gitignore中将其忽略，它是jekyll自动生成的静态站点，提交后，有些全局修改会不会同步。
 * 添加ico时注意要在head.html中添加如下代码
-  ```  
-   <link rel="shortcut icon" href="/favicon.ico?" type="image/x_icon"/>
-  ```
+ 
+ ```  <link rel="shortcut icon" href="/favicon.ico?" type="image/x_icon"/> ```
 * 我是在dnspod上申请的以cn结尾的域名，需要提交身份证扫描件，审核是可以通过的，并且很快
 
 希望这些内容对你有用。
