@@ -27,10 +27,12 @@ github提供静态blog所需的一切，包括流量，空间，服务器托管�
 * 安装了*github-pages*包后，无需单独安装*jekyll*，
 * 目录下需要有Gemfile文件，内容为[手把手安装jekyll等依赖](https://help.github.com/articles/using-jekyll-with-pages/)中对应。
 * 创建了jekyll的框架后，手动cp到你的本地仓库中，然后add,commit,push到github上，就可以访问了。
-* 启动命令 ```bundle exec jekyll serve```,本地url[http://localhost:4000](http://localhost:4000)
+* 启动命令 ```bundle exec jekyll serve```,本地url:[http://localhost:4000](http://localhost:4000)
 * **_site**目录不要提交，在.gitignore中将其忽略，它是jekyll自动生成的静态站点，提交后，有些全局修改会不会同步。
 * 添加ico时注意要在head.html中添加如下代码
+    
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x_icon"/>
+
 * 我是在dnspod上申请的以cn结尾的域名，需要提交身份证扫描件，审核是可以通过的，并且很快
 
 希望这些内容对你有用。
