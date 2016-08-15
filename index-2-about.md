@@ -19,5 +19,5 @@ permalink: /about/
 更多工作信息，参考我的[LinkedIn](https://cn.linkedin.com/in/sigmajiang)。
 
 # 爱好
-运动：登山、游泳；看书：历史书，尤其是近代史；数学：尤其是Fourier系列。
+运动：登山、游泳；看书：历史书，尤其是近代史；数学：尤其是Fourier变换系列。
 
