@@ -88,7 +88,7 @@ $TF-IDF$($Term frequency-inverse document frequency$ ) 是文本挖掘中一种�
 
 其中词频$TF$指的是某一个给定的词语在该文件中出现的次数。$TF$通常要被归一化（区别于下面的$IDF$，分子小于分母）：
 
-	$$ TF(t,d) = \frac{t}{d} $$
+$$ TF(t,d) = \frac{t}{d} $$
 
 逆文档频度$IDF$是单词携带信息量的数值度量:
 
@@ -96,9 +96,7 @@ $$ IDF(t,D) = \log \frac{{|D| + 1}}{{DF(t,D) + 1}} $$
 
 其中$|D|$是语料中的文档总数。由于使用了$log$计算，如果单词在所有文档中出现，那么$IDF$就等于0。注意这里做了平滑处理（+1操作），防止单词没有在语料中出现时IDF计算中除0。$TF-IDF$度量是$TF$和$IDF$的简单相乘：
 
-$$
-TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D)
-$$
+$$TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D)$$
 
 #### 具体实现
 
