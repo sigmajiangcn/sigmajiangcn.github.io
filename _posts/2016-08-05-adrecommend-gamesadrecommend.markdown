@@ -228,27 +228,19 @@ LR模型比较简单，需要交叉特征提升模型表达能力。
 在计算广告中，常使用逻辑回归模型，因为LR模型比较简单，易于大规模并行化。另外需要注意在特征工程中关注有效提取特征，特征的维度如果过高，后续的计算复杂度将会提高，需要考虑正则化。
 ### 最大似然法ML
 逻辑回归其实仅为在线性回归的基础上，套用了一个逻辑函数，但也就由于这个逻辑函数，逻辑回归成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。
-\begin{align}
- & y=f(x)=w^Tx\tag{1} \\
-  & y=f(x)=sign(w^Tx)\tag{2} \\
-  & y=f(x)=\dfrac{1}{1+\exp(-w^Tx)} \tag{3}
-\end{align}
+
+$$\begin{align} & y=f(x)=w^Tx\tag{1} \\ & y=f(x)=sign(w^Tx)\tag{2} \\ & y=f(x)=\dfrac{1}{1+\exp(-w^Tx)}\tag{3} \end{align}$$
 
 
  假设$x\in R^d$  为$d$维输入向量，$y\in \{0,1\}$为输出标签，$w\in R^d$是参数。
  则有
-\begin{align}
- & p(y_i=1|x_i,w)=\dfrac{\exp(w^Tx)}{1+\exp(w^Tx)}=P_i\tag{4} \\
-  & p(y_i=0|x_i,w)=\dfrac{1}{1+\exp(w^Tx)}=1-P_i \tag{5}
-\end{align}
+
+$$\begin{align} & p(y_i=1|x_i,w)=\dfrac{\exp(w^Tx)}{1+\exp(w^Tx)}=P_i\tag{4} \\ & p(y_i=0|x_i,w)=\dfrac{1}{1+\exp(w^Tx)}=1-P_i \tag{5} \end{align}$$
+
  然后有：
-\begin{align}
- & w^*=arg \  \underset{w}{max}P(D|w)\tag{16} \\
-&\hspace {6mm}  =arg \  \underset{w}{max}\prod_{i=1}^NP_i^{y_i}(1-P_i)^{1-y_i} \tag{6} \\
-& \hspace {6mm}  =arg \ \underset{w}{max}\sum_{i=1}^Ny_i\log{P_i}+(1-y_i)\log{(1-P_i)} \tag{7} \\
-& \hspace {6mm}  =arg \  \underset{w}{max}\sum_{i=1}^Ny_i\log{\dfrac{P_i}{1-P_i}}+\log{(1-P_i)} \tag{8} \\
-& \hspace {6mm}  =arg \  \underset{w}{max}=\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{9}
-\end{align}
+
+$$\begin{align} & w^*=arg \  \underset{w}{max}P(D|w)\tag{16} \\ &\hspace {6mm}  =arg \  \underset{w}{max}\prod_{i=1}^NP_i^{y_i}(1-P_i)^{1-y_i} \tag{6} \\ & \hspace {6mm}  =arg \ \underset{w}{max}\sum_{i=1}^Ny_i\log{P_i}+(1-y_i)\log{(1-P_i)} \tag{7} \\ & \hspace {6mm}  =arg \  \underset{w}{max}\sum_{i=1}^Ny_i\log{\dfrac{P_i}{1-P_i}}+\log{(1-P_i)} \tag{8} \\ & \hspace {6mm}  =arg \  \underset{w}{max}=\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{9} \end{align}$$
+
  据Andrew Ng关于最大似然函数与最小损失函数的关系: 
 \begin{align}
  &  $J(\theta)=-\dfrac{1}{m}L(\theta) \tag{10}\\
@@ -259,33 +251,23 @@ LR模型比较简单，需要交叉特征提升模型表达能力。
 \end{align}
  因此
  
- \begin{align}
- & J(w)}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\
-  &  =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
-\end{align}
+$$ \begin{align} & J(w){\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\ &  =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13} \end{align}$$
  
  
  
  
  
  
-\begin{align}
- & \dfrac{\partial J(w)}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\
-  & \hspace {14mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
-\end{align}
+$$\begin{align} & \dfrac{\partial J(w)}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\  & \hspace {14mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13} \end{align}$$
  因此有参数的迭代如下：
  \begin{align}
 & w_{j+1}=w_j-\alpha\cdot\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
 \end{align}				
+
 ### 最大后验估计MAP与正则化
 
 避免过拟合，降低server负担
- \begin{align}
- & w^*=arg \  \underset{w}{max}P(w|D) \tag{14} \\
-  & \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D)\tag{15} \\
-   & \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w)\tag{16} \\
-    & \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{17} \\
-\end{align}		
+ $$\begin{align} & w^*=arg \  \underset{w}{max}P(w|D) \tag{14} \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D)\tag{15} \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w)\tag{16} \\ & \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{17}  \end{align}$$		
 
 
 
@@ -303,6 +285,7 @@ spark mllib, tmllib
 强规则在各个业务中有所差异，例如在掌盟中将用户最近对局常失败的英雄对应的攻略推荐给用户；
 
 热销榜则是根据最近12小时内的攻略点击率排行榜给用户推荐，热销榜具有很强的时效性，另外需要衡量点击率的指标需要略做优化。例如攻略A的曝光量是200，点击量是100，点击率是50%；同时攻略B的曝光量是2000，而点击量是900，点击率是45%，攻略A和B该怎么排序？这个也是需要注意的。
+
 ### 贝叶斯平滑
 预估互联网广告的点击率一个重要的技术手段是logistic regression 模型，这个模型非常依赖特征的设计。每个广告的反馈ctr作为特征能极大地提升预估的准确性，所以每个广告的反馈ctr非常重要。
 目前用得比较多的获取反馈ctr的方式是直接计算每个广告的历史ctr，这样的问题就是当该广告投放量比较少的时候（如新广告），历史ctr与实际ctr相差很大。如一个广告投放了100次，有2次点击，那么ctr就是2%，但是当这个广告投放量到了1000次的时候，点击只有10次，点击率是1%，这里就相差了一倍了。产生这种问题的的原因是投放量太少，数据有偏，所以如果每个广告在开始投放前就有了默认的一个展示数和点击数，即分子分母都加上一个比较大的常数，这样计算起ctr来就不会有那么大的偏差。这种方法叫做ctr平滑，通用的方法是在展示数和点击上面各自加一个常数，缓解低投放量带来的不准确性，使其接近其实际的CTR。
@@ -337,47 +320,3 @@ EPR是互娱运营部数据中心推出的一套报表系统，旨在通过在EP
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-## 方案
-使用TeX(LaTeX)编写公式，使用MathJax在线实时渲染公式。网上可以找到很多TeX资料，在学术界已经流行了几十年，所以可以很方便上手，下面给出了一些TeX资料。MathJax是一个在线的公式渲染引擎，集成非常方便，只需要在header中加入一段js代码即可，免费（如果用的好，可以捐点），由MIT和美国数学委员会资助，技术和维护应该不成问题。所以选取这套方案。
-
-## 资料
-* [LaTeX Math Symbols](http://web.ift.uib.no/Teori/KURS/WRK/TeX/symALL.html)
-* [TeX快速常用示例](http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference)
-* [TeX问答](http://tex.stackexchange.com/)
-* [MathJax官方使用文档](https://docs.mathjax.org/en/v2.6-latest/start.html#putting-mathematics-in-a-web-page)
-
-## 我的示例
-
-### 行内inline
-
-When $a \ne 0$, there are two solutions to $\(ax^2 + bx + c = 0\)$ and they are
-$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
-
-### 矩阵和向量
-
-$$
-\begin{bmatrix}
-a & b \\ c & d
-\end{bmatrix}
-\vec{x} = \vec{b}
-$$
