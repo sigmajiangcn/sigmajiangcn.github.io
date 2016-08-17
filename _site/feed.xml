@@ -6,8 +6,8 @@
 </description>
     <link>http://sigmajiangcn.github.io/</link>
     <atom:link href="http://sigmajiangcn.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 17 Aug 2016 00:20:10 +0800</pubDate>
-    <lastBuildDate>Wed, 17 Aug 2016 00:20:10 +0800</lastBuildDate>
+    <pubDate>Thu, 18 Aug 2016 00:39:30 +0800</pubDate>
+    <lastBuildDate>Thu, 18 Aug 2016 00:39:30 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -20,31 +20,29 @@
           &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;数据源&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#xml&quot; id=&quot;markdown-toc-xml&quot;&gt;何从xml网页文档提取中文&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;构建词库&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;构建英雄字典&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;分词与自定义字典&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;词性过滤&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;分词与自定义字典&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;词性过滤&lt;/a&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;攻略关键词提取&lt;/a&gt;        &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;攻略关键词提取&lt;/a&gt;        &lt;ul&gt;
           &lt;li&gt;&lt;a href=&quot;#tf-idf&quot; id=&quot;markdown-toc-tf-idf&quot;&gt;$TF-IDF$关键词提取原理&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;具体实现&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;具体实现&lt;/a&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#dummy&quot; id=&quot;markdown-toc-dummy&quot;&gt;离散Dummy化&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#tcaplus&quot; id=&quot;markdown-toc-tcaplus&quot;&gt;生成特征并写入Tcaplus&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;用户特征生成&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;用户自然人属性计算&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#dummy&quot; id=&quot;markdown-toc-dummy&quot;&gt;离散Dummy化&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;用户特征生成&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;用户自然人属性计算&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#dummy-1&quot; id=&quot;markdown-toc-dummy-1&quot;&gt;离散Dummy化&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#tcaplus-1&quot; id=&quot;markdown-toc-tcaplus-1&quot;&gt;生成特征并写入Tcaplus&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;配置攻略和用户交叉属性&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#storm&quot; id=&quot;markdown-toc-storm&quot;&gt;Storm实时统计与样本拼接&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-13&quot; id=&quot;markdown-toc-section-13&quot;&gt;日志接入与样本拼接&lt;/a&gt;        &lt;ul&gt;
-          &lt;li&gt;&lt;a href=&quot;#storm-1&quot; id=&quot;markdown-toc-storm-1&quot;&gt;Storm实现方法&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;#pb&quot; id=&quot;markdown-toc-pb&quot;&gt;广告pb定义&lt;/a&gt;&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#storm-1&quot; id=&quot;markdown-toc-storm-1&quot;&gt;什么是Storm&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-13&quot; id=&quot;markdown-toc-section-13&quot;&gt;日志接入与样本拼接&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-14&quot; id=&quot;markdown-toc-section-14&quot;&gt;样本拼接&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
@@ -67,23 +65,21 @@
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;section&quot;&gt;业务简介&lt;/h2&gt;
-&lt;p&gt;互联网广告的精准投放，在近十年来取得了蓬勃的发展，现在仍然是一个十分活跃的研究领域。对于互娱来说，游戏广告是信息触达用户的一条重要途径。精准化的广告推送，将有助于营销活动更容易取得成功，例如通过广告定位到处于游戏生命周期各个层次的用户，从而有助于拉取新用户、促进活跃、提升付费转化以及防止流失等。我们最近针对掌盟和王者荣耀手机助手等应用，提供个性化的攻略推荐，在优化用户体验中作了一些尝试。&lt;/p&gt;
-
-&lt;p&gt;在攻略推荐过程中，用户和攻略的信息作为预测的特征。预测的过程可以看成一个二分类的问题，即计算用户对攻略的感兴趣程度。一般常用由广义线性模型演变而来的逻辑回归作为训练模型，为了提升模型的表示能力，在特征工程中需要设计高阶交叉特征。在特征提取、离散dummy化、交叉、样本生成以及模型训练等流程进行简要介绍。&lt;/p&gt;
+&lt;p&gt;我们最近针对掌盟和王者荣耀手机助手等应用App，提供个性化的游戏攻略推荐，在优化用户体验中作了一些尝试。在游戏攻略推荐过程中，用户和攻略的信息作为预测的特征。预测的过程可以看成一个二分类的问题，即计算用户对攻略的感兴趣程度。本文将主要从工程和理论两个角度简要介绍处理流程。&lt;/p&gt;
 
 &lt;h2 id=&quot;section-1&quot;&gt;主要内容&lt;/h2&gt;
-&lt;p&gt;介绍攻略和用户属性的特征工程化处理&lt;/p&gt;
+&lt;p&gt;介绍攻略和用户属性的特征工程处理&lt;/p&gt;
 
-&lt;p&gt;介绍基于tdbank和storm的实时处理系统&lt;/p&gt;
+&lt;p&gt;介绍基于Tdbank和Storm的实时处理系统&lt;/p&gt;
 
-&lt;p&gt;介绍逻辑回归模型和基于spark的应用&lt;/p&gt;
+&lt;p&gt;介绍逻辑回归和基于Spark的模型训练&lt;/p&gt;
 
 &lt;h2 id=&quot;section-2&quot;&gt;攻略特征生成&lt;/h2&gt;
 
 &lt;h3 id=&quot;section-3&quot;&gt;数据源准备&lt;/h3&gt;
 
 &lt;h4 id=&quot;section-4&quot;&gt;数据源&lt;/h4&gt;
-&lt;p&gt;一般各个业务方面的攻略存储有差异，例如有放在cdb中或者redis中。攻略推荐的原始数据主要需要下面几个字段：攻略标识、中文标题、作者、攻略内容、发布时间、播放次数（例如视频攻略）等其他字段。攻略内容大都以原始的xml形式给出，例如：&lt;/p&gt;
+&lt;p&gt;一般各个项目组的游戏攻略存储都有差异，例如有放在cdb中或者redis中。攻略推荐的原始数据主要需要下面几个字段：攻略标识、中文标题、作者、攻略内容、发布时间、播放次数（例如视频攻略）等其他字段。攻略内容大都以原始的xml形式，例如：&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;&amp;lt;strong style=&quot;white-space: normal;&quot;&amp;gt;&amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp;——&amp;lt;/strong&amp;gt;解析&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;&amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp;1.线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了！&amp;lt;br/&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;&amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp; &amp;amp;nbsp;2.如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！&amp;lt;/p&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -101,12 +97,9 @@
 &lt;/div&gt;
 
 &lt;h4 id=&quot;section-5&quot;&gt;构建词库&lt;/h4&gt;
-&lt;p&gt;分别为作者、标题、内容构建词库，为后期的dummy化特征作准备。&lt;/p&gt;
+&lt;p&gt;分别为作者、标题、内容构建词库，为后期的关键词dummy化特征作准备。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-6&quot;&gt;构建英雄字典&lt;/h4&gt;
-&lt;p&gt;这个在提取标题关键词和攻略文本分词时比较重要，例如在LOL中的英雄盖伦，盖伦是名字，德玛西亚是称号，草丛伦是外号，这个都应被判定为盖伦。&lt;/p&gt;
-
-&lt;h4 id=&quot;section-7&quot;&gt;分词与自定义字典&lt;/h4&gt;
+&lt;h4 id=&quot;section-6&quot;&gt;分词与自定义字典&lt;/h4&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.oschina.net/p/jieba&quot;&gt;Jieba&lt;/a&gt;分词简单易用，效率高。在利用Jieba分词时，需要预先加载一个自定义分词字典。这个字段主要包括英雄的称号、名字、技能、符文、天赋以及常见的游戏解说名字等。例如如下自定义字典:&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;德玛西亚
@@ -116,9 +109,10 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;在分词之前预加载自定义的字典，则可以保持“草丛伦”不会被分成“草丛”和“伦”。&lt;/p&gt;
+&lt;p&gt;在分词之前预加载自定义的字典，则可以保持“草丛伦”不会被分成“草丛”和“伦”。
+另外需要注意的是，例如在LOL中的英雄盖伦，盖伦是名字，德玛西亚是称号，草丛伦是外号，这个都应被判定为盖伦。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-8&quot;&gt;词性过滤&lt;/h4&gt;
+&lt;h4 id=&quot;section-7&quot;&gt;词性过滤&lt;/h4&gt;
 &lt;p&gt;分词之后需要对词性进行标注并进行词性过滤。&lt;/p&gt;
 
 &lt;p&gt;词性标注如下：&lt;/p&gt;
@@ -147,11 +141,11 @@ words =pseg.cut(&quot;线上续航能力神技能，配合上出门装多兰盾�
 
 &lt;p&gt;实践过程中需要注意到unicode、utf8以及gbk等编码之间的转化&lt;/p&gt;
 
-&lt;h3 id=&quot;section-9&quot;&gt;攻略关键词提取&lt;/h3&gt;
-&lt;p&gt;经过上面的分词和词性过滤，每篇攻略将过滤得到比较重要的词语，接下来需要对几千篇攻略分析，应用$TF-IDF$来提取每篇攻略的关键词。&lt;/p&gt;
+&lt;h3 id=&quot;section-8&quot;&gt;攻略关键词提取&lt;/h3&gt;
+&lt;p&gt;经过上面的分词和词性过滤，每篇攻略正文内容将过滤得到比较重要的词语，接下来需要对几千篇有效攻略进行分析，应用$TF-IDF$来提取每篇攻略的关键词。&lt;/p&gt;
 
 &lt;h4 id=&quot;tf-idf&quot;&gt;$TF-IDF$关键词提取原理&lt;/h4&gt;
-&lt;p&gt;$TF-IDF$($Term frequency-inverse document frequency$ ) 是文本挖掘中一种广泛使用的特征向量化方法。&lt;/p&gt;
+&lt;p&gt;$TF-IDF$($Term\ frequency-inverse\ document\ frequency$ ) 是文本挖掘中一种广泛使用的特征向量化方法。&lt;/p&gt;
 
 &lt;p&gt;假设单词用$t$表示，文档用$d$表示，语料用$D$表示，那么文档频度$DF(t,D)$是包含单词$t$的文档数。如果我们只是使用词频度量重要性，就会很容易过分强调重复次数多但携带信息少的单词，例如：“a”,“the”以及“of”。如果某个单词在整个语料库中高频出现，意味着它没有携带专门针对某特殊文档的信息。&lt;/p&gt;
 
@@ -163,19 +157,11 @@ words =pseg.cut(&quot;线上续航能力神技能，配合上出门装多兰盾�
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;IDF(t,D) = \log \frac{|D| + 1}{DF(t,D) + 1}&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;其中$&lt;/td&gt;
-      &lt;td&gt;D&lt;/td&gt;
-      &lt;td&gt;$是语料中的文档总数。由于使用了$log$计算，如果单词在所有文档中出现，那么$IDF$就等于0。注意这里做了平滑处理（+1操作），防止单词没有在语料中出现时IDF计算中除0。$TF-IDF$度量是$TF$和$IDF$的简单相乘：&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;其中是$\lvert D \rvert$语料中的文档总数。由于使用了$log$计算，如果单词在所有文档中出现，那么$IDF$就等于0。注意这里做了平滑处理（+1操作），防止单词没有在语料中出现时IDF计算中除0。$TF-IDF$ 度量是$TF$和$IDF$的简单相乘：&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D)&lt;/script&gt;
 
-&lt;h4 id=&quot;section-10&quot;&gt;具体实现&lt;/h4&gt;
+&lt;h4 id=&quot;section-9&quot;&gt;具体实现&lt;/h4&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from  sklearn import feature_extraction
 from  sklearn.feature_extraction.text import TfidfTransformer
@@ -187,36 +173,43 @@ word=vectorizer.get_feature_names()
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;经过$TF-IDF$之后，我们会为每一篇攻略内容保留至多10个关键词。关键词在词库索引中查找对应的编号，则每篇攻略就由不超过10个关键词的索引构成，例如某篇攻略关键词提取之后包含“多兰盾  防御  盖伦”，则根据词库可能会被编码成“237 896  145”。具体$TF-IDF$计算时需要注意设置合适的文档频DF阈值。
-### 离散Dummy化
-上面得到每篇攻略的关键词索引可以直接Dummy化。然而每篇攻略上线之后的统计数据，例如点击率、播放次数等特征则需要进行离散Dummy化，具体公式如下：
+&lt;p&gt;经过$TF-IDF$之后，我们会为每一篇攻略内容保留至多10个关键词。关键词在词库索引中查找对应的编号，则每篇攻略就由不超过10个关键词的索引构成，例如某篇攻略关键词提取之后包含“多兰盾  防御  盖伦”，则根据词库可能会被编码成“237 896  145”。具体$TF-IDF$计算时需要注意设置合适的文档频DF阈值。&lt;/p&gt;
+
+&lt;h3 id=&quot;dummy&quot;&gt;离散Dummy化&lt;/h3&gt;
+&lt;p&gt;离散dummy化可以让模型保持一定的鲁棒性。上面得到每篇攻略的关键词索引可以直接Dummy化。然而每篇攻略上线之后的统计数据，例如点击率、播放次数等特征则需要进行离散Dummy化，具体公式如下：
 &lt;script type=&quot;math/tex&quot;&gt;id=\dfrac{x_i-x_{min}}{x_{max}-x_{min}}*dummyRange&lt;/script&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;tcaplus&quot;&gt;生成特征并写入Tcaplus&lt;/h3&gt;
-&lt;p&gt;为了后面Storm实时拼接样本以及推荐系统生成用户特征提供高速存储。&lt;/p&gt;
+&lt;p&gt;TCaplus是互娱研发部结合游戏特点、平衡性能和成本，开发的一款高速分布式Key-Values模型的NoSql存储系统。与之类似的是Redis，这是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;TCaplus是互娱研发部结合游戏特点、平衡性能和成本，开发的一款高速分布式Key-Values模型的NoSql存储系统。与之类似的是Redis，这是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库。
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;p&gt;这里用来给后面Storm实时拼接样本以及在线推荐系统提供高速存储。key是每篇游戏攻略的id，value是在稀疏特征空间的位置编号以及对应取值。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-11&quot;&gt;用户特征生成&lt;/h2&gt;
+&lt;h2 id=&quot;section-10&quot;&gt;用户特征生成&lt;/h2&gt;
 
-&lt;h3 id=&quot;section-12&quot;&gt;用户自然人属性计算&lt;/h3&gt;
+&lt;h3 id=&quot;section-11&quot;&gt;用户自然人属性计算&lt;/h3&gt;
 &lt;p&gt;构建用户自然人属性宽表 ，主要包括用户基本信息、登录、活跃、付费、最近常玩英雄以及实力表现等数据。用户自然人属性和攻略属性的差异在于，基本来自结构化的数据处理，不再需要通过分析xml内容去提取关键词特征。&lt;/p&gt;
 
-&lt;h3 id=&quot;dummy&quot;&gt;离散Dummy化&lt;/h3&gt;
+&lt;h3 id=&quot;dummy-1&quot;&gt;离散Dummy化&lt;/h3&gt;
 &lt;p&gt;将之前的宽表各个字段根据要求分别进行离散Dummy化。&lt;/p&gt;
 
 &lt;h3 id=&quot;tcaplus-1&quot;&gt;生成特征并写入Tcaplus&lt;/h3&gt;
 &lt;p&gt;类似攻略属性。&lt;/p&gt;
 
+&lt;h2 id=&quot;section-12&quot;&gt;配置攻略和用户交叉属性&lt;/h2&gt;
+&lt;p&gt;一般而言，一篇攻略包含作者、标题关键词、内容关键词、点击率等特征。同时每个用户则包含如基本信息、最近常用英雄、常失败英雄等上千维特征。这些攻略和用户特征既包含离散化特征，也有Dummy特征，需要具体制定哪些特征需要进行交叉，增强模型的解释能力。&lt;/p&gt;
+
 &lt;h2 id=&quot;storm&quot;&gt;Storm实时统计与样本拼接&lt;/h2&gt;
-&lt;p&gt;### 什么是Storm
- Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和ETL等领域。Storm的部署管理非常简单，而且，在同类的流式计算工具，Storm的性能也是非常出众的。&lt;/p&gt;
+
+&lt;h3 id=&quot;storm-1&quot;&gt;什么是Storm&lt;/h3&gt;
+&lt;p&gt;Storm是一个开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和ETL等领域。Storm的部署管理非常简单，而且，在同类的流式计算工具，Storm的性能也是非常出众的。&lt;/p&gt;
 
 &lt;p&gt;Storm主要分为两种组件Nimbus和Supervisor。这两种组件都是快速失败的，没有状态。任务状态和心跳信息等都保存在Zookeeper上的，提交的代码资源都在本地机器的硬盘上。&lt;/p&gt;
 
 &lt;p&gt;Storm的常见关键词简介如下：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Storm提交运行的程序称为Topology。&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Nimbus负责在集群里面发送代码，分配工作给机器，并且监控状态。全局只有一个。&lt;/p&gt;
@@ -231,26 +224,21 @@ word=vectorizer.get_feature_names()
 &lt;/blockquote&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;Storm提交运行的程序称为Topology。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;blockquote&gt;
   &lt;p&gt;Topology处理的最小的消息单位是一个Tuple，也就是一个任意对象的数组。&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;Topology由Spout和Bolt构成。Spout是发出Tuple的结点。Bolt可以随意订阅某个Spout或者Bolt发出的Tuple。Spout和Bolt都统称为component。&lt;/p&gt;
+  &lt;p&gt;Topology由Spout和Bolt构成，统称为Component。Spout是发出Tuple的结点,可以通过bid从tdbank中消费数据。Bolt可以随意订阅某个Spout或者Bolt发出的Tuple。&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;h3 id=&quot;section-13&quot;&gt;日志接入与样本拼接&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;./1469452773370.png&quot; alt=&quot;Alt text&quot; /&gt;
-一方面由于客户端上报给我们的日志可能有多种形式，例如Probuf、Json或者Tlog等形式，另一方面由于考虑到后面Storm的处理能力，例如节假日一般数倍于平时的日志量。我们通过几乎透明的中转把数据发送到Tdbank数据银行，它既可以起到后面缓冲消费的作用，并且可以将数据共享给其他合作的业务部门消费，起到了充分利用数据的目的。&lt;/p&gt;
+&lt;p&gt;一方面由于客户端上报给我们的日志可能有多种形式，例如Probuf、Json或者Tlog等形式，另一方面由于考虑到后面Storm的处理能力，例如节假日一般数倍于平时的日志量。我们通过几乎透明的中转把数据发送到Tdbank（类似Kafka）它既可以起到后面缓冲消费的作用，并且可以将数据共享给其他合作的业务部门消费，起到了充分利用数据的目的。&lt;/p&gt;
 
 &lt;p&gt;接下来通过Storm来消费Tdbank 的数据，主要有以下几个目的：&lt;/p&gt;
 
-&lt;p&gt;1、PV统计：主要包括曝光总量、点击总量、免费领用总量、购买总量、购买流水&lt;/p&gt;
-
-&lt;p&gt;2、UV统计：主要包括曝光、点击、购买等对用户进行去重的数据&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;PV和UV统计：主要包括曝光、点击的用户数据&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;p&gt;3、Filter：这个主要是用来在业务上线或者调试时，方便对关注的用户进行过滤，校验数据协议的准确性&lt;/p&gt;
 
@@ -260,60 +248,11 @@ word=vectorizer.get_feature_names()
 
 &lt;p&gt;更加深入的可以参考我的同事文章&lt;a href=&quot;http://km.oa.com/group/25372/articles/show/232795&quot;&gt;《图灵系统介绍（十）- 实时日志处理平台》&lt;/a&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;storm-1&quot;&gt;Storm实现方法&lt;/h4&gt;
-&lt;p&gt;在execute方法中，传入的参数是一个Tuple，该Tuple就包含了上游（Upstream）组件ProduceRecordSpout所emit的数据，直接取出数据进行处理。上面代码中，我们将取出的数据，按照空格进行的split，得到一个一个的单词，然后在emit到下一个组件，声明的输出schema为2个Field：word和count，当然这里面count的值都为1。&lt;/p&gt;
-
-&lt;h4 id=&quot;pb&quot;&gt;广告pb定义&lt;/h4&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```java
-package gpm;
-option java_package = &quot;gpm.logprocess.proto&quot;;
-option java_outer_classname = &quot;TrainingProto&quot;;
-
-enum Constants {
-    SPEED_MAX_ITEM_ID = 100000;
-}
-
-enum ValueType {
-    DISCRETE = 0;
-    DUMMY    = 1;
-}
-
-message IDValuePair
-{
-    required int64     id = 1;
-    optional float     value = 2 [ default  = 1.0 ];
-    optional ValueType value_type = 3 [default  =  DUMMY];
-}
-
-message Features
-{
-    repeated IDValuePair features = 1;
-    repeated int64       feature_group_ids = 2; // 有feature值的group id集合
-}
-
-message TrainingSample
-{
-    repeated IDValuePair features  = 1;
-    required float       y_value   = 2;
-    required int32       timestamp = 3;
-    optional int64       id        = 4;
-}
-
-message TrainingResult
-{
-    required float       theta_zero = 1;
-    repeated IDValuePair thetas = 2;
-}
-
-```
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
 &lt;h3 id=&quot;section-14&quot;&gt;样本拼接&lt;/h3&gt;
 &lt;p&gt;LR模型比较简单，需要交叉特征提升模型表达能力。
-在前面已经将用户属性和攻略属性分别离散Dummy化存储至KV系统Tcaplus，在拼接样本的bolt中，对来自spout的每条点击流数据判断是曝光还是点击，如果是点击则标记为正样本，否则为负样本。接下来对该条数据的uin去缓存查有无该用户数据，没有则至Tcaplus中去查询用户数据，得到uin的特征之后则查询攻略的特征，也是优先从缓存去查，然后去Tcaplus查询特征，接下来根据高阶交叉规则拼接模型样本。
-大部分情况下，待推荐的有效攻略不过几千，而用户量是远大于攻略数目的，例如掌盟的日均曝光UV可达500万，所以实际情况下，每条点击流数据主要是去Tcaplus去查询用户特征，而攻略特征在bolt运行一段时间之后大部分已经保存在Cache中。&lt;/p&gt;
+在前面已经将用户属性和攻略属性分别离散Dummy化存储至KV系统Tcaplus，在拼接样本的bolt中，对来自spout的每条点击流数据判断是曝光还是点击，如果是点击则标记为正样本，否则为负样本。接下来对该条数据的uin去缓存查有无该用户数据，没有则至Tcaplus中去查询用户数据，得到uin的特征之后则查询攻略的特征，也是优先从缓存去查，然后去Tcaplus查询特征，接下来根据高阶交叉规则拼接模型样本。&lt;/p&gt;
+
+&lt;p&gt;大部分情况下，待推荐的有效攻略不过几千，而用户量是远大于攻略数目的，例如掌盟的日均曝光UV可达500万，所以实际情况下，每条点击流数据主要是去Tcaplus去查询用户特征，而攻略特征在bolt运行一段时间之后大部分已经保存在Cache中。&lt;/p&gt;
 
 &lt;p&gt;这里还要注意一点，在机器学习的模型训练中，正负样本的比例控制很重要。点击流中的曝光，也就是负样本远比正样本多，所以对负样本要做一定的筛选，使正负样本比例在一个合理的阈值范围之内，保证模型训练的有效性。&lt;/p&gt;
 
@@ -349,9 +288,7 @@ message TrainingResult
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align} &amp; J(w){\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\ &amp;  =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13} \end{align} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
-\begin{align} &amp; \dfrac{\partial J(w)}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\  &amp; \hspace {14mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13} \end{align} %]]&gt;&lt;/script&gt;
- 因此有参数的迭代如下：
+&lt;p&gt;因此有参数的迭代如下：
  \begin{align}
 &amp;amp; w_{j+1}=w_j-\alpha\cdot\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
 \end{align}&lt;/p&gt;
@@ -363,7 +300,8 @@ message TrainingResult
 \begin{align} &amp; w^*=arg \  \underset{w}{max}P(w|D) \tag{14} \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D)\tag{15} \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w)\tag{16} \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{17}  \end{align} %]]&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;section-16&quot;&gt;在线训练&lt;/h3&gt;
-&lt;p&gt;spark mllib, tmllib&lt;/p&gt;
+&lt;p&gt;spark mllib, tmllib
+Spark是在hadoop基础上改进&lt;/p&gt;
 
 &lt;h3 id=&quot;section-17&quot;&gt;参数调优&lt;/h3&gt;
 
@@ -384,11 +322,9 @@ message TrainingResult
 &lt;p&gt;实时推荐系统方面，我的同事在&lt;a href=&quot;http://km.oa.com/group/25372/articles/show/238608&quot;&gt;《游戏广告推荐服务器原理介绍和实现总结》&lt;/a&gt;中形象的介绍了实现的流程，在与推荐系统对接时，需要添加一些人工规则，例如最近的攻略，或者对模型的参数进行变化，来降低实时推荐系统的计算压力。能离线计算好的部分尽量先行计算，然后异步更新到Cache中，方便后续的计算、排序和推荐。&lt;/p&gt;
 
 &lt;h3 id=&quot;epr&quot;&gt;EPR页面生成&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;./1469454293150.png&quot; alt=&quot;Alt text&quot; /&gt;
-EPR是互娱运营部数据中心推出的一套报表系统，旨在通过在EPR配置端创建报表和配置报表参数，可以将结构化的数据转换成成可视化报表并展现给用户。通过对报表页参数不同的配置，用户可以在浏览器中看到丰富的报表展现形式，如折线图、柱状图、表格等。具体使用方法可以参考&lt;a href=&quot;http://km.oa.com/group/18997/articles/show/220812?kmref=search&amp;amp;from_page=1&amp;amp;no=2&amp;amp;is_from_iso=1&quot;&gt;《使用“TDW+洛子系统+EPR”完成数据展示》&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;EPR是互娱运营部数据中心推出的一套报表系统，旨在通过在EPR配置端创建报表和配置报表参数，可以将结构化的数据转换成成可视化报表并展现给用户。通过对报表页参数不同的配置，用户可以在浏览器中看到丰富的报表展现形式，如折线图、柱状图、表格等。具体使用方法可以参考&lt;a href=&quot;http://km.oa.com/group/18997/articles/show/220812?kmref=search&amp;amp;from_page=1&amp;amp;no=2&amp;amp;is_from_iso=1&quot;&gt;《使用“TDW+洛子系统+EPR”完成数据展示》&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;section-21&quot;&gt;监控告警&lt;/h3&gt;
-&lt;p&gt;集群托管&lt;/p&gt;
 
 &lt;p&gt;不仅仅是在攻略推荐，还有各种游戏内的精准营销活动。&lt;/p&gt;
 
