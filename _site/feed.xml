@@ -6,8 +6,8 @@
 </description>
     <link>http://sigmajiangcn.github.io/</link>
     <atom:link href="http://sigmajiangcn.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 18 Aug 2016 23:43:48 +0800</pubDate>
-    <lastBuildDate>Thu, 18 Aug 2016 23:43:48 +0800</lastBuildDate>
+    <pubDate>Fri, 19 Aug 2016 00:13:36 +0800</pubDate>
+    <lastBuildDate>Fri, 19 Aug 2016 00:13:36 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -308,6 +308,7 @@ word=vectorizer.get_feature_names()
 &lt;p&gt;Spark是在hadoop基础上改进得到的分布式框架，采用内存迭代式的计算，非常适合机器学习算法。相比于之前的map -reduce，spark提供了丰富的操作算子，以前我们可能需要编写很多代码，现在只需要通过若干个transform和action就可以完成。一般认为，hadoop特点在于批处理，storm特点在于流处理，spark特点在于内存迭代。我们在游戏攻略推荐中，用户属性生成和入库有着数量较大和周期性的特点，适合采用mapreduce；攻略效果统计和模型样本拼接对实时性要求较高，适合采用storm；在模型训练阶段涉及到多轮参数寻优迭代，适合采用spark。&lt;/p&gt;
 
 &lt;h3 id=&quot;section-17&quot;&gt;参数调优&lt;/h3&gt;
+&lt;p&gt;一方面，我们需要关注模型在测试集上的预测性能，例如准确率、召回率、AUC等，另一方面需要防止过拟合，调整损失函数和正则化之间的比例。训练得到的非零参数如果过多，则也不利于后期的在线推荐部分的计算。&lt;/p&gt;
 
 &lt;h3 id=&quot;section-18&quot;&gt;效果对比&lt;/h3&gt;
 &lt;p&gt;上面的工作目的都只有一个，把合适的内容推荐给用户，提高点击率。一般我们把请求服务器的用户分成一定比例的对照用户，对比算法的实际效果。典型的例如在算法、强规则、随机包、热销榜之间的点击流对比。&lt;/p&gt;
