@@ -6,8 +6,8 @@
 </description>
     <link>http://sigmajiangcn.github.io/</link>
     <atom:link href="http://sigmajiangcn.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 18 Aug 2016 00:39:30 +0800</pubDate>
-    <lastBuildDate>Thu, 18 Aug 2016 00:39:30 +0800</lastBuildDate>
+    <pubDate>Thu, 18 Aug 2016 23:43:48 +0800</pubDate>
+    <lastBuildDate>Thu, 18 Aug 2016 23:43:48 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -18,7 +18,7 @@
   &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;攻略特征生成&lt;/a&gt;    &lt;ul&gt;
       &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;数据源准备&lt;/a&gt;        &lt;ul&gt;
           &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;数据源&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;#xml&quot; id=&quot;markdown-toc-xml&quot;&gt;何从xml网页文档提取中文&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#xml&quot; id=&quot;markdown-toc-xml&quot;&gt;如何从xml网页文档提取中文&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;构建词库&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;分词与自定义字典&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;词性过滤&lt;/a&gt;&lt;/li&gt;
@@ -47,6 +47,7 @@
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#section-15&quot; id=&quot;markdown-toc-section-15&quot;&gt;逻辑回归模型训练&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#ml&quot; id=&quot;markdown-toc-ml&quot;&gt;最大似然法ML&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#map&quot; id=&quot;markdown-toc-map&quot;&gt;最大后验估计MAP与正则化&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-16&quot; id=&quot;markdown-toc-section-16&quot;&gt;在线训练&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-17&quot; id=&quot;markdown-toc-section-17&quot;&gt;参数调优&lt;/a&gt;&lt;/li&gt;
@@ -85,7 +86,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h4 id=&quot;xml&quot;&gt;何从xml网页文档提取中文&lt;/h4&gt;
+&lt;h4 id=&quot;xml&quot;&gt;如何从xml网页文档提取中文&lt;/h4&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from bs4 import BeautifulSoup
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
@@ -236,15 +237,13 @@ word=vectorizer.get_feature_names()
 
 &lt;p&gt;接下来通过Storm来消费Tdbank 的数据，主要有以下几个目的：&lt;/p&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;PV和UV统计：主要包括曝光、点击的用户数据&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;1、PV和UV统计：主要包括曝光、点击的用户数据&lt;/p&gt;
 
-&lt;p&gt;3、Filter：这个主要是用来在业务上线或者调试时，方便对关注的用户进行过滤，校验数据协议的准确性&lt;/p&gt;
+&lt;p&gt;2、Filter：这个主要是用来在业务上线或者调试时，方便对关注的用户进行过滤，校验数据协议的准确性&lt;/p&gt;
 
-&lt;p&gt;4、Sample：这个是用来拼接模型训练样本，每条样本包括用户特征、广告特征以及交叉特征&lt;/p&gt;
+&lt;p&gt;3、Sample：这个是用来拼接模型训练样本，每条样本包括用户特征、广告特征以及交叉特征&lt;/p&gt;
 
-&lt;p&gt;5、Save：对部分数据保存至tdw，方便后续的深入分析&lt;/p&gt;
+&lt;p&gt;4、Save：对部分数据保存至tdw，方便后续的深入分析&lt;/p&gt;
 
 &lt;p&gt;更加深入的可以参考我的同事文章&lt;a href=&quot;http://km.oa.com/group/25372/articles/show/232795&quot;&gt;《图灵系统介绍（十）- 实时日志处理平台》&lt;/a&gt;&lt;/p&gt;
 
@@ -257,9 +256,10 @@ word=vectorizer.get_feature_names()
 &lt;p&gt;这里还要注意一点，在机器学习的模型训练中，正负样本的比例控制很重要。点击流中的曝光，也就是负样本远比正样本多，所以对负样本要做一定的筛选，使正负样本比例在一个合理的阈值范围之内，保证模型训练的有效性。&lt;/p&gt;
 
 &lt;h2 id=&quot;section-15&quot;&gt;逻辑回归模型训练&lt;/h2&gt;
-&lt;p&gt;在计算广告中，常使用逻辑回归模型，因为LR模型比较简单，易于大规模并行化。另外需要注意在特征工程中关注有效提取特征，特征的维度如果过高，后续的计算复杂度将会提高，需要考虑正则化。
-### 最大似然法ML
-逻辑回归其实仅为在线性回归的基础上，套用了一个逻辑函数，但也就由于这个逻辑函数，逻辑回归成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。&lt;/p&gt;
+&lt;p&gt;在计算广告中，常使用逻辑回归模型，因为LR模型比较简单，易于大规模并行化。另外需要注意在特征工程中关注有效提取特征，特征的维度如果过高，后续的计算复杂度将会提高，需要考虑正则化。&lt;/p&gt;
+
+&lt;h3 id=&quot;ml&quot;&gt;最大似然法ML&lt;/h3&gt;
+&lt;p&gt;逻辑回归其实仅为在线性回归的基础上，套用了一个逻辑函数，但也就由于这个逻辑函数，逻辑回归成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align} &amp; y=f(x)=w^Tx\tag{1} \\ &amp; y=f(x)=sign(w^Tx)\tag{2} \\ &amp; y=f(x)=\dfrac{1}{1+\exp(-w^Tx)}\tag{3} \end{align} %]]&gt;&lt;/script&gt;
@@ -277,7 +277,7 @@ word=vectorizer.get_feature_names()
 
 &lt;p&gt;据Andrew Ng关于最大似然函数与最小损失函数的关系: 
 \begin{align}
- &amp;amp;  $J(\theta)=-\dfrac{1}{m}L(\theta) \tag{10}&lt;br /&gt;
+ &amp;amp;  J(w)=-\dfrac{1}{m}L(w) \tag{10}&lt;br /&gt;
 \end{align}
  这里取:
 \begin{align}
@@ -286,7 +286,7 @@ word=vectorizer.get_feature_names()
  因此&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align} &amp; J(w){\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\ &amp;  =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13} \end{align} %]]&gt;&lt;/script&gt;
+\begin{align} &amp; \frac{\partial{J(w)}}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\ &amp; \hspace {16mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13} \end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;因此有参数的迭代如下：
  \begin{align}
@@ -295,13 +295,17 @@ word=vectorizer.get_feature_names()
 
 &lt;h3 id=&quot;map&quot;&gt;最大后验估计MAP与正则化&lt;/h3&gt;
 
+&lt;p&gt;《计算广告》的作者刘未鹏在&lt;a href=&quot;http://mindhacks.cn/2008/09/21/the-magical-bayesian-method/&quot;&gt;《数学之美番外篇：平凡而又神奇的贝叶斯方法》&lt;/a&gt;形象的介绍过结合先验分布的最大后验估计。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align} &amp; p(w|D)=\dfrac{p(w,D)}{p(D)} \\ &amp; \hspace {16mm}=\dfrac{p(D|w) \cdot p(w)}{p(D)} \\ &amp; \hspace {16mm}  \propto p(w) \cdot p(D|w) \end{align} %]]&gt;&lt;/script&gt;
+
 &lt;p&gt;避免过拟合，降低server负担
  &lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
 \begin{align} &amp; w^*=arg \  \underset{w}{max}P(w|D) \tag{14} \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D)\tag{15} \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w)\tag{16} \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{17}  \end{align} %]]&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;section-16&quot;&gt;在线训练&lt;/h3&gt;
-&lt;p&gt;spark mllib, tmllib
-Spark是在hadoop基础上改进&lt;/p&gt;
+&lt;p&gt;Spark是在hadoop基础上改进得到的分布式框架，采用内存迭代式的计算，非常适合机器学习算法。相比于之前的map -reduce，spark提供了丰富的操作算子，以前我们可能需要编写很多代码，现在只需要通过若干个transform和action就可以完成。一般认为，hadoop特点在于批处理，storm特点在于流处理，spark特点在于内存迭代。我们在游戏攻略推荐中，用户属性生成和入库有着数量较大和周期性的特点，适合采用mapreduce；攻略效果统计和模型样本拼接对实时性要求较高，适合采用storm；在模型训练阶段涉及到多轮参数寻优迭代，适合采用spark。&lt;/p&gt;
 
 &lt;h3 id=&quot;section-17&quot;&gt;参数调优&lt;/h3&gt;
 
