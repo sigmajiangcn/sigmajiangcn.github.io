@@ -30,7 +30,7 @@ categories: [adRecommend]
 
 	<p><strong><strong style="white-space: normal;">&nbsp; &nbsp; &nbsp; &nbsp;——</strong>解析</strong></p><p>&nbsp; &nbsp; &nbsp; &nbsp;1.线上续航能力神技能，配合上出门装多兰盾，还有防御天赋的两点“愈合”，你就知道前期的德玛西亚之力盖伦有多恶心人了！<br/></p><p>&nbsp; &nbsp; &nbsp; &nbsp;2.如果对拼大亏后，果断舍弃补兵，躲草丛吃经验，一分钟后又是一个名扬天下的草丛伦！</p>
 
-#### 何从xml网页文档提取中文
+#### 如何从xml网页文档提取中文
 	from bs4 import BeautifulSoup
 
 这个库可以有效提取xml网页中的中文，在爬虫中比较常用。提取中文之后如下：
@@ -159,13 +159,13 @@ Storm的常见关键词简介如下：
 
 接下来通过Storm来消费Tdbank 的数据，主要有以下几个目的：
 
-1. PV和UV统计：主要包括曝光、点击的用户数据
+1、PV和UV统计：主要包括曝光、点击的用户数据
 
-3、Filter：这个主要是用来在业务上线或者调试时，方便对关注的用户进行过滤，校验数据协议的准确性
+2、Filter：这个主要是用来在业务上线或者调试时，方便对关注的用户进行过滤，校验数据协议的准确性
 
-4、Sample：这个是用来拼接模型训练样本，每条样本包括用户特征、广告特征以及交叉特征
+3、Sample：这个是用来拼接模型训练样本，每条样本包括用户特征、广告特征以及交叉特征
 
-5、Save：对部分数据保存至tdw，方便后续的深入分析
+4、Save：对部分数据保存至tdw，方便后续的深入分析
 
 更加深入的可以参考我的同事文章[《图灵系统介绍（十）- 实时日志处理平台》](http://km.oa.com/group/25372/articles/show/232795)
 
@@ -180,6 +180,7 @@ LR模型比较简单，需要交叉特征提升模型表达能力。
 
 ## 逻辑回归模型训练
 在计算广告中，常使用逻辑回归模型，因为LR模型比较简单，易于大规模并行化。另外需要注意在特征工程中关注有效提取特征，特征的维度如果过高，后续的计算复杂度将会提高，需要考虑正则化。
+
 ### 最大似然法ML
 逻辑回归其实仅为在线性回归的基础上，套用了一个逻辑函数，但也就由于这个逻辑函数，逻辑回归成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。
 
@@ -197,7 +198,7 @@ $$\begin{align} & w^*=arg \  \underset{w}{max}P(D|w)\tag{16} \\ &\hspace {6mm}  
 
  据Andrew Ng关于最大似然函数与最小损失函数的关系: 
 \begin{align}
- &  $J(\theta)=-\dfrac{1}{m}L(\theta) \tag{10}\\
+ &  J(w)=-\dfrac{1}{m}L(w) \tag{10}\\
 \end{align}
  这里取:
 \begin{align}
@@ -205,7 +206,7 @@ $$\begin{align} & w^*=arg \  \underset{w}{max}P(D|w)\tag{16} \\ &\hspace {6mm}  
 \end{align}
  因此
  
-$$ \begin{align} & J(w){\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\ &  =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13} \end{align}$$
+$$ \begin{align} & \frac{\partial{J(w)}}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\ & \hspace {16mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13} \end{align}$$
  
  因此有参数的迭代如下：
  \begin{align}
@@ -214,14 +215,17 @@ $$ \begin{align} & J(w){\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^T
 
 ### 最大后验估计MAP与正则化
 
+《计算广告》的作者刘未鹏在[《数学之美番外篇：平凡而又神奇的贝叶斯方法》](http://mindhacks.cn/2008/09/21/the-magical-bayesian-method/)形象的介绍过结合先验分布的最大后验估计。
+
+$$\begin{align} & p(w|D)=\dfrac{p(w,D)}{p(D)} \\ & \hspace {16mm}=\dfrac{p(D|w) \cdot p(w)}{p(D)} \\ & \hspace {16mm}  \propto p(w) \cdot p(D|w) \end{align}$$
+
 避免过拟合，降低server负担
  $$\begin{align} & w^*=arg \  \underset{w}{max}P(w|D) \tag{14} \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D)\tag{15} \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w)\tag{16} \\ & \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{17}  \end{align}$$		
 
 
 
 ### 在线训练
-spark mllib, tmllib
-Spark是在hadoop基础上改进
+Spark是在hadoop基础上改进得到的分布式框架，采用内存迭代式的计算，非常适合机器学习算法。相比于之前的map -reduce，spark提供了丰富的操作算子，以前我们可能需要编写很多代码，现在只需要通过若干个transform和action就可以完成。一般认为，hadoop特点在于批处理，storm特点在于流处理，spark特点在于内存迭代。我们在游戏攻略推荐中，用户属性生成和入库有着数量较大和周期性的特点，适合采用mapreduce；攻略效果统计和模型样本拼接对实时性要求较高，适合采用storm；在模型训练阶段涉及到多轮参数寻优迭代，适合采用spark。
 
 
 ### 参数调优
