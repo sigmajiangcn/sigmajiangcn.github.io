@@ -6,8 +6,8 @@
 </description>
     <link>http://sigmajiangcn.github.io/</link>
     <atom:link href="http://sigmajiangcn.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 19 Aug 2016 00:13:36 +0800</pubDate>
-    <lastBuildDate>Fri, 19 Aug 2016 00:13:36 +0800</lastBuildDate>
+    <pubDate>Fri, 19 Aug 2016 21:53:13 +0800</pubDate>
+    <lastBuildDate>Fri, 19 Aug 2016 21:53:13 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -152,15 +152,17 @@ words =pseg.cut(&quot;线上续航能力神技能，配合上出门装多兰盾�
 
 &lt;p&gt;其中词频$TF$指的是某一个给定的词语在该文件中出现的次数。$TF$通常要被归一化（区别于下面的$IDF$，分子小于分母）：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;TF(t,d) = \frac{t}{d}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;TF(t,d) = \frac{t}{d}  \tag{1}&lt;/script&gt;
 
 &lt;p&gt;逆文档频度$IDF$是单词携带信息量的数值度量:&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;IDF(t,D) = \log \frac{|D| + 1}{DF(t,D) + 1}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;IDF(t,D) = \log \frac{|D| + 1}{DF(t,D) + 1} \tag{2}&lt;/script&gt;
 
 &lt;p&gt;其中是$\lvert D \rvert$语料中的文档总数。由于使用了$log$计算，如果单词在所有文档中出现，那么$IDF$就等于0。注意这里做了平滑处理（+1操作），防止单词没有在语料中出现时IDF计算中除0。$TF-IDF$ 度量是$TF$和$IDF$的简单相乘：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D)&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D) \tag{3}&lt;/script&gt;
+
+&lt;p&gt;可以看出，$TF-IDF$与一个词在文档中的出现次数成正比，与该次在整个语料中的出现次数成反比。所以自动提取关键词的算法就是计算出文档的每个词的$TF-IDF$值，然后按照降序排列，取排在最前面的几个词。&lt;/p&gt;
 
 &lt;h4 id=&quot;section-9&quot;&gt;具体实现&lt;/h4&gt;
 
@@ -174,11 +176,12 @@ word=vectorizer.get_feature_names()
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;经过$TF-IDF$之后，我们会为每一篇攻略内容保留至多10个关键词。关键词在词库索引中查找对应的编号，则每篇攻略就由不超过10个关键词的索引构成，例如某篇攻略关键词提取之后包含“多兰盾  防御  盖伦”，则根据词库可能会被编码成“237 896  145”。具体$TF-IDF$计算时需要注意设置合适的文档频DF阈值。&lt;/p&gt;
+&lt;p&gt;经过$TF-IDF$之后，我们会为每一篇攻略内容保留至多10个关键词。关键词在词库索引中查找对应的编号，则每篇攻略就由不超过10个关键词的索引构成，例如某篇攻略关键词提取之后包含“多兰盾  防御  盖伦”，则根据词库可能会被编码类似于“237 896  145”。具体$TF-IDF$计算时需要注意设置合适的文档频DF阈值。&lt;/p&gt;
 
 &lt;h3 id=&quot;dummy&quot;&gt;离散Dummy化&lt;/h3&gt;
-&lt;p&gt;离散dummy化可以让模型保持一定的鲁棒性。上面得到每篇攻略的关键词索引可以直接Dummy化。然而每篇攻略上线之后的统计数据，例如点击率、播放次数等特征则需要进行离散Dummy化，具体公式如下：
-&lt;script type=&quot;math/tex&quot;&gt;id=\dfrac{x_i-x_{min}}{x_{max}-x_{min}}*dummyRange&lt;/script&gt;&lt;/p&gt;
+&lt;p&gt;离散dummy化可以让模型保持一定的鲁棒性。上面得到每篇攻略的关键词索引可以直接Dummy化。然而每篇攻略上线之后的统计数据，例如点击率、播放次数等特征则需要进行离散Dummy化，具体公式如下：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;id=\dfrac{x_i-x_{min}}{x_{max}-x_{min}}*dummyRange \tag{4}&lt;/script&gt;
 
 &lt;h3 id=&quot;tcaplus&quot;&gt;生成特征并写入Tcaplus&lt;/h3&gt;
 &lt;p&gt;TCaplus是互娱研发部结合游戏特点、平衡性能和成本，开发的一款高速分布式Key-Values模型的NoSql存储系统。与之类似的是Redis，这是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库。&lt;/p&gt;
@@ -188,10 +191,10 @@ word=vectorizer.get_feature_names()
 &lt;h2 id=&quot;section-10&quot;&gt;用户特征生成&lt;/h2&gt;
 
 &lt;h3 id=&quot;section-11&quot;&gt;用户自然人属性计算&lt;/h3&gt;
-&lt;p&gt;构建用户自然人属性宽表 ，主要包括用户基本信息、登录、活跃、付费、最近常玩英雄以及实力表现等数据。用户自然人属性和攻略属性的差异在于，基本来自结构化的数据处理，不再需要通过分析xml内容去提取关键词特征。&lt;/p&gt;
+&lt;p&gt;构建用户自然人属性宽表 ，主要包括用户基本信息、登录、活跃、付费、最近常玩英雄以及实力表现等数据，其中一部分数据可以来自例行化的用户画像数据。用户自然人属性和攻略属性的差异在于，基本来自结构化的数据处理，不再需要通过分析xml内容去提取关键词特征。&lt;/p&gt;
 
 &lt;h3 id=&quot;dummy-1&quot;&gt;离散Dummy化&lt;/h3&gt;
-&lt;p&gt;将之前的宽表各个字段根据要求分别进行离散Dummy化。&lt;/p&gt;
+&lt;p&gt;将之前的宽表各个字段根据要求分别进行离散Dummy化。例如用户的年龄和注册时间等，&lt;/p&gt;
 
 &lt;h3 id=&quot;tcaplus-1&quot;&gt;生成特征并写入Tcaplus&lt;/h3&gt;
 &lt;p&gt;类似攻略属性。&lt;/p&gt;
@@ -262,53 +265,59 @@ word=vectorizer.get_feature_names()
 &lt;p&gt;逻辑回归其实仅为在线性回归的基础上，套用了一个逻辑函数，但也就由于这个逻辑函数，逻辑回归成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align} &amp; y=f(x)=w^Tx\tag{1} \\ &amp; y=f(x)=sign(w^Tx)\tag{2} \\ &amp; y=f(x)=\dfrac{1}{1+\exp(-w^Tx)}\tag{3} \end{align} %]]&gt;&lt;/script&gt;
+\begin{align} &amp; y=f(x)=w^Tx\tag{5} \\ &amp; y=f(x)=sign(w^Tx)\tag{6} \\ &amp; y=f(x)=\dfrac{1}{1+\exp(-w^Tx)}\tag{7} \end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;假设$x\in R^d$  为$d$维输入向量，$y\in {0,1}$为输出标签，$w\in R^d$是参数。
  则有&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align} &amp; p(y_i=1|x_i,w)=\dfrac{\exp(w^Tx)}{1+\exp(w^Tx)}=P_i\tag{4} \\ &amp; p(y_i=0|x_i,w)=\dfrac{1}{1+\exp(w^Tx)}=1-P_i \tag{5} \end{align} %]]&gt;&lt;/script&gt;
+\begin{align} &amp; p(y_i=1|x_i,w)=\dfrac{\exp(w^Tx)}{1+\exp(w^Tx)}=P_i\tag{8} \\ &amp; p(y_i=0|x_i,w)=\dfrac{1}{1+\exp(w^Tx)}=1-P_i \tag{9} \end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;然后有：&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align} &amp; w^*=arg \  \underset{w}{max}P(D|w)\tag{16} \\ &amp;\hspace {6mm}  =arg \  \underset{w}{max}\prod_{i=1}^NP_i^{y_i}(1-P_i)^{1-y_i} \tag{6} \\ &amp; \hspace {6mm}  =arg \ \underset{w}{max}\sum_{i=1}^Ny_i\log{P_i}+(1-y_i)\log{(1-P_i)} \tag{7} \\ &amp; \hspace {6mm}  =arg \  \underset{w}{max}\sum_{i=1}^Ny_i\log{\dfrac{P_i}{1-P_i}}+\log{(1-P_i)} \tag{8} \\ &amp; \hspace {6mm}  =arg \  \underset{w}{max}=\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{9} \end{align} %]]&gt;&lt;/script&gt;
+\begin{align} &amp; w^*=arg \  \underset{w}{max}P(D|w)\tag{10} \\ &amp;\hspace {6mm}  =arg \  \underset{w}{max}\prod_{i=1}^NP_i^{y_i}(1-P_i)^{1-y_i} \tag{11} \\ &amp; \hspace {6mm}  =arg \ \underset{w}{max}\sum_{i=1}^Ny_i\log{P_i}+(1-y_i)\log{(1-P_i)} \tag{12} \\ &amp; \hspace {6mm}  =arg \  \underset{w}{max}\sum_{i=1}^Ny_i\log{\dfrac{P_i}{1-P_i}}+\log{(1-P_i)} \tag{13} \\ &amp; \hspace {6mm}  =arg \  \underset{w}{max}=\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{14} \end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;据Andrew Ng关于最大似然函数与最小损失函数的关系: 
 \begin{align}
- &amp;amp;  J(w)=-\dfrac{1}{m}L(w) \tag{10}&lt;br /&gt;
+ &amp;amp;  J(w)=-\dfrac{1}{m}L(w) \tag{15}&lt;br /&gt;
 \end{align}
  这里取:
 \begin{align}
- &amp;amp;  J(w)=-L(w)=-\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{11}&lt;br /&gt;
+ &amp;amp;  J(w)=-L(w)=-\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{16}&lt;br /&gt;
 \end{align}
  因此&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align} &amp; \frac{\partial{J(w)}}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\ &amp; \hspace {16mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13} \end{align} %]]&gt;&lt;/script&gt;
+\begin{align} &amp; \frac{\partial{J(w)}}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{17} \\ &amp; \hspace {16mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{18} \end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;因此有参数的迭代如下：
  \begin{align}
-&amp;amp; w_{j+1}=w_j-\alpha\cdot\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
+&amp;amp; w_{j+1}=w_j-\alpha\cdot\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{19}
 \end{align}&lt;/p&gt;
 
 &lt;h3 id=&quot;map&quot;&gt;最大后验估计MAP与正则化&lt;/h3&gt;
 
-&lt;p&gt;《计算广告》的作者刘未鹏在&lt;a href=&quot;http://mindhacks.cn/2008/09/21/the-magical-bayesian-method/&quot;&gt;《数学之美番外篇：平凡而又神奇的贝叶斯方法》&lt;/a&gt;形象的介绍过结合先验分布的最大后验估计。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://mindhacks.cn/2008/09/21/the-magical-bayesian-method/&quot;&gt;《数学之美番外篇：平凡而又神奇的贝叶斯方法》&lt;/a&gt;形象的介绍过结合先验分布的最大后验估计。&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align} &amp; p(w|D)=\dfrac{p(w,D)}{p(D)} \\ &amp; \hspace {16mm}=\dfrac{p(D|w) \cdot p(w)}{p(D)} \\ &amp; \hspace {16mm}  \propto p(w) \cdot p(D|w) \end{align} %]]&gt;&lt;/script&gt;
+\begin{align} &amp; p(w|D)=\dfrac{p(w,D)}{p(D)} \\ &amp; \hspace {16mm}=\dfrac{p(D|w) \cdot p(w)}{p(D)} \\ &amp; \hspace {16mm}  \propto p(w) \cdot p(D|w) \tag{20} \end{align} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;避免过拟合，降低server负担
+&lt;p&gt;假设模型的参数$w$服从分布$p(w)$,根据MAP则有：
  &lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
-\begin{align} &amp; w^*=arg \  \underset{w}{max}P(w|D) \tag{14} \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D)\tag{15} \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w)\tag{16} \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{17}  \end{align} %]]&gt;&lt;/script&gt;&lt;/p&gt;
+\begin{align} &amp; w^*=arg \  \underset{w}{max}P(w|D)  \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D) \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w) \\ &amp; \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{21}  \end{align} %]]&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;对比ML和MAP推导的结果，可以看出MAP比ML多了$\log p(w)$，这个可以用来惩罚过拟合。根据奥卡姆剃刀原则，如果两个模型有着相似的解释能力，那就选择更简单的那个。也就是希望更多的$w$，取值为0,。更简单的模型还同时可以降低在线推荐server负担。实践当中一般有L1正则化和L2正则化两种。具体如下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/prml-lr.png&quot; alt=&quot;prml&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;section-16&quot;&gt;在线训练&lt;/h3&gt;
 &lt;p&gt;Spark是在hadoop基础上改进得到的分布式框架，采用内存迭代式的计算，非常适合机器学习算法。相比于之前的map -reduce，spark提供了丰富的操作算子，以前我们可能需要编写很多代码，现在只需要通过若干个transform和action就可以完成。一般认为，hadoop特点在于批处理，storm特点在于流处理，spark特点在于内存迭代。我们在游戏攻略推荐中，用户属性生成和入库有着数量较大和周期性的特点，适合采用mapreduce；攻略效果统计和模型样本拼接对实时性要求较高，适合采用storm；在模型训练阶段涉及到多轮参数寻优迭代，适合采用spark。&lt;/p&gt;
 
 &lt;h3 id=&quot;section-17&quot;&gt;参数调优&lt;/h3&gt;
 &lt;p&gt;一方面，我们需要关注模型在测试集上的预测性能，例如准确率、召回率、AUC等，另一方面需要防止过拟合，调整损失函数和正则化之间的比例。训练得到的非零参数如果过多，则也不利于后期的在线推荐部分的计算。&lt;/p&gt;
+
+&lt;p&gt;需要注意的是，一般用户和攻略的一阶特征可能不是太多，但是他们之间的交叉特征可能比较多，导致每条样本的维度比较高，模型训练的计算量也会比较大。后期可能会对特征交叉的规模有所折衷。&lt;/p&gt;
 
 &lt;h3 id=&quot;section-18&quot;&gt;效果对比&lt;/h3&gt;
 &lt;p&gt;上面的工作目的都只有一个，把合适的内容推荐给用户，提高点击率。一般我们把请求服务器的用户分成一定比例的对照用户，对比算法的实际效果。典型的例如在算法、强规则、随机包、热销榜之间的点击流对比。&lt;/p&gt;
