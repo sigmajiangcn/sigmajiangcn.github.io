@@ -223,6 +223,7 @@ $$\begin{align} & p(w|D)=\dfrac{p(w,D)}{p(D)} \\ & \hspace {16mm}=\dfrac{p(D|w) 
  $$\begin{align} & w^*=arg \  \underset{w}{max}P(w|D) \tag{14} \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D)\tag{15} \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w)\tag{16} \\ & \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{17}  \end{align}$$		
 
 对比ML和MAP推导的结果，可以看出MAP比ML多了$\log p(w)$，这个可以用来惩罚过拟合。根据奥卡姆剃刀原则，如果两个模型有着相似的解释能力，那就选择更简单的那个。也就是希望更多的$w$，取值为0,。更简单的模型还同时可以降低在线推荐server负担。实践当中一般有L1正则化和L2正则化两种。具体如下图：
+
 ![Alt text](/img/prml-lr.png)
 
 ### 在线训练
