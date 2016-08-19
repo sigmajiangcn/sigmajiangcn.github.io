@@ -223,7 +223,7 @@ $$\begin{align} & p(w|D)=\dfrac{p(w,D)}{p(D)} \\ & \hspace {16mm}=\dfrac{p(D|w) 
  $$\begin{align} & w^*=arg \  \underset{w}{max}P(w|D) \tag{14} \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D)\tag{15} \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w)\tag{16} \\ & \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{17}  \end{align}$$		
 
 对比ML和MAP推导的结果，可以看出MAP比ML多了$\log p(w)$，这个可以用来惩罚过拟合。根据奥卡姆剃刀原则，如果两个模型有着相似的解释能力，那就选择更简单的那个。也就是希望更多的$w$，取值为0,。更简单的模型还同时可以降低在线推荐server负担。实践当中一般有L1正则化和L2正则化两种。具体如下图：
-![Alt text](./img/prml-lr.png)
+![Alt text](/img/prml-lr.png)
 
 ### 在线训练
 Spark是在hadoop基础上改进得到的分布式框架，采用内存迭代式的计算，非常适合机器学习算法。相比于之前的map -reduce，spark提供了丰富的操作算子，以前我们可能需要编写很多代码，现在只需要通过若干个transform和action就可以完成。一般认为，hadoop特点在于批处理，storm特点在于流处理，spark特点在于内存迭代。我们在游戏攻略推荐中，用户属性生成和入库有着数量较大和周期性的特点，适合采用mapreduce；攻略效果统计和模型样本拼接对实时性要求较高，适合采用storm；在模型训练阶段涉及到多轮参数寻优迭代，适合采用spark。
