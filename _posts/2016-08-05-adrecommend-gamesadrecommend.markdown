@@ -84,17 +84,19 @@ $TF-IDF$($Term\ frequency-inverse\ document\ frequency$ ) 是文本挖掘中一�
 
 其中词频$TF$指的是某一个给定的词语在该文件中出现的次数。$TF$通常要被归一化（区别于下面的$IDF$，分子小于分母）：
 
-$$ TF(t,d) = \frac{t}{d} $$
+$$ TF(t,d) = \frac{t}{d}  \tag{1} $$
 
 逆文档频度$IDF$是单词携带信息量的数值度量:
 
-$$ IDF(t,D) = \log \frac{|D| + 1}{DF(t,D) + 1} $$
+$$ IDF(t,D) = \log \frac{|D| + 1}{DF(t,D) + 1} \tag{2} $$
 
 
 其中是$\lvert D \rvert$语料中的文档总数。由于使用了$log$计算，如果单词在所有文档中出现，那么$IDF$就等于0。注意这里做了平滑处理（+1操作），防止单词没有在语料中出现时IDF计算中除0。$TF-IDF$ 度量是$TF$和$IDF$的简单相乘：
 
 
-$$TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D)$$
+$$TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D) \tag{3} $$
+
+可以看出，$TF-IDF$与一个词在文档中的出现次数成正比，与该次在整个语料中的出现次数成反比。所以自动提取关键词的算法就是计算出文档的每个词的$TF-IDF$值，然后按照降序排列，取排在最前面的几个词。
 
 #### 具体实现
 
@@ -106,11 +108,12 @@ $$TFIDF(t,d,D) = TF(t,d) \cdot IDF(t,D)$$
 	tfidf=transformer.fit_transform(vectorizer.fit_transform(Corpus))
 	word=vectorizer.get_feature_names()
 
-经过$TF-IDF$之后，我们会为每一篇攻略内容保留至多10个关键词。关键词在词库索引中查找对应的编号，则每篇攻略就由不超过10个关键词的索引构成，例如某篇攻略关键词提取之后包含“多兰盾  防御  盖伦”，则根据词库可能会被编码成“237 896  145”。具体$TF-IDF$计算时需要注意设置合适的文档频DF阈值。
+经过$TF-IDF$之后，我们会为每一篇攻略内容保留至多10个关键词。关键词在词库索引中查找对应的编号，则每篇攻略就由不超过10个关键词的索引构成，例如某篇攻略关键词提取之后包含“多兰盾  防御  盖伦”，则根据词库可能会被编码类似于“237 896  145”。具体$TF-IDF$计算时需要注意设置合适的文档频DF阈值。
 
 ### 离散Dummy化
 离散dummy化可以让模型保持一定的鲁棒性。上面得到每篇攻略的关键词索引可以直接Dummy化。然而每篇攻略上线之后的统计数据，例如点击率、播放次数等特征则需要进行离散Dummy化，具体公式如下：
-$$id=\dfrac{x_i-x_{min}}{x_{max}-x_{min}}*dummyRange$$
+
+$$id=\dfrac{x_i-x_{min}}{x_{max}-x_{min}}*dummyRange \tag{4}$$
 
 ### 生成特征并写入Tcaplus
 TCaplus是互娱研发部结合游戏特点、平衡性能和成本，开发的一款高速分布式Key-Values模型的NoSql存储系统。与之类似的是Redis，这是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库。
@@ -120,14 +123,14 @@ TCaplus是互娱研发部结合游戏特点、平衡性能和成本，开发的�
 ## 用户特征生成
 
 ###  用户自然人属性计算
-构建用户自然人属性宽表 ，主要包括用户基本信息、登录、活跃、付费、最近常玩英雄以及实力表现等数据。用户自然人属性和攻略属性的差异在于，基本来自结构化的数据处理，不再需要通过分析xml内容去提取关键词特征。
+构建用户自然人属性宽表 ，主要包括用户基本信息、登录、活跃、付费、最近常玩英雄以及实力表现等数据，其中一部分数据可以来自例行化的用户画像数据。用户自然人属性和攻略属性的差异在于，基本来自结构化的数据处理，不再需要通过分析xml内容去提取关键词特征。
 
 ### 离散Dummy化
-将之前的宽表各个字段根据要求分别进行离散Dummy化。
+将之前的宽表各个字段根据要求分别进行离散Dummy化。例如用户的年龄和注册时间等，
 
 ### 生成特征并写入Tcaplus
 类似攻略属性。
-
+ 
 
 ## 配置攻略和用户交叉属性
 一般而言，一篇攻略包含作者、标题关键词、内容关键词、点击率等特征。同时每个用户则包含如基本信息、最近常用英雄、常失败英雄等上千维特征。这些攻略和用户特征既包含离散化特征，也有Dummy特征，需要具体制定哪些特征需要进行交叉，增强模型的解释能力。
@@ -184,47 +187,47 @@ LR模型比较简单，需要交叉特征提升模型表达能力。
 ### 最大似然法ML
 逻辑回归其实仅为在线性回归的基础上，套用了一个逻辑函数，但也就由于这个逻辑函数，逻辑回归成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。
 
-$$\begin{align} & y=f(x)=w^Tx\tag{1} \\ & y=f(x)=sign(w^Tx)\tag{2} \\ & y=f(x)=\dfrac{1}{1+\exp(-w^Tx)}\tag{3} \end{align}$$
+$$\begin{align} & y=f(x)=w^Tx\tag{5} \\ & y=f(x)=sign(w^Tx)\tag{6} \\ & y=f(x)=\dfrac{1}{1+\exp(-w^Tx)}\tag{7} \end{align}$$
 
 
  假设$x\in R^d$  为$d$维输入向量，$y\in \{0,1\}$为输出标签，$w\in R^d$是参数。
  则有
 
-$$\begin{align} & p(y_i=1|x_i,w)=\dfrac{\exp(w^Tx)}{1+\exp(w^Tx)}=P_i\tag{4} \\ & p(y_i=0|x_i,w)=\dfrac{1}{1+\exp(w^Tx)}=1-P_i \tag{5} \end{align}$$
+$$\begin{align} & p(y_i=1|x_i,w)=\dfrac{\exp(w^Tx)}{1+\exp(w^Tx)}=P_i\tag{8} \\ & p(y_i=0|x_i,w)=\dfrac{1}{1+\exp(w^Tx)}=1-P_i \tag{9} \end{align}$$
 
  然后有：
 
-$$\begin{align} & w^*=arg \  \underset{w}{max}P(D|w)\tag{16} \\ &\hspace {6mm}  =arg \  \underset{w}{max}\prod_{i=1}^NP_i^{y_i}(1-P_i)^{1-y_i} \tag{6} \\ & \hspace {6mm}  =arg \ \underset{w}{max}\sum_{i=1}^Ny_i\log{P_i}+(1-y_i)\log{(1-P_i)} \tag{7} \\ & \hspace {6mm}  =arg \  \underset{w}{max}\sum_{i=1}^Ny_i\log{\dfrac{P_i}{1-P_i}}+\log{(1-P_i)} \tag{8} \\ & \hspace {6mm}  =arg \  \underset{w}{max}=\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{9} \end{align}$$
+$$\begin{align} & w^*=arg \  \underset{w}{max}P(D|w)\tag{10} \\ &\hspace {6mm}  =arg \  \underset{w}{max}\prod_{i=1}^NP_i^{y_i}(1-P_i)^{1-y_i} \tag{11} \\ & \hspace {6mm}  =arg \ \underset{w}{max}\sum_{i=1}^Ny_i\log{P_i}+(1-y_i)\log{(1-P_i)} \tag{12} \\ & \hspace {6mm}  =arg \  \underset{w}{max}\sum_{i=1}^Ny_i\log{\dfrac{P_i}{1-P_i}}+\log{(1-P_i)} \tag{13} \\ & \hspace {6mm}  =arg \  \underset{w}{max}=\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{14} \end{align}$$
 
  据Andrew Ng关于最大似然函数与最小损失函数的关系: 
 \begin{align}
- &  J(w)=-\dfrac{1}{m}L(w) \tag{10}\\
+ &  J(w)=-\dfrac{1}{m}L(w) \tag{15}\\
 \end{align}
  这里取:
 \begin{align}
- &  J(w)=-L(w)=-\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{11}\\
+ &  J(w)=-L(w)=-\sum_{i=1}^N[y_i\cdot w^Tx_i-\log{(1+\exp{(w^Tx_i)})}] \tag{16}\\
 \end{align}
  因此
  
-$$ \begin{align} & \frac{\partial{J(w)}}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{12} \\ & \hspace {16mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13} \end{align}$$
+$$ \begin{align} & \frac{\partial{J(w)}}{\partial{w}}=-\sum_{i=1}^N[y_i\cdot x_i-\dfrac{\exp{(w^Tx_i)}}{1+\exp{(w^Tx_i})}\cdot{x_i}]\tag{17} \\ & \hspace {16mm} =\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{18} \end{align}$$
  
  因此有参数的迭代如下：
  \begin{align}
-& w_{j+1}=w_j-\alpha\cdot\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{13}
+& w_{j+1}=w_j-\alpha\cdot\sum_{i=1}^N(P_i-y_i)\cdot{x_i}  \tag{19}
 \end{align}				
 
 ### 最大后验估计MAP与正则化
 
 [《数学之美番外篇：平凡而又神奇的贝叶斯方法》](http://mindhacks.cn/2008/09/21/the-magical-bayesian-method/)形象的介绍过结合先验分布的最大后验估计。
 
-$$\begin{align} & p(w|D)=\dfrac{p(w,D)}{p(D)} \\ & \hspace {16mm}=\dfrac{p(D|w) \cdot p(w)}{p(D)} \\ & \hspace {16mm}  \propto p(w) \cdot p(D|w) \end{align}$$
+$$\begin{align} & p(w|D)=\dfrac{p(w,D)}{p(D)} \\ & \hspace {16mm}=\dfrac{p(D|w) \cdot p(w)}{p(D)} \\ & \hspace {16mm}  \propto p(w) \cdot p(D|w) \tag{20} \end{align}$$
 
 假设模型的参数$w$服从分布$p(w)$,根据MAP则有：
- $$\begin{align} & w^*=arg \  \underset{w}{max}P(w|D) \tag{14} \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D)\tag{15} \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w)\tag{16} \\ & \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{17}  \end{align}$$		
+ $$\begin{align} & w^*=arg \  \underset{w}{max}P(w|D)  \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(w|D) \cdot P(D) \\ & \hspace {6mm}  = arg \  \underset{w}{max}P(D|w) \cdot P(w) \\ & \hspace {6mm}  = arg \  \underset{w}{max}[\log{P(D|w)} +\log{P(w)}]\tag{21}  \end{align}$$		
 
 对比ML和MAP推导的结果，可以看出MAP比ML多了$\log p(w)$，这个可以用来惩罚过拟合。根据奥卡姆剃刀原则，如果两个模型有着相似的解释能力，那就选择更简单的那个。也就是希望更多的$w$，取值为0,。更简单的模型还同时可以降低在线推荐server负担。实践当中一般有L1正则化和L2正则化两种。具体如下图：
 
-![Alt text](/img/prml-lr.png)
+![prml](/img/prml-lr.png)
 
 ### 在线训练
 Spark是在hadoop基础上改进得到的分布式框架，采用内存迭代式的计算，非常适合机器学习算法。相比于之前的map -reduce，spark提供了丰富的操作算子，以前我们可能需要编写很多代码，现在只需要通过若干个transform和action就可以完成。一般认为，hadoop特点在于批处理，storm特点在于流处理，spark特点在于内存迭代。我们在游戏攻略推荐中，用户属性生成和入库有着数量较大和周期性的特点，适合采用mapreduce；攻略效果统计和模型样本拼接对实时性要求较高，适合采用storm；在模型训练阶段涉及到多轮参数寻优迭代，适合采用spark。
@@ -232,6 +235,8 @@ Spark是在hadoop基础上改进得到的分布式框架，采用内存迭代式
 
 ### 参数调优
 一方面，我们需要关注模型在测试集上的预测性能，例如准确率、召回率、AUC等，另一方面需要防止过拟合，调整损失函数和正则化之间的比例。训练得到的非零参数如果过多，则也不利于后期的在线推荐部分的计算。
+
+需要注意的是，一般用户和攻略的一阶特征可能不是太多，但是他们之间的交叉特征可能比较多，导致每条样本的维度比较高，模型训练的计算量也会比较大。后期可能会对特征交叉的规模有所折衷。
 
 ### 效果对比
 上面的工作目的都只有一个，把合适的内容推荐给用户，提高点击率。一般我们把请求服务器的用户分成一定比例的对照用户，对比算法的实际效果。典型的例如在算法、强规则、随机包、热销榜之间的点击流对比。
