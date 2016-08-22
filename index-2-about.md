@@ -16,8 +16,6 @@ permalink: /about/
 * 腾讯（深圳总部IEG），2014年夏到秋，实习，初入职场，学到不少做人做事的道理，该实习经历助我打开腾讯大门。
  
 
-更多工作信息，参考我的[LinkedIn](https://cn.linkedin.com/in/sigmajiang)。
-
 # 爱好
 运动：登山、游泳；看书：历史书，尤其是近代史；数学：尤其是Fourier变换系列。
 
