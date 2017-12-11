@@ -534,11 +534,12 @@ $$ \dfrac{d_{l(t)}}{d_{h(t)}}=h(t)-y(t) \tag{57}$$
 第二项的计算为：
 $$\dfrac{d_{L(t+1)}}{d_{h(t)}}=W_h^T\delta gates_t \tag{58}$$
 其中：
+$$
 \begin{gather*}
 \delta gates_t=\begin{bmatrix} f'(t) \\ a'(t)\\ i'(t)\\o'(t)\end{bmatrix}\quad
 \tag{59}
 \end{gather*}
-
+$$
 另外对$s(t)$的依赖关系如下图：
 ![依赖关系图](/img/LSTM级联.jpg)
 则其导数为：
