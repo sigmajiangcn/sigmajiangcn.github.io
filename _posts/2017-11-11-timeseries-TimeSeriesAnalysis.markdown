@@ -274,6 +274,7 @@ $$BIC=ln(\widetilde{\sigma}_l^2)+\dfrac{l\cdot ln(T)}{T}\tag{26}$$
 - 单位根检验
 上述两种方法都是通过观察的方法来完成，存在一定的主观性。单位根检验可以比较客观判断序列的平稳特性。如果时间序列是非平稳的，可以通过$d$次差分($Difference$)可以将其转化为平稳序列，称差分得到的序列为$I(d)$，其中$I$意指整合($Integrated$),$d$为整合阶数，例如：
 $$x_t=x_{t-1}+\epsilon_t\tag{27}$$
+
 其中$x_0=0$,$\epsilon_t \sim N(0,\sigma^2_{\epsilon})$,则可以得到：
 $$E(x_t)=0 \tag{28}$$
 $$Var(x_t)=Var(x_{t-1})+\sigma^2_\epsilon=...=t\sigma^2_\epsilon\tag{29}$$
