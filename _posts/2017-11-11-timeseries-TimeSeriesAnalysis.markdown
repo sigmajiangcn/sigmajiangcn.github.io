@@ -161,12 +161,14 @@ $$
 \end{equation}  
 $$
 考虑到$\gamma_0=1$,上述方程可以进一步转化为：
+$$
 \begin{gather*}
 \begin{bmatrix} r_1 \\ r_2 \\ . \\ .\\r_k \end{bmatrix}\quad=
 \begin{bmatrix} 1 & r_1 &r_2 & ... & r_{k-1} \\1 & r_1 &r_2 & ... & r_{k-1} \\.  & . & . & ... & . \\.  & . & . & ... & . \\1 & r_1 &r_2 & ... & r_{k-1}    \end{bmatrix} \quad
 \begin{bmatrix} \phi_1 \\ \phi_2 \\ . \\ . \\ \phi_k \end{bmatrix}\quad
 \tag{11}
 \end{gather*}
+$$
 上式称之为[$Yule-Walker$](http://www-stat.wharton.upenn.edu/~steele/Courses/956/ResourceDetails/YWSourceFiles/YW-Eshel.pdf)方程。从中可求解出$\phi_{k,1}、\phi_{k,2}、...、\phi_{k,k}$。其中的最后一个解$\phi_{k,k}$便为时间序列$X_t$延迟$k$阶偏自相关系数$PACF$。
 
 ### 周期性
@@ -211,6 +213,7 @@ $$\begin{align}
  其中$W_N^{nk}=e^{-j\dfrac{2\pi}{N}nk}$.DFT的两个特性：时域和频域都是离散的；时域和频域点数都是有限的。可以方便在计算机中进行计算实现。且时域和频域均可在一个周期内完全反映出来。
 $FFT$是$DFT$的一种高效算法，称为快速傅里叶变换($fast\space fourier\space transform$)。
 傅里叶变换在时间序列分析中有重要的应用，下面举两个例子：
+
 （1）时间序列的多周期性
 ![时间序列的多周期性](/img/fft_long.jpg)
 
@@ -227,20 +230,22 @@ $n_k=\dfrac{1}{f_k}=\dfrac{N}{k} \tag{24}$
 如果能够充分提取到库存序列的趋势、多周期特性则能有效提升预估性能。
 
 （2）时间序列的阶段周期性
+
 平时和暑假的周期特性表现有差异，暑假的周期中$T=7$表现不明显。
 ![暑假和非暑假的week周期波动差异](/img/fft_period1.jpg)
 暑假的数据的周期成分低，波动性小；根据离散傅里叶变换的定义，用总共时间长度60除以横坐标，得到的是周期数，例如对红色线在17处，实际是60/17=3.5左右的周期
 
 （3）低通滤波器过滤异常点
+
 可以通过对时间序列的频谱进行低通滤波，过滤掉数据中异常存在的点。
 
 ### 模型识别
 >引言：经典的时间序列分析方法，通常采用自回归滑动平均的方法来建模，需要选择最优的参数值，然后预测模型。通常有两种方法：1.采用前述的相关函数法，通过相关函数的变化来推测模型参数的取值；2.定义模型的选择指标，兼顾模型的表达能力与简单性。可以参考《金融时间序列分析-蔡瑞胸》。
 
-####相关函数法
+#### 相关函数法
 - ACF
 - PACF
-####信息准则法
+#### 信息准则法
 $AIC$是一种用于模型选择的指标，同时考虑了模型的拟合程度以及简单性，而$BIC$则是对$AIC$的一个改进，具体的定义如下：
 - AIC准则
 $Akaike$信息准则($AIC$)定义如下：
@@ -252,10 +257,10 @@ $$BIC=ln(\widetilde{\sigma}_l^2)+\dfrac{l\cdot ln(T)}{T}\tag{26}$$
 在$AIC$准则中对每个参数的惩罚为2，而在$BIC$中为$ln(T)$，当样本容量适度或较大时，$BIC$会更倾向于一个低阶的模型。
 一般而言，较小的$AIC$或者$BIC$表明模型在保持简单的同时能够很好地对时间序列进行拟合。因此，我们往往会选择具有最小的$AIC$或者$BIC$的模型作为相对最优的模型。
 
-###模型检验
+### 模型检验
 >引言：时间序列的平稳性是许多时间序列分析方法的前提，在构建模型用来预测未来之前，需要检验该时间序列的平稳性。检验方法一般有三种：观察时序图、观察相关函数图以及单位根检验法。另外，应用模型提取时间序列的趋势、周期、自回归等特性后，还需要检测残差序列是否为白噪声，如果不是白噪声，从信息论角度看，模型还没有完全表达序列数据，即为欠拟合。
 
-####平稳性检验
+#### 平稳性检验
 - 时序图观察法
   根据弱平稳的定义，序列的均值和方差是一个常数。也就是说平稳时间序列的序列值在一个常数水平上下波动，并且波动幅度接近。因此，如果序列数据围绕一个水平线上下以大致相同的幅度波动，那么该时间序列可能具备弱平稳性。
 - 相关函数观察法
@@ -289,7 +294,7 @@ $$
 $$DF=\dfrac{\hat \gamma}{SE(\gamma )}\tag{33}$$
 如果该统计量比临界值小，则拒绝原假设，也就是认为序列是平稳的，否则认为序列是非平稳的。
 
-####白噪声检验
+#### 白噪声检验
 时间序列${r_t}$称为一个白噪声序列，如果${r_t}$是一个具有有限均值和有限方差的独立同分布随机变量序列。特别地，若${r_t}$还服从均值为0、方差为$\sigma^2$的正态分布，则称这个序列为高斯白噪声。对白噪声序列，所有自相关函数为0。在实际应用中，如果所有样本自相关函数接近于0，则认为该序列是白噪声序列。
 白噪声是一种理想存在；信息熵最大，完全未知的情况；
 白噪声检验也成为纯随机性检验，一般是构造检验统计量来检验序列的纯随机性，常见的检验统计量有$Q$统计量、$LB$统计量由样本各延迟期数的自相关系数可以计算得到检验统计量，然后计算得到对应的$p$值
@@ -384,7 +389,7 @@ $$
 -$PACF$
 几何型或者振荡型。
 
-###自回归滑动平均模型ARMA
+### 自回归滑动平均模型ARMA
 随机变量$X_t$的取值$x_t$不仅与以前$p$期的序列值有关，还与前$q$期的随机扰动有关。
 $$\forall t,x_t=\sum_{i=1}^p\phi_ix_{t-i}+\sum_{j=1}^q\theta_j\epsilon_{t-j}+ \epsilon_t     \tag{43}$$
 很显然，相对于$AR(p)$和$MA(q)$模型，$ARMA(p,q)$模型更具有普适性。并且$AR(p)$是$q=0$的$ARMA(p,q)$模型，$MA(q)$是$p=0$的$ARMA(p,q)$模型
@@ -396,7 +401,7 @@ $$\forall t,x_t=\sum_{i=1}^p\phi_ix_{t-i}+\sum_{j=1}^q\theta_j\epsilon_{t-j}+ \e
 |$MA(q)$|$q$阶截尾|拖尾（几何型或者振荡型）|
 |$ARMA(p,q)$|拖尾（几何型或者振荡型）|拖尾（几何型或者振荡型）|
 如果通过观察序列的$ACF$和$PACF$来判断$p$和$q$的值不是很明确，可以尝试建立多个模型，然后通过$AIC$或则$BIC$指标来选择。
-###单位根非平稳性与ARIMA
+### 单位根非平稳性与ARIMA
 许多非平稳序列差分后会显示出平稳序列的性质，称这个非平稳序列为差分平稳序列。对差分平稳序列可以使用$ARIMA$模型进行拟合。
 非平稳时间序列经过差分之后得到平稳的时间序列，然后通过上述的$ARMA$来建模，假设$x_t^{\prime}$是差分$d$次得到的平稳序列，其表达式如下：
 $$\forall t,x_t^{\prime}=\sum_{i=1}^p\phi_ix_{t-i}^{\prime}+\sum_{j=1}^q\theta_j\epsilon_{t-j}+ \epsilon_t     \tag{44}$$
@@ -407,12 +412,12 @@ $q$=滑动平滑的阶数
 结合之前的滞后算子，则上述表达式如下：
 $$(1-\phi_1L-...-\phi_pL^p)\   (1-L)^d \ x_t=\mu+(1+\theta L+...+\theta_q L^q)\epsilon_t \tag{45}$$
 其中$(1-\phi_1L-...-\phi_pL^p)$表示序列的$p$阶自回归$AR(p)$特性，(1-L)^d表示序列的$d$阶差分平稳$I(d)$特性，$(1+\theta L+...+\theta_q L^q)$表示序列的$q$阶滑动平均$MA(q)$特性.
-###季节模型与SARIMA
+### 季节模型与SARIMA
 全称为$Seasonal\  Auto \ Regressive\  Integrated\  Moving\  Average$，季节性差分自回归滑动平均模型。运用$ARMA$模型的前提条件是时间序列为零均值的平稳随机过程。对于包含趋势性或季节性的非平稳时间序列，须经过适当的逐期差分及季节差分消除趋势影响后，在对形成的新的平稳序列建立$ARMA(p,q)$模型进行分析。对于只包含趋势性的原序列，可以表示为$ARIMA(p,d,q)$模型；若原序列同时包含季节性和趋势性，则可以表示为$ARIMA(p,d,q)(P,D,Q)_s$模型，其中的$d,D$分别为逐期差分和季节差分的阶数，$p,q$分别为自回归和滑动平均的阶数，$P,Q$分别为季节自回归和季节移动平均的阶数。
 
 ## 非线性时间序列分析
 >引言：近些年来，深度学习除了在文本、语音、图像上面有很大的突破。以RNN、LSTM为代表的循环神经网络被引入自然语言处理以及时间序列分析，关于LSTM及其演化可以参考[《Long short-term memory》](http://www.bioinf.jku.at/publications/older/2604.pdf)、[《A Critical Review of Recurrent Neural Networks for Sequence Learning》](http://zacklipton.com/media/papers/recurrent-network-review-lipton-2015v2.pdf)以及[《Understanding LSTM by Colah》](http://colah.github.io/posts/2015-08-Understanding-LSTMs)
-###LSTM
+### LSTM
 LSTM的经典网络结构图如下：
 ![LSTM网络结构图 ](/img/lstm.jpg)
 其中涉及三个门，分别如下：
@@ -499,6 +504,7 @@ $$
 \end{equation}  
 $$
 可以图示理解如下：
+$$
 \begin{gather*}
 \begin{bmatrix} x \\ h \end{bmatrix}\quad
 \rightarrow
@@ -511,13 +517,15 @@ $$
 \rightarrow
 \begin{bmatrix} f(t) \\ a(t)\\ i(t)\\o(t)\end{bmatrix}\quad
 \end{gather*}
+$$
 记：
+$$
 \begin{gather*}
 W_x=\begin{bmatrix}W_{fx} \\W_{fax}\\ W_{ix}\\W_{ox}\end{bmatrix},\quad
 W_h=\begin{bmatrix}W_{fh} \\W_{fah}\\ W_{ih}\\W_{oh}\end{bmatrix},\quad
 gates_t=\begin{bmatrix} f(t) \\ a(t)\\ i(t)\\o(t)\end{bmatrix}\quad
 \end{gather*}
-
+$$
 ### BPTT反向传播算法
 根据链式求导法则，因此可以得到反向传播的梯度BPTT算法，得到针对$h_t$的导数如下：
 $$ \dfrac{d_{L(t)}}{d_{h(t)}} = \dfrac{d_{l(t)}}{d_{h(t)}} +\dfrac{d_{L(t+1)}}{d_{h(t)}}\tag{56}$$
