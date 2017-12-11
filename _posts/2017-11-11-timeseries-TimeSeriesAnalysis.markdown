@@ -426,7 +426,7 @@ $$(1-\phi_1L-...-\phi_pL^p)\   (1-L)^d \ x_t=\mu+(1+\theta L+...+\theta_q L^q)\e
 ### LSTM
 LSTM的经典网络结构图如下：
 
-![LSTM网络结构图 ](/img/lstm.jpg)
+![LSTM网络结构图  |center](/img/lstm.jpg)
 
 其中涉及三个门，分别如下：
 forget gate:
