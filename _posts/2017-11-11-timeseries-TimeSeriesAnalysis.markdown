@@ -419,7 +419,9 @@ $$(1-\phi_1L-...-\phi_pL^p)\   (1-L)^d \ x_t=\mu+(1+\theta L+...+\theta_q L^q)\e
 >引言：近些年来，深度学习除了在文本、语音、图像上面有很大的突破。以RNN、LSTM为代表的循环神经网络被引入自然语言处理以及时间序列分析，关于LSTM及其演化可以参考[《Long short-term memory》](http://www.bioinf.jku.at/publications/older/2604.pdf)、[《A Critical Review of Recurrent Neural Networks for Sequence Learning》](http://zacklipton.com/media/papers/recurrent-network-review-lipton-2015v2.pdf)以及[《Understanding LSTM by Colah》](http://colah.github.io/posts/2015-08-Understanding-LSTMs)
 ### LSTM
 LSTM的经典网络结构图如下：
+
 ![LSTM网络结构图 ](/img/lstm.jpg)
+
 其中涉及三个门，分别如下：
 forget gate:
 $$f_t=\sigma(W_f\cdot[h_{t-1},x_t])+b_f \tag{46}$$
@@ -541,7 +543,9 @@ $$
 \end{gather*}
 $$
 另外对$s(t)$的依赖关系如下图：
+
 ![依赖关系图](/img/LSTM级联.jpg)
+
 则其导数为：
 
 $$
@@ -654,6 +658,7 @@ $$y(t)=(k+a(t)^T\delta)+(b+a(t)^T\gamma)+X\beta+\epsilon_t \tag{70}$$
 - 非线性：
 $$y(t)=\dfrac{C(t)}{1+exp(-(k+a(t)^T\delta)(t-(b+a(t)^T)\gamma))}+X\beta+\epsilon_t \tag{71}$$
 其中各个变量分别表示：
+
 | 变量      |    维度大小 | 含义  |
 | :-------- | --------:| :--: |
 | $t$  | 1*T |  代表时间序列数据，总长度为T  |
@@ -665,6 +670,7 @@ $$y(t)=\dfrac{C(t)}{1+exp(-(k+a(t)^T\delta)(t-(b+a(t)^T)\gamma))}+X\beta+\epsilo
 | $\beta$      |    K*1 | 向量，表示周期项以及节假日项回归系数  |
 | $X$      |    T*K | 矩阵，表示周期项以及节假日项目的矩阵  |
 | $\epsilon$      |    T*1 | 向量，表示模型拟合残差  |
+
 $Prophet$结合先验知识，假设数据服从线性或非线性两种似然函数（likelihood function），另外对参数$k,b,\delta,\beta,\epsilon$也给以先验分布假设，通过最大后验证估计来得到满足当前假设的最有参数，从而进行预估。
 
 > 实际应用过程中需要注意如下几点：
