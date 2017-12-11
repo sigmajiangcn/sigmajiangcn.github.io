@@ -423,10 +423,11 @@ $$(1-\phi_1L-...-\phi_pL^p)\   (1-L)^d \ x_t=\mu+(1+\theta L+...+\theta_q L^q)\e
 
 ## 非线性时间序列分析
 >引言：近些年来，深度学习除了在文本、语音、图像上面有很大的突破。以RNN、LSTM为代表的循环神经网络被引入自然语言处理以及时间序列分析，关于LSTM及其演化可以参考[《Long short-term memory》](http://www.bioinf.jku.at/publications/older/2604.pdf)、[《A Critical Review of Recurrent Neural Networks for Sequence Learning》](http://zacklipton.com/media/papers/recurrent-network-review-lipton-2015v2.pdf)以及[《Understanding LSTM by Colah》](http://colah.github.io/posts/2015-08-Understanding-LSTMs)
+
 ### LSTM
 LSTM的经典网络结构图如下：
 
-![LSTM网络结构图  |center](/img/lstm.jpg)
+![LSTM网络结构图](/img/lstm.jpg)
 
 其中涉及三个门，分别如下：
 forget gate:
