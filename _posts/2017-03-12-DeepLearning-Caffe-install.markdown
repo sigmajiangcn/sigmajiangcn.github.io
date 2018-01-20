@@ -1,11 +1,12 @@
 ---
 layout: post
-title:  "深度学习之一--Caffe环境搭建"
+title:  "深度学习之一:Caffe环境搭建"
 date:   2017-03-12 21:12:06 +0800
 categories: [DeepLearning]
 ---
 
 * TOC
+{:toc}
 
 [TOC]
 ## 前言
