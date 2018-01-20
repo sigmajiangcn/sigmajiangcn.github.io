@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  "深度学习之一-Caffe环境搭建"
+title:  "深度学习之一--Caffe环境搭建"
 date:   2017-03-12 21:12:06 +0800
 categories: [DeepLearning]
 ---
 
-* TOC
+
 {:toc}
 [TOC]
 ## 前言
@@ -203,8 +203,8 @@ export LD_LIBRARY_PATH=...
 - makefile
 - rpm
 - tesseract
-http://blog.csdn.net/yoara/article/details/42392659
-http://blog.csdn.net/airk000/article/details/23876389
+
+
 
 ## 总结
 "工欲善其事，必先利其器"。caffe是深度学习在图像领域广泛使用的框架，其model zoo有大量的预训练好的模型提供使用。大部分图像相关的应用部分将用到caffe。如何进一步挖掘caffe中的模型实现方法，高效完成个性化的需求是一个重要的方向。
@@ -213,9 +213,3 @@ http://blog.csdn.net/airk000/article/details/23876389
 - [Caffe 安装错误记录及解决办法](http://coldmooon.github.io/2015/07/09/caffe/)
 - [linux(CentOS)下的caffe编译安装简易手册](https://www.zybuluo.com/hanxiaoyang/note/364680)
 - [caffe install](https://gist.github.com/arundasan91/b432cb011d1c45b65222d0fac5f9232c)
-[]()
-[]()
-[]()
-[]()
-[]()
-[]()
