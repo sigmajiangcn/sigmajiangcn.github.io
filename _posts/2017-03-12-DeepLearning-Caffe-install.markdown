@@ -198,10 +198,11 @@ export LD_LIBRARY_PATH=...
 这里需要注意LD_LIBRARY_PATH中不要添加anaconda的路径，否则会[libtiff报错](https://groups.google.com/forum/#!msg/caffe-users/wKYe45FKSqE/HcFMlGS-M8gJ).
 
 ## 相关知识点
-- D_LIBRARY_PATH
+- LD_LIBRARY_PATH
 - PKG_CONFIG_PATH
 - 动态链接库
 - makefile
+- gdb
 - rpm
 - tesseract
 
