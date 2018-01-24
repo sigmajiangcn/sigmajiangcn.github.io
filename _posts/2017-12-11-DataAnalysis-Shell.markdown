@@ -11,7 +11,9 @@ categories: [Tools]
 [TOC]
 ## 前言
 Shell是一门常用的脚本语言，易于入门，方便灵活。在数据处理时，尤其是处理日志时非常有帮助。常用的主要如Grep、awk、sed三大神器。
+
 **持续更新**
+
 ## 用grep查找日志问题
 ```shell
 grep -R -n -A 5 -B 6 "error" *.log
