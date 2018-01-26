@@ -40,6 +40,20 @@ df.query("mean>10").drop(['mean'],axis=1)
 ```
 
 - fillna
+- drop del
+drop 删除列返回新的df，不影响原有数据，更安全
+
+- loc、iloc、ix
+```python
+df.head(2).iloc[:,0:1]
+```
+## matplotlib绘图
+- figure
+- hist
+- xlabel
+- ylabel
+- legend
+- show
 
 ## 其他常用点
 - glob
