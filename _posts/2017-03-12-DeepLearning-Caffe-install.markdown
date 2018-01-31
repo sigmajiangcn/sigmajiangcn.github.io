@@ -197,6 +197,13 @@ export LD_LIBRARY_PATH=...
 ```
 这里需要注意LD_LIBRARY_PATH中不要添加anaconda的路径，否则会[libtiff报错](https://groups.google.com/forum/#!msg/caffe-users/wKYe45FKSqE/HcFMlGS-M8gJ).
 
+遇到一个coredump问题，gdb查出
+```shell
+Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe3d8) at src/server_main.cpp:372
+372	src/server_main.cpp: No such file or directory.
+```
+重新编译静态链接库解决。
+
 ## 相关知识点
 - LD_LIBRARY_PATH
 - PKG_CONFIG_PATH

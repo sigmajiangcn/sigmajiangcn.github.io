@@ -54,6 +54,27 @@ df.head(2).iloc[:,0:1]
 - ylabel
 - legend
 - show
+- 坐标轴点数选取
+横坐标如果太密集，可以[选取部分值出来](https://mail.python.org/pipermail/python-list/2006-March/389991.html)：
+```Python
+from matplotlib.ticker import MaxNLocator
+from pylab import figure, show, nx
+
+fig = figure()
+ax = fig.add_subplot(111)
+ax.plot(nx.mlab.rand(1000))
+ax.xaxis.set_major_locator(MaxNLocator(4))
+show()
+```
+- 坐标轴时间轴格式
+可以调整时间轴的[格式](https://www.tuicool.com/articles/jmQzUzy)和旋转角度：
+```Python
+ ax.xaxis.set_major_formatter(mdate.DateFormatter('%Y-%m-%d'))#设置时间标签显示格式
+```
+[mdate](https://matplotlib.org/devdocs/gallery/api/date.html)
+
+$y=\widetilde{CTR}*\alpha+\widetilde{eCPM}*(1-\alpha)$
+
 
 ## 其他常用点
 - glob
