@@ -15,8 +15,10 @@ categories: [math]
 
 
 ## 整体框架
-![statistics](/img/statistics.jpg)
 
+<p align="center">
+<img src="/img/statistics.jpg" width="70%" height="70%">
+</p>
 ## 描述统计
 
 
