@@ -15,7 +15,7 @@ categories: [math]
 
 
 ## 整体框架
-
+![statistics](/img/statistics.jpg)
 
 ## 描述统计
 
