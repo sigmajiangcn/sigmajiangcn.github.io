@@ -34,6 +34,10 @@ awk -F"," 'NR==FNR {a[$1]=$2} NR>=FNR{if(NF>5 && $6 in a && $5==a[$6]){b[$6]=$0}
 ```shell
 ps -ef |grep smart_server |awk '{print $2}' |xargs kill -9
 ```
+## 文件导入mysql
+```shell
+mysql -h $IP -u $USER -p $PASSWORD -D $DATABASE -e"use $ONE_DATABASE;load data local  infile '$LOCAL_FILE_NAME' replace  into table $TO_WHICH_TABLE fields terminated by ',';"
+```
 
 ## 总结
 "工欲善其事，必先利其器"。
