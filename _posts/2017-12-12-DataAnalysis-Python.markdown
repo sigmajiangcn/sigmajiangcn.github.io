@@ -12,10 +12,12 @@ categories: [Tools]
 ## 前言
 Python是一门常用的编程语言，易于入门，方便灵活。尤其当掌握了一些常用的库，更是用的飞起。这里主要介绍介绍Pandas。
 
-2018年3月1日，微信公众号《机器学习研究会》推送的一篇《Pandas习题集》，其github链接提供了大量的**微操**（Tiny but effective and strong operation）,原文：
+2018年3月1日，微信公众号《机器学习研究会》推送的一篇《Pandas习题集》，其github链接提供了大量的**微操**（*Tiny but effective and strong operation*）,原文：
 Since pandas is a large library with many different specialist features and functions, these excercises focus mainly on the fundamentals of manipulating data (indexing, grouping, aggregating, cleaning), making use of the core DataFrame and Series objects. [Many of the excerises](https://github.com/ajcr/100-pandas-puzzles) here are straightforward in that the solutions require no more than a few lines of code (in pandas or NumPy - don't go using pure Python!). Choosing the right methods and following best practices is the underlying goal.
 
 另外，还有[《Numpy习题集》](https://github.com/rougier/numpy-100)。
+
+
 **持续更新**
 
 ## 文件交互
