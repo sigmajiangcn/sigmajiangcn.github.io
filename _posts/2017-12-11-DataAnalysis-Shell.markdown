@@ -39,6 +39,65 @@ ps -ef |grep smart_server |awk '{print $2}' |xargs kill -9
 mysql -h $IP -u $USER -p $PASSWORD -D $DATABASE -e"use $ONE_DATABASE;load data local  infile '$LOCAL_FILE_NAME' replace  into table $TO_WHICH_TABLE fields terminated by ',';"
 ```
 
+## 当前路径
+```shell
+FOLDER=$(cd `dirname $0`;pwd)
+echo $FOLDER
+```
+
+## 时间参数
+```shell
+if [[ $1 == "" ]]; then
+  DAY=$( date +%Y%m%d -d "yesterday" )
+else
+  DAY=`date +%Y%m%d -d "$1"`
+fi
+```
+
+## 时间遍历
+```shell
+input_start="2016-10-21"
+input_end="2018-02-28"
+
+day="$input_start"
+while [ "$day" != $input_end ];
+do
+  today=$(date -d"$day" +"%Y%m%d")
+  OTHER COMMAND
+  day=$(date -I -d "$day + 1 day")
+  sleep 1
+done
+exit
+```
+
+## 文件传输
+```shell
+autoscp(){
+    expect -c "
+    set timeout 10;
+    spawn scp $1 $2
+    expect  "*assword*" {send $3\r}
+    expect "*100%"
+    expect eof
+"
+}
+
+autoscp $REMOTE $LOCAL $PASSWORD
+```
+
+## 检查集群文件
+```shell
+hadoop fs -test -e $HADOOP_FILE_PATH
+if [ $? -eq 0 ];then
+    ACTION
+else
+    OTHER_ACTION
+fi
+```
+
+
+
+
 ## 总结
 "工欲善其事，必先利其器"。
 
