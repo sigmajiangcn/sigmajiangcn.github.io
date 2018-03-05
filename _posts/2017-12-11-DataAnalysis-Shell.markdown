@@ -95,10 +95,77 @@ else
 fi
 ```
 
+## 批量关闭进程
+```shell
+sleep 10
+ps -ef |grep display |awk '{print $2}' |xargs kill -9
+```
+## 常用控制语句
+### If
+```shell
+#!/bin/bash
 
+a=10
+b=20
+if [ $a -eq $b ]
+then
+   echo "a 等于 b"
+elif [ $a -gt $b ]
+then
+   echo "a 大于 b"
+elif [ $a -lt $b ]
+then
+   echo "a 小于 b"
+else
+   echo "没有符合的条件"
+fi
+```
+### While
+```shell
+while condition
+do
+    command
+done
+例如：
+echo '按下 <CTRL-D> 退出'
+echo -n '输入你最喜欢的书名: '
+while read book
+do
+    echo "是的！$book 是一部好书"
+done
+```
 
+### For
+```shell
+#!/bin/bash
+for var in 1 2 3 4 5
+do
+    echo "value is ${var}"
+done
+或者为for var in `seq 1 5`
+```
 
+### Case
+```shell
+#!/bin/bash
+
+while : #开启无限循环
+do
+    echo -n "输入 1 到 5 之间的数字:"
+    read aNum
+    case $aNum in
+        1|2|3|4|5) echo "你输入的数字为 $aNum!"
+        ;;
+        *) echo "你输入的数字不是 1 到 5 之间的! 游戏结束"
+            break # break 表示退出循环; 如果使用continue关键字，则结束本次循环，继续执行循环后面的内容
+        ;;
+    esac
+done
+```
 ## 总结
 "工欲善其事，必先利其器"。
 
 ## 参考文献
+```shell
+
+```
