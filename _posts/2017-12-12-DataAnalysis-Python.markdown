@@ -84,8 +84,35 @@ show()
 
 ## 其他常用点
 - glob
+```Python
+current_predict_paths = glob.glob('data/%s/%s/model/%s_output_*'%(key,target,train_day))
+```
 - os.makedirs
 - os.sys.platform.startswith("win")
+- 正则表达式
+```python
+例如找出剧目vid列表，其中每个剧目都是由小写字母和数字构成：
+import re
+pattern=re.compile(r'[a-z0-9]+')
+vid_list=pattern.findall(vid_string)
+```
+- 参数解析
+```python
+import argparse
+parser = argparse.ArgumentParser(description="")
+parser.add_argument("-d", "--date", help="日期", default="2017-08-01")
+args=parser.parse_args(sys.argv[1:])
+today=args.date
+```
+
+- 虚拟化界面
+```python
+在linux+selenium中模拟浏览器爬虫会有遇到：
+from xvfbwrapper import Xvfb
+xvfb = Xvfb(width=1280,height=720)
+xvfb.start()
+xvfb.stop()
+```
 
 ## 总结
 "工欲善其事，必先利其器"。
