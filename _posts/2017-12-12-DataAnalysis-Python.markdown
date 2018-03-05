@@ -104,7 +104,29 @@ parser.add_argument("-d", "--date", help="日期", default="2017-08-01")
 args=parser.parse_args(sys.argv[1:])
 today=args.date
 ```
+- 配置文件
+```python
+import ConfigParser
+config=ConfigParser.ConfigParser()
+config.read("conf/env.ini")
+path=self.config.get("Section_A", "variable_a")
+其中国配置文件env.ini内容类似如下：
+[Section_A]
+variable_1=10
+variable_2=10
+[Section_B]
+variable_1=10
+...
+```
 
+- 界面显示字符宽度
+```python
+np.set_printoptions(threshold=np.inf)
+pd.set_option('display.max_columns', 1000)
+pd.set_option('display.width',1000)
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.height',500)
+```
 - 虚拟化界面
 ```python
 在linux+selenium中模拟浏览器爬虫会有遇到：
@@ -113,7 +135,18 @@ xvfb = Xvfb(width=1280,height=720)
 xvfb.start()
 xvfb.stop()
 ```
-
+## 常用框架
+### 框架之一：Django
+### 框架之二：Selenium
+### 框架之三：Sklearn
+```python
+from sklearn.cross_validation import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn import decomposition, pipeline, metrics, grid_search
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.externals import joblib
+```
+### 框架之四：Tensorflow
 ## 总结
 "工欲善其事，必先利其器"。
 
