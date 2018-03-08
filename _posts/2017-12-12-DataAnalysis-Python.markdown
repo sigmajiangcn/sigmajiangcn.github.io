@@ -29,6 +29,9 @@ df=pd.read_csv(train_file,sep=",",index_col=target_list,nrows=5)
 
 ## 常用算子
 - query
+```python
+select_df=total_df.query("video>10000 and title_index>0")
+```
 - groupby
 - merge
 - date_range
@@ -135,6 +138,24 @@ xvfb = Xvfb(width=1280,height=720)
 xvfb.start()
 xvfb.stop()
 ```
+
+- 变量名字符串
+[how-to-get-a-variable-name-as-a-string](https://stackoverflow.com/questions/2553354/how-to-get-a-variable-name-as-a-string)
+```python
+>>> some= 1
+>>> list= 2
+>>> of= 3
+>>> vars= 4
+>>> dict( (name,eval(name)) for name in ['some','list','of','vars'] )
+{'list': 2, 'some': 1, 'vars': 4, 'of': 3}
+```
+
+- 字符编码
+```python
+import chardet
+detect_result = chardet.detect(target.encode('utf8'))
+```
+
 ## 常用框架
 ### 框架之一：Django
 ### 框架之二：Selenium
