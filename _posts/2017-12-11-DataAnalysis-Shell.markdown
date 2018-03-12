@@ -36,9 +36,26 @@ ps -ef |grep smart_server |awk '{print $2}' |xargs kill -9
 ```
 ## 文件导入mysql
 ```shell
-mysql -h $IP -u $USER -p $PASSWORD -D $DATABASE -e"use $ONE_DATABASE;load data local  infile '$LOCAL_FILE_NAME' replace  into table $TO_WHICH_TABLE fields terminated by ',';"
-```
+mysql -h $IP -u $USER -p $PASSWORD -D $DATABASE -e"use $ONE_DATABASE;
+load data local  infile '$LOCAL_FILE_NAME' replace  into table $TO_WHICH_TABLE fields terminated by ',';"
+要注意的是 如果这里的表格最后一列有time_stamp,而文本数据没有的话，可以如下设置：
 
+CREATE TABLE `video_play` (
+  `fdate` date NOT NULL,
+  `fcoverid` varchar(40) NOT NULL COMMENT 'cover id',
+  `fvideoid` varchar(40) NOT NULL COMMENT 'video id',
+  `ftotal` int(100) NOT NULL,
+  `fopt_time` timestamp  NOT NULL  ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '数据库更新时间',
+  PRIMARY KEY (`fdate`,`fcoverid`,`fvideoid`,`ftotal`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='。。。';
+load data local  infile 'testin' ignore  into table video_play  fields terminated by ',' (fdate,fcoverid,fvideoid,ftotal,@fopt_time) set fopt_time=NOW();
+或者将最后的改为
+ fopt_time=CURRENT_TIMESTAMP
+要注意这里 replace与ignore的用法
+```
+可以参见
+- [timestamp-field-error-with-load-data-infile-with-python-on-linux](https://stackoverflow.com/questions/38269211/timestamp-field-error-with-load-data-infile-with-python-on-linux)
+- [mysql-how-do-i-insert-now-date-when-doing-a-load-data-infile](https://stackoverflow.com/questions/9591170/mysql-how-do-i-insert-now-date-when-doing-a-load-data-infile)
 ## 当前路径
 ```shell
 FOLDER=$(cd `dirname $0`;pwd)
