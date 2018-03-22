@@ -56,6 +56,7 @@ load data local  infile 'testin' ignore  into table video_play  fields terminate
 可以参见
 - [timestamp-field-error-with-load-data-infile-with-python-on-linux](https://stackoverflow.com/questions/38269211/timestamp-field-error-with-load-data-infile-with-python-on-linux)
 - [mysql-how-do-i-insert-now-date-when-doing-a-load-data-infile](https://stackoverflow.com/questions/9591170/mysql-how-do-i-insert-now-date-when-doing-a-load-data-infile)
+
 ## 当前路径
 ```shell
 FOLDER=$(cd `dirname $0`;pwd)
@@ -85,6 +86,12 @@ do
   sleep 1
 done
 exit
+```
+## 一个月以前
+```shell
+DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+datediff
 ```
 
 ## 文件传输
