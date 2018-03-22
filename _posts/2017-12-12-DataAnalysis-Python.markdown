@@ -56,6 +56,44 @@ drop 删除列返回新的df，不影响原有数据，更安全
 ```python
 df.head(2).iloc[:,0:1]
 ```
+
+- isin
+```python
+>>> df
+  countries
+0        US
+1        UK
+2   Germany
+3     China
+>>> countries
+['UK', 'China']
+>>> df.countries.isin(countries)
+0    False
+1     True
+2    False
+3     True
+Name: countries, dtype: bool
+>>> df[df.countries.isin(countries)]
+  countries
+1        UK
+3     China
+>>> df[~df.countries.isin(countries)]
+  countries
+0        US
+2   Germany
+
+
+或者：
+criterion = lambda row: row['countries'] not in countries
+not_in = df[df.apply(criterion, axis=1)]
+```
+具体请见[how-to-implement-in-and-not-in-for-pandas-dataframe](https://stackoverflow.com/questions/19960077/how-to-implement-in-and-not-in-for-pandas-dataframe)
+
+## 覆盖式定义
+```Python
+df['C'] = df['C'].apply(np.int64)
+```
+[重新赋值修改部分](https://stackoverflow.com/questions/21291259/convert-floats-to-ints-in-pandas/21291622)
 ## matplotlib绘图
 - figure
 - hist
@@ -156,6 +194,12 @@ import chardet
 detect_result = chardet.detect(target.encode('utf8'))
 ```
 
+- 自定义包的引用路径
+```python
+查看的两种方法：sys.path  或者 os.sys.path
+修改的两种方法：export PYTHONPATH=$PYTHONPATH：$NEW_PATH  或者在~/.bashrc中修改
+在代码前面sys.path.append()不够优雅
+```
 ## 常用框架
 ### 框架之一：Django
 ### 框架之二：Selenium
