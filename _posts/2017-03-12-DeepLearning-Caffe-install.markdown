@@ -235,6 +235,7 @@ collect2: error: ld returned 1 exit status
 - 静态链接库
 - makefile
 - gdb
+[程序调试的利器GDB](http://www.cppblog.com/niewenlong/archive/2008/07/27/57270.html)
 - rpm
 - tesseract
 
