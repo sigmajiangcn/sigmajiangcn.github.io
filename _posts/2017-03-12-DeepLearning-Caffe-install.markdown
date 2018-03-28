@@ -205,6 +205,29 @@ Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe3d8) at src/server_main.cp
 重新编译静态链接库解决。
 [GCC编译过程与动态链接库和静态链接库](https://www.cnblogs.com/king-lps/p/7757919.html)
 [Linux下出现Segmentation Fault（core dump）错误](http://blog.csdn.net/YSBJ123/article/details/50035169)
+[Linux环境下段错误的产生原因及调试方法小结](http://www.cnblogs.com/panfeng412/archive/2011/11/06/segmentation-fault-in-linux.html)
+
+```python
+1、出现段错误时，首先应该想到段错误的定义，从它出发考虑引发错误的原因。
+2、在使用指针时，定义了指针后记得初始化指针，在使用的时候记得判断是否为NULL。
+3、在使用数组时，注意数组是否被初始化，数组下标是否越界，数组元素是否存在等。
+4、在访问变量时，注意变量所占地址空间是否已经被程序释放掉。
+5、在处理变量时，注意变量的格式控制是否合理等。
+```
+
+### 动态链接库冲突
+例如libprotobuf.so.15、libprotobuf.so.8等冲突，分析调用的依赖库引用顺序：
+```shell
+/usr/bin/ld: warning: libprotobuf.so.8, needed by /data/software/caffe/build/lib/libcaffe.so, may conflict with libprotobuf.so.15
+/usr/bin/ld: /data/software/caffe/build/lib/libcaffe.so: undefined reference to symbol '_ZN6google8protobuf8internal12kEmptyStringE'
+/usr/bin/ld: note: '_ZN6google8protobuf8internal12kEmptyStringE' is defined in DSO /usr/lib64/libprotobuf.so.8 so try adding it to the linker command line
+/usr/lib64/libprotobuf.so.8: could not read symbols: Invalid operation
+collect2: error: ld returned 1 exit status
+```
+解决方案：调整makefile中动态链接库的调用顺序，先引用/usr/lib64/,再引用 /data/software/caffe/build/lib/。
+
+
+
 ## 相关知识点
 - LD_LIBRARY_PATH
 - PKG_CONFIG_PATH

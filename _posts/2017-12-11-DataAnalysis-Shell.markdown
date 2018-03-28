@@ -14,6 +14,9 @@ Shell是一门常用的脚本语言，易于入门，方便灵活。在数据处
 
 **持续更新**
 
+## 指令文档
+[Linux命令大全](http://man.linuxde.net/grep)
+
 ## 用grep查找日志问题
 ```shell
 grep -R -n -A 5 -B 6 "error" *.log
@@ -94,6 +97,11 @@ DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
 datediff
 ```
 
+## date时间
+[Linux date命令的用法](https://www.cnblogs.com/xd502djj/archive/2010/12/29/1919478.html)
+```shell
+date +"%Y-%m-%d %H:%M:%S"
+```
 ## 文件传输
 ```shell
 autoscp(){
