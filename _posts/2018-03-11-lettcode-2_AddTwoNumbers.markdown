@@ -31,10 +31,11 @@ Explanation: 342 + 465 = 807.
 ## 实际代码
 Python
 ```python
-class ListNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.next = None
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
 
 class Solution(object):
     def addTwoNumbers(self, l1, l2):
@@ -56,8 +57,10 @@ class Solution(object):
             carry=sum/10
             res.next=node
             res=res.next
-            l1=l1.next
-            l2=l2.next
+            if l1:
+                l1=l1.next
+            if l2:
+                l2=l2.next
         if carry:
             res.next=ListNode(1)
 
