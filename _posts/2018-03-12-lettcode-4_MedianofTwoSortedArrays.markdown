@@ -33,7 +33,7 @@ nums2 = [3, 4]
 The median is (2 + 3)/2 = 2.5
 ```
 ## 思路分析
-
+参考这个[实现方案](https://www.cnblogs.com/zuoyuan/p/3759682.html)，采用递归的方法解决问题。关注递归结束的判别条件。得到一个第$k$大数字的普遍方法。
 
 ## 实际代码
 Python
