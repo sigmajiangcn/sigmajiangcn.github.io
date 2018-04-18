@@ -11,7 +11,7 @@ categories: [lettcode]
 [TOC]
 
 ## 问题
-[最长回文子序列](Longest Palindromic Substring)
+[最长回文子序列](https://leetcode.com/problems/longest-palindromic-substring/description/)
 
 Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
 
