@@ -29,11 +29,16 @@ Output: "bb"
 ```
 ## 思路分析
 参考这个[实现方案](https://blog.csdn.net/fuxuemingzhu/article/details/79573621)，采用动态规划的方法解决问题。
+
 动态规划的两个特点：第一大问题拆解为小问题，第二重复利用之前的计算结果。
+
 参考资料：
-[解题报告](http://fisherlei.blogspot.com/2012/12/leetcode-longest-palindromic-substring.html)
+
+- [解题报告](http://fisherlei.blogspot.com/2012/12/leetcode-longest-palindromic-substring.html)
 指出存在$O(n)$[解法](https://articles.leetcode.com/longest-palindromic-substring-part-ii/)。
-需要注意下[Python中定义二维数组的方法](https://www.cnblogs.com/woshare/p/5823303.html)
+
+- 需要注意下[Python中定义二维数组的方法](https://www.cnblogs.com/woshare/p/5823303.html)
+
 ## 实际代码
 Python
 ```python
