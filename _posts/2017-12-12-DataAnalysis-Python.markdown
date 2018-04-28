@@ -212,6 +212,65 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.externals import joblib
 ```
 ### 框架之四：Tensorflow
+1.Graph
+    Tensorflow支持通过tf.Graph函数来生成性的计算图。不同计算图上的张量和运算都不会共享。
+2.tensor
+    所有数据都可以通过张量的形式来表示。张量可以被简单理解为多维数组。
+- 零阶张量表示标量（Scalar），也就是一个数；
+- 第一阶张量表示向量（Vector），也就是一个一维数组；
+- 第$n$阶张量表示一个$n$维数组。
+
+张量中并没有真正保存数字，它保存的是如何得到这些数字的计算过程，是对结果的一个引用。
+   TensorFlow的这一点与Numpy中的数组不同，计算结果不是一个具体的数字，而是一个张量的结构。主要保存：
+   - 名字（name）
+   - 维度（shape）
+   - 类型（type）
+ 可以通过result.get_shape得到结果的维度信息。可以通过tf.Session().run(result)语句得到计算结果。
+3.dtype
+类型不匹配不能加减，要制定，如dtype=tf.float32,主要支持14种不同的类型：
+- 实数
+    - tf.float32
+    - tf.float64
+- 整数
+    - tf.int8
+    - tf.int16
+    - tf.int32
+    - tf.int64
+    - tf.uint8
+- 布尔型
+    - tf.bool
+- 复数
+    - tf.complex64
+    - tf.complex128
+
+4.Session
+一方面tf需要通过Graph、Tensor、运算符等来组织数据和运算，另一方面需要通过会话来执行定义好的运算。简单创建会话的方式如下:
+```Python
+with tf.Session() as sess:
+    sess.run(...)
+```
+会话可以通过tf.ConfigProto()来实现。
+
+-游乐场[http://playground.tensorflow.org](http://playground.tensorflow.org)是一个通过网页浏览器就可以训练的简单神经网络并实现了可视化训练过程的工具。
+这样可以自动管理资源创建和释放工作，不会因为忘记sess.close()而造成资源泄漏。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 总结
 "工欲善其事，必先利其器"。
 
