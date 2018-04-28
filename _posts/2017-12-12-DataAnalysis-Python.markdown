@@ -254,12 +254,31 @@ with tf.Session() as sess:
 -游乐场[http://playground.tensorflow.org](http://playground.tensorflow.org)是一个通过网页浏览器就可以训练的简单神经网络并实现了可视化训练过程的工具。
 这样可以自动管理资源创建和释放工作，不会因为忘记sess.close()而造成资源泄漏。
 
+5.算子
+- 乘法：matmul
+- 变量分布初始化：
+weights=tf.variable(tf.random_normal([2,3],stddev=2))
+随机数生成函数：
+  - tf.random_normal
+  - tf.truncated_normal
+  - tf.random_uniform
+  - tf.random_gamma
+常数生成函数：
+  - tf.zeros
+  - tf.ones
+  - tf.fill
+  - tf.constant
 
 
-
-
-
-
+其他：
+1.TensorFlow提供了placeholder机制用于提供输入数据，placeholder相当于定义了一个位置，这个位置中的数据在程序运行时再指定。这样在程序中就不需要生成大量敞亮来提供输入数据，而只需要通过将数据通过placeholder传入TensorFlow，便于每轮迭代计算。
+另外变量的类型不可变，维度可以推导。
+2.feed_dict是一个字典，给出每个用到的placeholder的取值。
+3.常见的三种优化方法：
+- tf.train.GradientDescentOptimizer
+- tf.train.AdamOptimizer
+- tf.train.MomentumOptimizer
+选定的反向传播算法将会对所有的Graphkeys.TRAINABLE_VARIABLES集合中的变量进行优化，使得在当前的batch下损失函数最小。
 
 
 
