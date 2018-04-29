@@ -281,7 +281,7 @@ weights=tf.variable(tf.random_normal([2,3],stddev=2))
 选定的反向传播算法将会对所有的Graphkeys.TRAINABLE_VARIABLES集合中的变量进行优化，使得在当前的batch下损失函数最小。
 
 4.交叉熵
-[交叉熵](https://www.zhihu.com/question/41252833)越小说明预测的结果和真实的结果差距越小。
+[交叉熵](https://www.zhihu.com/question/41252833)刻画的是两个分布之间的距离。表征的是通过概率分布$q$来表达概率分布$p$的困难程度。因为正确答案是希望得到的结果，所以当交叉熵作为神经网络的损失函数时，$p$代表的是正确答案，$q$代表的是预测值。两个概率分布之间的距离越小，说明预测的结果和真实的结果差距越小。
 连续函数：
 $$H(p,q)=E_p[-logq]=H(p)+D_{KL}(p||q)$$
 两项中$H(p)$是$p$的信息熵，后者是想对熵。
@@ -289,21 +289,48 @@ $$H(p,q)=E_p[-logq]=H(p)+D_{KL}(p||q)$$
 离散函数：
 $$H(p,q)=-\sum_{x}p(x)logq(x)$$
 
-5.深度学习非线性
+要注意交叉熵的乘法是＊，不是矩阵乘法tf.matmul。
+5.深度学习的非线性
 [维基百科](https://en.wikipedia.org/wiki/Deep_learning)定义：一类通过多层非线性变换对高复杂性数据建模算法的合集。其中深层神经网络是实现“多层非线性变换”最常用的一种方法。
 线性模型的局限性：
 只通过线性变换，则任意层的全连接神经网络和单层神经网络模型的表达能力没有任何的差异。
-常用的非线性激活函数：
+TensorFlow提供了7种不同的非线性激活函数，常用的非线性激活函数如下三个：
 - ReLU
 $$f(x)=max(x,0)$$
+对应的是tf.nn.relu。
 - sigmoid
 $$f(x)=\dfrac{1}{1+e^{-x}}$$
+对应的是tf.sigmoid。
 - tanh
 $$f(x)=\dfrac{1-e^{-2x}}{1+e^{-2x}}$$
+对应的是tf.tanh。
 另外，偏置项bias也是神经网络中常用的一种结构。
 
+6.反向传播backpropagation与梯度下降gradient descent
+- 学习率
+learning rate控制参数更新的速度，如果幅度过大，那么可能导致参数在极优值的两侧来回移动。TensorFlow提供了一种更加灵活的学习率衰减方法：
+指数衰减法：tf.train.exponential_decay
 
+- 过拟合
+当一个模型过度复杂之后，它可以很好地“记忆”每一个训练数据中的随机噪声的部分而忘记了要去”学习”训练数据中通用的趋势。
+可以采用正则化regularization.正则化的思想就是在损失函数中加入刻画模型复杂程度的指标。在稀疏性能和求导方面，$L_1$和$L_2$有差异。一般可以同时使用：
+$$R(w)=\sum_{i}\alpha|w_i|+(1-\alpha)w_i^2$$.
+两种正则化的api如下：
+ - tf.contrib.layers.l1_regularizer(lambda=步长)(weights)
+ - tf.contrib.layers.l2_regularizer(lambda=步长)(weights)
 
+关键词总结：
+```Python
+非线性
+多层
+优化目标
+反向传播
+梯度下降
+正则化
+```
+
+7.Mnist数字识别问题
+$MNIST$是一个非常有名的手写数字识别数据集，它是$NIST$数据集的一个子集。它包含了60000张
 
 
 
