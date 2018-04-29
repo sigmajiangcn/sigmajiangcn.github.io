@@ -280,9 +280,27 @@ weights=tf.variable(tf.random_normal([2,3],stddev=2))
 - tf.train.MomentumOptimizer
 选定的反向传播算法将会对所有的Graphkeys.TRAINABLE_VARIABLES集合中的变量进行优化，使得在当前的batch下损失函数最小。
 
+4.交叉熵
+[交叉熵](https://www.zhihu.com/question/41252833)越小说明预测的结果和真实的结果差距越小。
+连续函数：
+$$H(p,q)=E_p[-logq]=H(p)+D_{KL}(p||q)$$
+两项中$H(p)$是$p$的信息熵，后者是想对熵。
 
+离散函数：
+$$H(p,q)=-\sum_{x}p(x)logq(x)$$
 
-
+5.深度学习非线性
+[维基百科](https://en.wikipedia.org/wiki/Deep_learning)定义：一类通过多层非线性变换对高复杂性数据建模算法的合集。其中深层神经网络是实现“多层非线性变换”最常用的一种方法。
+线性模型的局限性：
+只通过线性变换，则任意层的全连接神经网络和单层神经网络模型的表达能力没有任何的差异。
+常用的非线性激活函数：
+- ReLU
+$$f(x)=max(x,0)$$
+- sigmoid
+$$f(x)=\dfrac{1}{1+e^{-x}}$$
+- tanh
+$$f(x)=\dfrac{1-e^{-2x}}{1+e^{-2x}}$$
+另外，偏置项bias也是神经网络中常用的一种结构。
 
 
 
