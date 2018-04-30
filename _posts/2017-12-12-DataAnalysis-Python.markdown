@@ -406,9 +406,41 @@ $ImageNet$以前每年都会举办图像识别相关的竞赛($ImageNet\ Large\ 
 
 #### 两种重要结构
 - 卷积层
+filter过滤器或者kernel内核。
+zero padding补0
+移动步长
+$$out=(in-filter+1)/stride$$
+对长和宽都生效。在卷积神经网络中，每一个卷积层中使用的过滤器中的参数都是一样的。从直观上看，共享过滤器的参数可以使得图像上的内容不受位置的影响。并且可以大大减少神经网络的参数、参数量与输入图片的大小无关，只和过滤器的尺寸、深度以及当前节点的矩阵深度有关，易于扩展。
+```Python
+filter_weight=tf.get_variable(
+            'weights',[5,5,3,16],
+            initializer=tf.truncated_normal_initializer(stddev=0.1)  
+            )
+biases=tf.get_variable(
+            'biases',[16],
+            initializer=tf.constant_initializer(0.1)
+            )
+conv=tf.nn.conv2d(input,filter_weight,stides=[1,1,1,1],padding='SAME')
+bias=tf.nn.bias_add(conv,biases)
+actived_conv=tf.nn.relu(bias)
+```
 
 - 池化层
-
+池化层可以非常有效地缩小矩阵的尺寸，从而减少最后全连接层中的参数，并且加快计算速度、防止过拟合。本质也是一个过滤器，不过常见的有如下两种：
+  - 最大池化层
+    max pooling，最大值操作，应用较多
+  - 平均池化层
+    average pooling，平均值操作，应用较少。
+既然也是滤波器，也需要设置尺寸、是否全0补充以及移动步长。实践中，一般不使用池化来改变图像举证的深度。
+page 161
+```Python
+pool=tf.nn.max_pool(
+        actived_conv,
+        ksize=[1,3,3,1],
+        strides=[1,2,2,1],
+        padding='SAME'
+)
+```
 #### 两种经典网络
 - LeNet-5
 - Inception-v3
