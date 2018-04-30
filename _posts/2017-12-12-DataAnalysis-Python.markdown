@@ -364,8 +364,29 @@ tf.variable_scope函数生成的上下文管理器也会创建一个TensorFlow�
 TensorFlow可以通过字典将模型保存时的变量名和需要加载的变量联系起来。通过元图(MetaGraph)来记录计算图中节点的信息以及运行计算图中节点所需要的元数据。元图是由MetaGraphDef Protocol Buffer定义的。
 
 10.卷积神经网络CNN
-LeNet-5
-Inception-v3
+$MNIST$手写字体识别数据集是一个相对简单的数据集，在其他更加复杂的图像识别数据及上，卷积神经网络有更加突出的表现。$Cifar$数据集就是一个影响力很大的图像分类数据集。$Cifar$数据集分为了$Cifar-10$和$Cifar-100$两个问题，它们都是图像词典项目(visual dictionary)中800万张图片中的一个子集。
+$Cifar$数据集的图片为32*32的彩色图片，这些图片是由$Alex\ Krizhevsky$教授、$Vinod\ Nair$博士和$Geoffrey\ Hinton$教授整理的。
+区别在于：$MNIST$是手写字体识别，每一张图片只包含一个数字；$Cifar$是不同类别的识别，每一张图片都只包含一个种类的物体。
+然而无论是$MNIST$还是$Cifar$数据集，相比真是环境下的图像识别问题，还是太简单，主要在于：
+- 分辨率
+现实生活图片分辨率要高于32*32，并且分别率不固定
+- 类别多
+现实世界物体种类不再局限于10类或者100类，并且一张图片不会只有一个种类的物体。
+
+为了更加贴近真实环境下的图像识别问题，由斯坦福大学的李飞飞教授带头整理的$ImageNet$很大程度可以解决这个问题。
+$ImageNet$是一个基于$WordNet$的大型图像数据库，在$ImageNet$中，将近1500万图片被关联到了$WordNet$的大约20000个名词同义词集上。目前每一个与WordNet相关的$ImageNet$同义词集都代表了现实世界的中的一个实体，可以被认为是分类问题中的一个类别。
+$ImageNet$中的图片是从互联网爬虫得到，并且通过亚马逊的人工标注服务将图片分类到对应的同义词集合上。
+$ImageNet$以前每年都会举办图像识别相关的竞赛($ImageNet\ Large\ Scale\ Visual\ Recognition\ Challenge,ILSVRC$),在$ILSVRC2012$中有来自1000个类别的120万张图片，其中每张图片属于且只属于一个类别。图片大小各异。
+2012,AlexNet
+2013,ZF
+2014,VGG,GoogleNet
+2015,Inception-v3,ResNet
+2016,GoogleNet-v4
+全连接层网络结构：每两层之间的所有节点都是有边相连的。**这是与卷积神经网络、循环神经网络**最大的区别。
+
+
+- LeNet-5
+- Inception-v3
 
 
 
