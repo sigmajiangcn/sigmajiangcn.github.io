@@ -472,6 +472,33 @@ Inception结构是一种和LeNet-5结构完全不同的卷积神经网络结构
 根据论文DeCAF：A Deep Convolutional Activation Feature for Generic Visual Recognition中的结论，可以保留训练好的Inception-v3模型中所有卷积层的参数，只是替换最后一层全连接层。在最后这一层全连接层之前的网络层称之为瓶颈层（bottleeneck）。
 游戏场景的识别。
 
+11.图像数据处理
+- TFRecord输入数据格式
+TFRecord文件中的数据都是通过tf.train.Example Protocol Buffer的格式存储的。
+- 图像预处理
+图片在存储时并非直接记录RGB色彩模式数据，而是压缩之后的结果。所以要将一张图像还原成一个三维矩阵，需要解码的过程。TensorFlow提供了对jpeg和png格式图像的编码/解码函数，如下：
+```Python
+image_raw_data=tf.gfile.FastGFile("/path/to/picture","r").read()
+with tf.Session() as sess:
+  #read to [1-256]
+  img_data=tf.image.decode_jpeg(image_raw_data)
+  #write to float encoded
+  encoded_jpeg=t.image.encode_jpeg(img_data)
+  with tf.gfile.GFile("/path/to/output","wb") as f:
+    f.write(encoded_jpeg.eval())
+```
+
+- 图像大小调整
+TensorFlow提供了四种不同的方法，封装在tf.image.resize_images()
+```Python
+resized=tf.image.resize_images(img_data,300,300,method=0)
+```
+| method | 算法 |
+| :-: | :-: |
+|0|双线性插值法Bilinear interpolation|
+|1|最近邻居法Nearest Neighbour interpolation|
+|2|双三次插值法Bicubic interpolation|
+|3|面积插值法Area interpolation|
 
 ## 总结
 "工欲善其事，必先利其器"。
