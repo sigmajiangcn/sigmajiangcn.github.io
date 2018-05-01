@@ -593,10 +593,11 @@ stacked_lstm=rnn_cell.MultiRNNCell([dropout_lstm]*number_of_layers)
 
 
 13.TensorBoard可视化
-
+TensorBoard与TensorFlow跑在不同的进程中，TensorBoard会自动读取最新的TensorFlow日志文件，并呈现当前的TensorFlow程序运行的最新状态，包括在运行过程中计算图、各种指标随着时间的变化趋势以及训练中使用的图像信息等。
 
 
 14.TensorFlow计算加速
+利用GPU或/和分布式计算进行模型训练。
 
 
 
