@@ -500,6 +500,62 @@ resized=tf.image.resize_images(img_data,300,300,method=0)
 |2|双三次插值法Bicubic interpolation|
 |3|面积插值法Area interpolation|
 
+- 图像翻转
+```Python
+flipped=tf.image.flip_up_down(img_data)#上下翻转
+flipped=tf.image.flip_left_right(img_data)#左右翻转
+flipped=tf.image.transpose_image(img_data)#对角线翻转
+```
+- 图像色彩调整
+```Python
+tf.image.adjust_hue
+tf.image.adjust_saturation
+tf.image.adjust_brightness
+tf.image.adjust_contrast
+```
+- 图像标注框
+```Python
+tf.image.draw_bounding_boxes
+```
+- 多线程输入数据处理框架
+  - 队列与多线程
+  tf.FIFOQueue
+  tf.Coordinator
+  - 输入文件队列
+  tf.train.string_input_producer
+  - 组合训练数据
+  将多个输入样例组织成一个batch可以提高模型训练的效率。所以在得到单个样例的预处理结果后，还需要将他们组织成batch，然后再提供给神经网络的输入层。
+  tf.train.batch
+  tf.train.shuffle_batch
+  tf.train.shuffle_batch_join
+
+12.循环神经网络
+循环神经网络（recurrent neural network,RNN）
+长短时记忆网络（long short-term memory,LSTM）
+主要应用在自然语言处理和时序分析领域。
+[Understanding LSTM Networks](http://colah.github.io/posts/2015-08-Understanding-LSTMs/)
+![LSTM电路图](/img/RNN-unrolled.png)
+一个最简单的循环体结构的循环神经网络，在这个循环体中只使用了一个类似全连接层的神经网络结构，如下图：
+ ![LSTM电路图](/img/SimpleRNN.png)
+循环神经网络中的状态是通过一个向量来表示的，这个向量的大小称为循环神经网络隐藏层的大小，假设为$h$。上图中循环神经网络的输入分为两个部分，一部分为上一个时刻的状态，另一个部分为当前时刻的输入样本。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 总结
 "工欲善其事，必先利其器"。
 
