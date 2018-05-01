@@ -538,9 +538,65 @@ tf.image.draw_bounding_boxes
 一个最简单的循环体结构的循环神经网络，在这个循环体中只使用了一个类似全连接层的神经网络结构，如下图：
  ![LSTM电路图](/img/SimpleRNN.png)
 循环神经网络中的状态是通过一个向量来表示的，这个向量的大小称为循环神经网络隐藏层的大小，假设为$h$。上图中循环神经网络的输入分为两个部分，一部分为上一个时刻的状态，另一个部分为当前时刻的输入样本。
+对于时间序列分析数据来说（例如不同时刻商品销量），每一个时刻的输入样例可以是当前时刻的数值（例如销量值）；对于语言模型而言，输入样例可以是当前单词对应的单词向量（word embedding）。
+循环体的参数个数为：
+$$(h+x)\cdot h+h$$
+
+循环神经网络的关键是使用历史的信息来帮助当前的决策。例如使用之前的单词来加强对当前单词的理解，这样可以利用传统神经网络不具备的信息，也带来了更大的技术挑战--长期依赖（long term dependencies）。
+与单一tanh循环体结构不同，LSTM是一种拥有三种“门”结构的特殊网络结构。LSTM靠一些门的结构让信息有选择性的影响循环神经网络中每个时刻的状态。输入门和遗忘门是LSTM结构的核心。
+
+```Python
+lstm=rnn_cell.BasicLSTMCell(lstm_hidden_size)
+state=lstm.zero_state(batch_size,tf.float32)
+loss=0.0
+for i in range(num_steps):
+  if i>0:
+    tf.get_variable_scope().reuse_variables()
+  lstm_output,state=lstm(current_input,state)
+  final_output=fully_connected(lstm_output)
+  loss+=calc_loss(final_output,expected_output)
+```
+
+- 循环神经网络的变种
+  - 双向循环神经网络
+  《Bidirectional recurrent neural network》,Bidirectional RNN.在预测一个语句中的缺失的单词不仅需要根据前文来判断，也需要根据后面的内容，这时双向循环网络就可以发挥它的作用。双向神经网络是由两个循环神经网络上下叠加在一起组成的。输出由这两个循环神经网络的状态共同决定。
+  在每一个时刻$t$，输入同时给两个循环神经网络，而输出则是由这两个单向循环神经网络共同决定。
+
+  - 深层循环神经网络
+  deepRNN，为了增强模型的表达能力，可以将每一个时刻上的循环体重复多次。和卷积神经网络类似，每一层的循环体中参数是一致的，而不同层中的参数可以不同。为了更好地支持深层循环，TTensorFlow中提供了MultiRNNCell类来实现深层循环神经网络的前向传播过程。
+  ```Python
+  lstm=rnn_cell.BasicLSTMCell(lstm_size)
+  stacked_lstm=rnn_cell.MultiRNNCell([lstm]*number_of_layers)
+  state=stacked_lstm.zero_state(batch_size,tf.float32)
+  for i in range(len(num_steps)):
+      if i>0:
+        tf.get_variable_scope().reuse_variables()
+        stacked_lstm_output,state=stacked_lstm(current_input,state)
+        final_output=fully_connected(stacked_lstm_output)
+        loss+=calc_loss(final_output,expected_output)
+  ```
+
+- dropout
+通过dropout，可以让神经网络更加健壮。卷积神经网络只在最后的全连接层使用dropout，循环神经网络一般只在不同层循环体结构之间使用dropout，而不在同一层的循环体结构之间使用。
+也就是说从时刻$t-1$传递到时刻$t$时，循环神经网络不会进行状态的dropout；而在同一个时刻$t$中，不同层循环体之间会使用dropout。
+```Python
+lstm=rnn_cell.BasicLSTMCell(lstm_size)
+dropout_lstm=tf.nn.rnn_cell.DropoutWrapper(lstm,out_keep_prob=0.5)
+stacked_lstm=rnn_cell.MultiRNNCell([dropout_lstm]*number_of_layers)
+```
+
+- 案例使用：
+  - 自然语言建模
+
+  - 时间序列建模
 
 
 
+13.TensorBoard可视化
+
+
+
+14.TensorFlow计算加速
 
 
 
