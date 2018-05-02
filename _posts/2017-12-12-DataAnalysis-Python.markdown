@@ -256,7 +256,7 @@ with tf.Session() as sess:
 
 5.算子
 - 乘法：matmul
-- 变量分布初始化：
+- 变量分布初始化：
 weights=tf.variable(tf.random_normal([2,3],stddev=2))
 随机数生成函数：
   - tf.random_normal
@@ -271,49 +271,49 @@ weights=tf.variable(tf.random_normal([2,3],stddev=2))
 
 
 其他：
-1.TensorFlow提供了placeholder机制用于提供输入数据，placeholder相当于定义了一个位置，这个位置中的数据在程序运行时再指定。这样在程序中就不需要生成大量敞亮来提供输入数据，而只需要通过将数据通过placeholder传入TensorFlow，便于每轮迭代计算。
-另外变量的类型不可变，维度可以推导。
+1.TensorFlow提供了placeholder机制用于提供输入数据，placeholder相当于定义了一个位置，这个位置中的数据在程序运行时再指定。这样在程序中就不需要生成大量敞亮来提供输入数据，而只需要通过将数据通过placeholder传入TensorFlow，便于每轮迭代计算。
+另外变量的类型不可变，维度可以推导。
 2.feed_dict是一个字典，给出每个用到的placeholder的取值。
 3.常见的三种优化方法：
 - tf.train.GradientDescentOptimizer
 - tf.train.AdamOptimizer
 - tf.train.MomentumOptimizer
-选定的反向传播算法将会对所有的Graphkeys.TRAINABLE_VARIABLES集合中的变量进行优化，使得在当前的batch下损失函数最小。
+选定的反向传播算法将会对所有的Graphkeys.TRAINABLE_VARIABLES集合中的变量进行优化，使得在当前的batch下损失函数最小。
 
 4.交叉熵
-[交叉熵](https://www.zhihu.com/question/41252833)刻画的是两个分布之间的距离。表征的是通过概率分布$q$来表达概率分布$p$的困难程度。因为正确答案是希望得到的结果，所以当交叉熵作为神经网络的损失函数时，$p$代表的是正确答案，$q$代表的是预测值。两个概率分布之间的距离越小，说明预测的结果和真实的结果差距越小。
+[交叉熵](https://www.zhihu.com/question/41252833)刻画的是两个分布之间的距离。表征的是通过概率分布$q$来表达概率分布$p$的困难程度。因为正确答案是希望得到的结果，所以当交叉熵作为神经网络的损失函数时，$p$代表的是正确答案，$q$代表的是预测值。两个概率分布之间的距离越小，说明预测的结果和真实的结果差距越小。
 连续函数：
 $$H(p,q)=E_p[-logq]=H(p)+D_{KL}(p||q)$$
-两项中$H(p)$是$p$的信息熵，后者是想对熵。
+两项中$H(p)$是$p$的信息熵，后者是想对熵。
 
 离散函数：
 $$H(p,q)=-\sum_{x}p(x)logq(x)$$
 
-要注意交叉熵的乘法是＊，不是矩阵乘法tf.matmul。
+要注意交叉熵的乘法是＊，不是矩阵乘法tf.matmul。
 5.深度学习的非线性
-[维基百科](https://en.wikipedia.org/wiki/Deep_learning)定义：一类通过多层非线性变换对高复杂性数据建模算法的合集。其中深层神经网络是实现“多层非线性变换”最常用的一种方法。
+[维基百科](https://en.wikipedia.org/wiki/Deep_learning)定义：一类通过多层非线性变换对高复杂性数据建模算法的合集。其中深层神经网络是实现“多层非线性变换”最常用的一种方法。
 线性模型的局限性：
 只通过线性变换，则任意层的全连接神经网络和单层神经网络模型的表达能力没有任何的差异。
 TensorFlow提供了7种不同的非线性激活函数，常用的非线性激活函数如下三个：
 - ReLU
 $$f(x)=max(x,0)$$
-对应的是tf.nn.relu。
+对应的是tf.nn.relu。
 - sigmoid
 $$f(x)=\dfrac{1}{1+e^{-x}}$$
-对应的是tf.sigmoid。
+对应的是tf.sigmoid。
 - tanh
 $$f(x)=\dfrac{1-e^{-2x}}{1+e^{-2x}}$$
-对应的是tf.tanh。
+对应的是tf.tanh。
 另外，偏置项bias也是神经网络中常用的一种结构。
 
 6.反向传播backpropagation与梯度下降gradient descent
 - 学习率
-learning rate控制参数更新的速度，如果幅度过大，那么可能导致参数在极优值的两侧来回移动。TensorFlow提供了一种更加灵活的学习率衰减方法：
+learning rate控制参数更新的速度，如果幅度过大，那么可能导致参数在极优值的两侧来回移动。TensorFlow提供了一种更加灵活的学习率衰减方法：
 指数衰减法：tf.train.exponential_decay
 
-- 过拟合
+- 过拟合
 当一个模型过度复杂之后，它可以很好地“记忆”每一个训练数据中的随机噪声的部分而忘记了要去”学习”训练数据中通用的趋势。
-可以采用正则化regularization.正则化的思想就是在损失函数中加入刻画模型复杂程度的指标。在稀疏性能和求导方面，$L_1$和$L_2$有差异。一般可以同时使用：
+可以采用正则化regularization.正则化的思想就是在损失函数中加入刻画模型复杂程度的指标。在稀疏性能和求导方面，$L_1$和$L_2$有差异。一般可以同时使用：
 $$R(w)=\sum_{i}\alpha|w_i|+(1-\alpha)w_i^2$$.
 两种正则化的api如下：
  - tf.contrib.layers.l1_regularizer(lambda=步长)(weights)
@@ -325,23 +325,23 @@ $$R(w)=\sum_{i}\alpha|w_i|+(1-\alpha)w_i^2$$.
 多层
 优化目标
 反向传播
-梯度下降
+梯度下降
 正则化
 ```
 
-7.Mnist数字识别问题
-[$MNIST]$(http://yann.lecun.com/exdb/mnist)是一个非常有名的手写数字识别数据集，它是$NIST$数据集的一个子集。它包含了60000张图片作为训练数据，10000张图片作为测试数据。在$MNIST$数据集中的每一张图片都代表了0~9中的一个数字。图片的大小都是28*28，且数字都会出现在图片的正中间。
-- train     训练
+7.Mnist数字识别问题
+[$MNIST]$(http://yann.lecun.com/exdb/mnist)是一个非常有名的手写数字识别数据集，它是$NIST$数据集的一个子集。它包含了60000张图片作为训练数据，10000张图片作为测试数据。在$MNIST$数据集中的每一张图片都代表了0~9中的一个数字。图片的大小都是28*28，且数字都会出现在图片的正中间。
+- train     训练
 - validation验证
 - test      测试
-
 
-从60000张训练数据中抽取出5000张作为验证集，其余55000作为训练集，可以采用交叉验证($cross  validation$)的方式来验证模型效果。但因为神经网络训练时间本身更加就比较长，采用交叉验证会花费大量时间。在海量数据的情况下，一般更多采用验证数据集的形式来评测模型的效果。
-需要注意的是，虽然一个神经网络模型的效果最终是通过测试数据来评判的，但是我们不能直接通过模型在测试数据上的效果来选择参数。使用测试数据来选择参数可能会造成神经网络过度拟合测试数据，从而失去对未知数据的预判能力。
-一般，可以在不同的迭代轮数的情况下，计算模型在验证数据和测试数据上的正确率。
-另外，可以计算模型在验证集和测试集的准确率曲线，分析二者是否正相关。
+
+从60000张训练数据中抽取出5000张作为验证集，其余55000作为训练集，可以采用交叉验证($cross  validation$)的方式来验证模型效果。但因为神经网络训练时间本身更加就比较长，采用交叉验证会花费大量时间。在海量数据的情况下，一般更多采用验证数据集的形式来评测模型的效果。
+需要注意的是，虽然一个神经网络模型的效果最终是通过测试数据来评判的，但是我们不能直接通过模型在测试数据上的效果来选择参数。使用测试数据来选择参数可能会造成神经网络过度拟合测试数据，从而失去对未知数据的预判能力。
+一般，可以在不同的迭代轮数的情况下，计算模型在验证数据和测试数据上的正确率。
+另外，可以计算模型在验证集和测试集的准确率曲线，分析二者是否正相关。
 代码主要分为三个部分：
-- mnist_inference.py
+- mnist_inference.py
 定义了前向传播的过程以及神经网络中的参数。
 - mnist_train.py
 定义了神经网络的训练过程。
@@ -349,11 +349,11 @@ $$R(w)=\sum_{i}\alpha|w_i|+(1-\alpha)w_i^2$$.
 定义了测试过程。
 
 8.变量管理
-TensorFlow提供了通过变量名称来创建或者获取一个变量的机制，通过这个机制，在不同的函数中可以直接通过变量的名字来使用变量，而不需要将变量通过参数的形式到处传递。主要是通过tf.get_variable和tf.variable_scope函数来实现。
+TensorFlow提供了通过变量名称来创建或者获取一个变量的机制，通过这个机制，在不同的函数中可以直接通过变量的名字来使用变量，而不需要将变量通过参数的形式到处传递。主要是通过tf.get_variable和tf.variable_scope函数来实现。
 tf.variable_scope函数生成的上下文管理器也会创建一个TensorFlow中的命名空间，在命名空间内创建的变量名称都会带上这个命名空间名作为前缀。
 
 9.模型持久化
-- tf.train.Saver
+- tf.train.Saver
   - model.ckpt.meta
     保存了计算图的结构
   - model.ckpt
@@ -361,22 +361,22 @@ tf.variable_scope函数生成的上下文管理器也会创建一个TensorFlow�
   - ckeckpoint
     保存了一个目录下所有的模型文件列表
 
-TensorFlow可以通过字典将模型保存时的变量名和需要加载的变量联系起来。通过元图(MetaGraph)来记录计算图中节点的信息以及运行计算图中节点所需要的元数据。元图是由MetaGraphDef Protocol Buffer定义的。
+TensorFlow可以通过字典将模型保存时的变量名和需要加载的变量联系起来。通过元图(MetaGraph)来记录计算图中节点的信息以及运行计算图中节点所需要的元数据。元图是由MetaGraphDef Protocol Buffer定义的。
 
 10.卷积神经网络CNN
-$MNIST$手写字体识别数据集是一个相对简单的数据集，在其他更加复杂的图像识别数据及上，卷积神经网络有更加突出的表现。$Cifar$数据集就是一个影响力很大的图像分类数据集。$Cifar$数据集分为了$Cifar-10$和$Cifar-100$两个问题，它们都是图像词典项目(visual dictionary)中800万张图片中的一个子集。
+$MNIST$手写字体识别数据集是一个相对简单的数据集，在其他更加复杂的图像识别数据及上，卷积神经网络有更加突出的表现。$Cifar$数据集就是一个影响力很大的图像分类数据集。$Cifar$数据集分为了$Cifar-10$和$Cifar-100$两个问题，它们都是图像词典项目(visual dictionary)中800万张图片中的一个子集。
 $Cifar$数据集的图片为32*32的彩色图片，这些图片是由$Alex\ Krizhevsky$教授、$Vinod\ Nair$博士和$Geoffrey\ Hinton$教授整理的。
-区别在于：$MNIST$是手写字体识别，每一张图片只包含一个数字；$Cifar$是不同类别的识别，每一张图片都只包含一个种类的物体。
+区别在于：$MNIST$是手写字体识别，每一张图片只包含一个数字；$Cifar$是不同类别的识别，每一张图片都只包含一个种类的物体。
 然而无论是$MNIST$还是$Cifar$数据集，相比真是环境下的图像识别问题，还是太简单，主要在于：
 - 分辨率
 现实生活图片分辨率要高于32*32，并且分别率不固定
-- 类别多
-现实世界物体种类不再局限于10类或者100类，并且一张图片不会只有一个种类的物体。
+- 类别多
+现实世界物体种类不再局限于10类或者100类，并且一张图片不会只有一个种类的物体。
 
 为了更加贴近真实环境下的图像识别问题，由斯坦福大学的李飞飞教授带头整理的$ImageNet$很大程度可以解决这个问题。
-$ImageNet$是一个基于$WordNet$的大型图像数据库，在$ImageNet$中，将近1500万图片被关联到了$WordNet$的大约20000个名词同义词集上。目前每一个与WordNet相关的$ImageNet$同义词集都代表了现实世界的中的一个实体，可以被认为是分类问题中的一个类别。
-$ImageNet$中的图片是从互联网爬虫得到，并且通过亚马逊的人工标注服务将图片分类到对应的同义词集合上。
-$ImageNet$以前每年都会举办图像识别相关的竞赛($ImageNet\ Large\ Scale\ Visual\ Recognition\ Challenge,ILSVRC$),在$ILSVRC2012$中有来自1000个类别的120万张图片，其中每张图片属于且只属于一个类别。图片大小各异。
+$ImageNet$是一个基于$WordNet$的大型图像数据库，在$ImageNet$中，将近1500万图片被关联到了$WordNet$的大约20000个名词同义词集上。目前每一个与WordNet相关的$ImageNet$同义词集都代表了现实世界的中的一个实体，可以被认为是分类问题中的一个类别。
+$ImageNet$中的图片是从互联网爬虫得到，并且通过亚马逊的人工标注服务将图片分类到对应的同义词集合上。
+$ImageNet$以前每年都会举办图像识别相关的竞赛($ImageNet\ Large\ Scale\ Visual\ Recognition\ Challenge,ILSVRC$),在$ILSVRC2012$中有来自1000个类别的120万张图片，其中每张图片属于且只属于一个类别。图片大小各异。
 2012,AlexNet
 2013,ZF
 2014,VGG,GoogleNet
@@ -385,7 +385,7 @@ $ImageNet$以前每年都会举办图像识别相关的竞赛($ImageNet\ Large\ 
 全连接层网络结构：每两层之间的所有节点都是有边相连的。
 **这是与卷积神经网络、循环神经网络***最大的区别。  
 
-神经网络两层之间的连接方式很重要，在全连接神经网络中网络参数太多。假设第一个隐层有500个节点，如果都是全连接神经网络，则有如下参数规模：
+神经网络两层之间的连接方式很重要，在全连接神经网络中网络参数太多。假设第一个隐层有500个节点，如果都是全连接神经网络，则有如下参数规模：
 - $MNIST$
 28*28*500+500=392500
 - $CIFAR$
@@ -396,7 +396,7 @@ $ImageNet$以前每年都会举办图像识别相关的竞赛($ImageNet\ Large\ 
 - 输入层
 输入RGB三通道维度图片
 - 卷积层
-针对每个小块深入分析得到抽象特征
+针对每个小块深入分析得到抽象特征
 - 池化层
 不改变矩阵深度，会改变矩阵大小。
 - 全连接层
@@ -406,8 +406,8 @@ $ImageNet$以前每年都会举办图像识别相关的竞赛($ImageNet\ Large\ 
 
 #### 两种重要结构
 - 卷积层
-filter过滤器或者kernel内核。
-zero padding补0
+filter过滤器或者kernel内核。
+zero padding补0
 移动步长
 $$out=(in-filter+1)/stride$$
 对长和宽都生效。在卷积神经网络中，每一个卷积层中使用的过滤器中的参数都是一样的。从直观上看，共享过滤器的参数可以使得图像上的内容不受位置的影响。并且可以大大减少神经网络的参数、参数量与输入图片的大小无关，只和过滤器的尺寸、深度以及当前节点的矩阵深度有关，易于扩展。
@@ -431,7 +431,7 @@ actived_conv=tf.nn.relu(bias)
     max pooling，最大值操作，应用较多
   - 平均池化层
     average pooling，平均值操作，应用较少。
-既然也是滤波器，也需要设置尺寸、是否全0补充以及移动步长。实践中，一般不使用池化来改变图像举证的深度。
+既然也是滤波器，也需要设置尺寸、是否全0补充以及移动步长。实践中，一般不使用池化来改变图像举证的深度。
 page 161
 ```Python
 pool=tf.nn.max_pool(
@@ -444,7 +444,7 @@ pool=tf.nn.max_pool(
 其中各个参数解释如下：
 - ksize：kernel size，滤波器尺寸，第一个和最后一个是1，意味着池化层的滤波器是不可以跨不同输入样例或者节点矩阵深度的，最常见的尺寸为[1，2，2，1]或者[1，3，3，1]。
 - strides：步长，第一个和最后一个是1，一直这样池化层不能减少节点矩阵的深度或者输入样例的个数。
-- padding表示填充补0，取值有VALID和SAME，VALID表示不使用全0填充，SAME表示使用全0填充。
+- padding表示填充补0，取值有VALID和SAME，VALID表示不使用全0填充，SAME表示使用全0填充。
 #### 两种经典网络
 ##### LeNet-5
 这是Yann Lecun教授在1998年《Gradient-based learning applied to document recognition》,它是第一个成功用户数字识别问题的*卷积神经网络*。这是一个7层的网络，在MNIST数据集上，可以达到99.2%的正确率。
@@ -455,28 +455,28 @@ pool=tf.nn.max_pool(
 - 第五层：全连接层
 - 第六层：全连接层
 - 第七层：全连接层
-
+
 一般而言，用于图片分类问题的卷积神经网络架构：
-输入层->(卷积层+->池化层？)+->全连接层+
+输入层->(卷积层+->池化层？)+->全连接层+
 其中，+号表示一层或者多层，？号表示有或者没有。池化层虽然可以起到减少参数防止过拟合的问题，但是部分论文发现可以通过直接调整卷积层步长也可以完成。*因此有些卷积神经网络中没有池化层*。
 AlexNet、ZFNet以及VGGNet基本满足上述正则表达式结构。
 
 ##### Inception-v3
-Inception结构是一种和LeNet-5结构完全不同的卷积神经网络结构。LeNet-5结构中，不同卷积层通过串联的方式连接在一起。而Inception-v3结构中将不同的卷积层通过并联的方式结合在一起。
+Inception结构是一种和LeNet-5结构完全不同的卷积神经网络结构。LeNet-5结构中，不同卷积层通过串联的方式连接在一起。而Inception-v3结构中将不同的卷积层通过并联的方式结合在一起。
 虽然滤波器的大小不同，但如果所欲的滤波器都是用全0填充且步长为1，那么前向传播得到的结果矩阵的长和宽都与输入矩阵一致。这样经过不同过滤器处理的结果矩阵可以拼接得到一个*更深*的矩阵。
-在《rethinking the Inception Architecture for Computer Vision》中，Inception—v3模型共有46层，由11个Inception模块构成。共有96个卷积层。
+在《rethinking the Inception Architecture for Computer Vision》中，Inception—v3模型共有46层，由11个Inception模块构成。共有96个卷积层。
 
 
 #### 迁移学习
 可以使用少量训练数据在短时间内训练处还不错的神经网络模型。
-根据论文DeCAF：A Deep Convolutional Activation Feature for Generic Visual Recognition中的结论，可以保留训练好的Inception-v3模型中所有卷积层的参数，只是替换最后一层全连接层。在最后这一层全连接层之前的网络层称之为瓶颈层（bottleeneck）。
+根据论文DeCAF：A Deep Convolutional Activation Feature for Generic Visual Recognition中的结论，可以保留训练好的Inception-v3模型中所有卷积层的参数，只是替换最后一层全连接层。在最后这一层全连接层之前的网络层称之为瓶颈层（bottleeneck）。
 游戏场景的识别。
 
 11.图像数据处理
 - TFRecord输入数据格式
 TFRecord文件中的数据都是通过tf.train.Example Protocol Buffer的格式存储的。
 - 图像预处理
-图片在存储时并非直接记录RGB色彩模式数据，而是压缩之后的结果。所以要将一张图像还原成一个三维矩阵，需要解码的过程。TensorFlow提供了对jpeg和png格式图像的编码/解码函数，如下：
+图片在存储时并非直接记录RGB色彩模式数据，而是压缩之后的结果。所以要将一张图像还原成一个三维矩阵，需要解码的过程。TensorFlow提供了对jpeg和png格式图像的编码/解码函数，如下：
 ```Python
 image_raw_data=tf.gfile.FastGFile("/path/to/picture","r").read()
 with tf.Session() as sess:
@@ -489,11 +489,11 @@ with tf.Session() as sess:
 ```
 
 - 图像大小调整
-TensorFlow提供了四种不同的方法，封装在tf.image.resize_images()
+TensorFlow提供了四种不同的方法，封装在tf.image.resize_images()
 ```Python
 resized=tf.image.resize_images(img_data,300,300,method=0)
 ```
-| method | 算法 |
+| method | 算法 |
 | :-: | :-: |
 |0|双线性插值法Bilinear interpolation|
 |1|最近邻居法Nearest Neighbour interpolation|
@@ -508,7 +508,7 @@ flipped=tf.image.transpose_image(img_data)#对角线翻转
 ```
 - 图像色彩调整
 ```Python
-tf.image.adjust_hue
+tf.image.adjust_hue
 tf.image.adjust_saturation
 tf.image.adjust_brightness
 tf.image.adjust_contrast
@@ -519,10 +519,10 @@ tf.image.draw_bounding_boxes
 ```
 - 多线程输入数据处理框架
   - 队列与多线程
-  tf.FIFOQueue
+  tf.FIFOQueue
   tf.Coordinator
   - 输入文件队列
-  tf.train.string_input_producer
+  tf.train.string_input_producer
   - 组合训练数据
   将多个输入样例组织成一个batch可以提高模型训练的效率。所以在得到单个样例的预处理结果后，还需要将他们组织成batch，然后再提供给神经网络的输入层。
   tf.train.batch
@@ -530,7 +530,7 @@ tf.image.draw_bounding_boxes
   tf.train.shuffle_batch_join
 
 12.循环神经网络
-循环神经网络（recurrent neural network,RNN）
+循环神经网络（recurrent neural network,RNN）
 长短时记忆网络（long short-term memory,LSTM）
 主要应用在自然语言处理和时序分析领域。
 [Understanding LSTM Networks](http://colah.github.io/posts/2015-08-Understanding-LSTMs/)
@@ -542,8 +542,8 @@ tf.image.draw_bounding_boxes
 循环体的参数个数为：
 $$(h+x)\cdot h+h$$
 
-循环神经网络的关键是使用历史的信息来帮助当前的决策。例如使用之前的单词来加强对当前单词的理解，这样可以利用传统神经网络不具备的信息，也带来了更大的技术挑战--长期依赖（long term dependencies）。
-与单一tanh循环体结构不同，LSTM是一种拥有三种“门”结构的特殊网络结构。LSTM靠一些门的结构让信息有选择性的影响循环神经网络中每个时刻的状态。输入门和遗忘门是LSTM结构的核心。
+循环神经网络的关键是使用历史的信息来帮助当前的决策。例如使用之前的单词来加强对当前单词的理解，这样可以利用传统神经网络不具备的信息，也带来了更大的技术挑战--长期依赖（long term dependencies）。
+与单一tanh循环体结构不同，LSTM是一种拥有三种“门”结构的特殊网络结构。LSTM靠一些门的结构让信息有选择性的影响循环神经网络中每个时刻的状态。输入门和遗忘门是LSTM结构的核心。
 
 ```Python
 lstm=rnn_cell.BasicLSTMCell(lstm_hidden_size)
@@ -559,11 +559,11 @@ for i in range(num_steps):
 
 - 循环神经网络的变种
   - 双向循环神经网络
-  《Bidirectional recurrent neural network》,Bidirectional RNN.在预测一个语句中的缺失的单词不仅需要根据前文来判断，也需要根据后面的内容，这时双向循环网络就可以发挥它的作用。双向神经网络是由两个循环神经网络上下叠加在一起组成的。输出由这两个循环神经网络的状态共同决定。
-  在每一个时刻$t$，输入同时给两个循环神经网络，而输出则是由这两个单向循环神经网络共同决定。
+  《Bidirectional recurrent neural network》,Bidirectional RNN.在预测一个语句中的缺失的单词不仅需要根据前文来判断，也需要根据后面的内容，这时双向循环网络就可以发挥它的作用。双向神经网络是由两个循环神经网络上下叠加在一起组成的。输出由这两个循环神经网络的状态共同决定。
+  在每一个时刻$t$，输入同时给两个循环神经网络，而输出则是由这两个单向循环神经网络共同决定。
 
   - 深层循环神经网络
-  deepRNN，为了增强模型的表达能力，可以将每一个时刻上的循环体重复多次。和卷积神经网络类似，每一层的循环体中参数是一致的，而不同层中的参数可以不同。为了更好地支持深层循环，TTensorFlow中提供了MultiRNNCell类来实现深层循环神经网络的前向传播过程。
+  deepRNN，为了增强模型的表达能力，可以将每一个时刻上的循环体重复多次。和卷积神经网络类似，每一层的循环体中参数是一致的，而不同层中的参数可以不同。为了更好地支持深层循环，TensorFlow中提供了MultiRNNCell类来实现深层循环神经网络的前向传播过程。
   ```Python
   lstm=rnn_cell.BasicLSTMCell(lstm_size)
   stacked_lstm=rnn_cell.MultiRNNCell([lstm]*number_of_layers)
@@ -577,8 +577,8 @@ for i in range(num_steps):
   ```
 
 - dropout
-通过dropout，可以让神经网络更加健壮。卷积神经网络只在最后的全连接层使用dropout，循环神经网络一般只在不同层循环体结构之间使用dropout，而不在同一层的循环体结构之间使用。
-也就是说从时刻$t-1$传递到时刻$t$时，循环神经网络不会进行状态的dropout；而在同一个时刻$t$中，不同层循环体之间会使用dropout。
+通过dropout，可以让神经网络更加健壮。卷积神经网络只在最后的全连接层使用dropout，循环神经网络一般只在不同层循环体结构之间使用dropout，而不在同一层的循环体结构之间使用。
+也就是说从时刻$t-1$传递到时刻$t$时，循环神经网络不会进行状态的dropout；而在同一个时刻$t$中，不同层循环体之间会使用dropout。
 ```Python
 lstm=rnn_cell.BasicLSTMCell(lstm_size)
 dropout_lstm=tf.nn.rnn_cell.DropoutWrapper(lstm,out_keep_prob=0.5)
@@ -592,11 +592,11 @@ stacked_lstm=rnn_cell.MultiRNNCell([dropout_lstm]*number_of_layers)
 
 
 
-13.TensorBoard可视化
-TensorBoard与TensorFlow跑在不同的进程中，TensorBoard会自动读取最新的TensorFlow日志文件，并呈现当前的TensorFlow程序运行的最新状态，包括在运行过程中计算图、各种指标随着时间的变化趋势以及训练中使用的图像信息等。
+13.TensorBoard可视化
+TensorBoard与TensorFlow跑在不同的进程中，TensorBoard会自动读取最新的TensorFlow日志文件，并呈现当前的TensorFlow程序运行的最新状态，包括在运行过程中计算图、各种指标随着时间的变化趋势以及训练中使用的图像信息等。
 
 
-14.TensorFlow计算加速
+14.TensorFlow计算加速
 利用GPU或/和分布式计算进行模型训练。
 
 
