@@ -1,0 +1,21 @@
+---
+layout: post
+title:  "P&NP"
+date:   2017-08-11 10:32:28 +0800
+categories: [math]
+---
+
+* TOC
+{:toc}
+
+## 前言
+
+## 定义
+- **P问题**
+所有能用多项式时间算法计算得到结果的问题，称为多项式问题。即P，侧重多项式求解。
+
+- **NP问题**
+Non-deterministic Polynomial,NP问题
+可用一定数量的运算去解决多项式时间内可解决的问题。
+
+## 总结
