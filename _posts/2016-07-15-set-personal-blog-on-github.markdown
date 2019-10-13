@@ -18,7 +18,7 @@ github提供静态blog所需的一切，包括流量，空间，服务器托管�
 
 # 参考文档
 * [如何创建github规范的博客仓库](https://pages.github.com/)
-* [Windwos上安装ruby](http://jekyll-windows.juthilo.com/)
+* [Windows上安装ruby](http://jekyll-windows.juthilo.com/)
 * [手把手安装jekyll等依赖](https://help.github.com/articles/using-jekyll-with-pages/)
 * [快速搭建流程](http://playingfingers.com/2016/03/26/build-a-blog/)
 * [搜索和生成合适的icon](http://www.favicon.cc/)
