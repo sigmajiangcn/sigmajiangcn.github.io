@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "因子分解机FM与矩阵分解MF"
+title:  "Factorization Machines"
 date:   2018-03-01 10:31:28 +0800
 categories: [adRecommend]
 ---
@@ -19,21 +19,18 @@ categories: [adRecommend]
 $$ab+bc+ab=\dfrac{1}{2}[(a+b+c)^2-(a^2+b^2+c^2)]$$
 - 矩阵分解
 $$<x_i,x_j>,Cn2$$实对称矩阵
+
 ## 主要内容
+### FMs
+### wide&deep
+### deepFM
+### xdeepFM
+### DeepCross
+### DSSM
+### NFM
+### AFM
+### DIN
 
-
-
-
-
-## 攻略特征生成
-
-### 数据源准备
-
-#### 数据源
-
-
-
-## 待优化点
 
 ## 致谢
 
