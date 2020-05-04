@@ -6,14 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="ujianVerification" content="a37043dadd6e026d008e42f92eb1f47e" />
-  <title>分类</title>
-  <meta name="description" content="专注数学，机器学习和数据挖掘应用
-">
+  <title>多变量逻辑回归与竞争模型</title>
+  <meta name="description" content="">
 
 
   <link rel="shortcut icon" href="/favicon.ico?" type="image/x_icon"/>
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://sigmajiangcn.github.io/category/">
+  <link rel="canonical" href="http://sigmajiangcn.github.io/strategy/2018/04/13/strategy-multiLR&Competition.html">
   <link rel="alternate" type="application/rss+xml" title="进无止境" href="http://sigmajiangcn.github.io/feed.xml">
   
   <!--MathJax数学公式-->
@@ -68,103 +67,114 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <article class="post">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title">分类</h1>
+    <h1 class="post-title" itemprop="name headline">多变量逻辑回归与竞争模型</h1>
+    <p class="post-meta"><time datetime="2018-04-13T21:34:28+08:00" itemprop="datePublished">Apr 13, 2018</time></p>
   </header>
 
-  <div class="post-content">
-    
-<h3>jekyll(1)</h3>
-<ul class="arc-list">
-    
-        <li>03/07/2016 <a href="/jekyll/2016/07/03/welcome-to-jekyll.html">Welcome to Jekyll!</a></li>
-    
+  <div class="post-content" itemprop="articleBody">
+    <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">问题</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">总结</a></li>
 </ul>
 
-<h3>adRecommend(1)</h3>
-<ul class="arc-list">
-    
-        <li>05/08/2016 <a href="/adrecommend/2016/08/05/adrecommend-gamesadrecommend.html">攻略推荐流程简介</a></li>
-    
-</ul>
+<p>[TOC]</p>
 
-<h3>DeepLearning(1)</h3>
-<ul class="arc-list">
-    
-        <li>12/03/2017 <a href="/deeplearning/2017/03/12/DeepLearning-Caffe-install.html">深度学习之一:Caffe环境搭建</a></li>
-    
-</ul>
+<h2 id="section">问题</h2>
+<p>在品牌广告中，平台通常需要提供大量的剧目内容，例如电影、电视剧、综艺等。招商广告主在广告投放时希望指定若干，在同一个时期，可能会有多个剧目同时播放，在</p>
 
-<h3>math(3)</h3>
-<ul class="arc-list">
-    
-        <li>11/03/2018 <a href="/math/2018/03/11/math-convex-optimization.html">凸优化</a></li>
-    
-        <li>11/08/2017 <a href="/math/2017/08/11/math-The-concise-history-of-Statistics.html">统计学简史</a></li>
-    
-        <li>11/08/2017 <a href="/math/2017/08/11/math-P&amp;NP.html">P&amp;NP</a></li>
-    
-</ul>
+<p><a href="https://en.wikipedia.org/wiki/Multinomial_logistic_regression">Multinomial logistic regression</a>
+<a href="https://en.wikipedia.org/wiki/Multinomial_probit">Multinomial probit</a></p>
 
-<h3>timeseries(1)</h3>
-<ul class="arc-list">
-    
-        <li>11/11/2017 <a href="/timeseries/2017/11/11/timeseries-TimeSeriesAnalysis.html">时间序列分析</a></li>
-    
-</ul>
+<p>样例demo
+```Python
+#https://www.cnblogs.com/chenkuo/p/8087055.html
+import tensorflow as tf
+import numpy as np
+from numpy.random import RandomState
+batch_size = 8</p>
 
-<h3>Tools(5)</h3>
-<ul class="arc-list">
-    
-        <li>15/12/2017 <a href="/tools/2017/12/15/DataAnalysis-Spark.html">数据分析工具之五:Spark</a></li>
-    
-        <li>14/12/2017 <a href="/tools/2017/12/14/DataAnalysis-Pig.html">数据分析工具之四:Pig常用库</a></li>
-    
-        <li>13/12/2017 <a href="/tools/2017/12/13/DataAnalysis-R.html">数据分析工具之三:R常用库</a></li>
-    
-        <li>12/12/2017 <a href="/tools/2017/12/12/DataAnalysis-Python.html">数据分析工具之二:Python常用库</a></li>
-    
-        <li>11/12/2017 <a href="/tools/2017/12/11/DataAnalysis-Shell.html">数据分析工具之一:Shell常用命令</a></li>
-    
-</ul>
+<p>#假设是3维度，或者30，由样本特征维度决定
+xa = tf.placeholder(tf.float32, shape=(None, 3), name=”xa-input”)
+wa = tf.Variable(tf.random_normal([3, 1], stddev=1, seed=1))
+tempa=tf.exp(tf.matmul(xa,wa))</p>
 
-<h3>Future(1)</h3>
-<ul class="arc-list">
-    
-        <li>28/01/2018 <a href="/future/2018/01/28/Future-Blockchain.html">放眼未来之一:区块链</a></li>
-    
-</ul>
+<p>xb = tf.placeholder(tf.float32, shape=(None, 3), name=”xb-input”)
+wb = tf.Variable(tf.random_normal([3, 1], stddev=1, seed=1))
+tempb=tf.exp(tf.matmul(xb,wb))</p>
 
-<h3>lettcode(6)</h3>
-<ul class="arc-list">
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-6_ZigZagConversion.html">6_ZigZagConversion</a></li>
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-5_LongestPalindomicSubstring.html">5_Longest Palindomic Substring</a></li>
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-4_MedianofTwoSortedArrays.html">4_MedianofTwoSortedArrays</a></li>
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-3_LongestSubStringWithoutRepeatingCharacter.html">3_LongestSubStringWithoutRepeatingCharacter</a></li>
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-2_AddTwoNumbers.html">2_AddTwoNums</a></li>
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-1_TwoSum.html">1_TwoSum</a></li>
-    
-</ul>
+<p>ya=tempa/(1+tempa+tempb)
+yb=tempb/(1+tempa+tempb)</p>
 
-<h3>strategy(2)</h3>
-<ul class="arc-list">
-    
-        <li>13/04/2018 <a href="/strategy/2018/04/13/strategy-multiLR&amp;Competition.html">多变量逻辑回归与竞争模型</a></li>
-    
-        <li>13/04/2018 <a href="/strategy/2018/04/13/strategy-Explore&amp;Exploit.html">Explore&amp;Exploit</a></li>
-    
-</ul>
+<p>ya_ = tf.placeholder(tf.float32, shape=(None, 1), name=”ya-input”)
+yb_ = tf.placeholder(tf.float32, shape=(None, 1), name=”yb-input”)</p>
 
+<p>loss=tf.reduce_sum(-ya_<em>tf.log(ya)-yb_</em>tf.log(yb))
+train_step = tf.train.AdamOptimizer(0.001).minimize(loss)</p>
+
+<p>#通过随机数生成一个模拟数据集
+rdma = RandomState(10)
+rdmb = RandomState(20)
+dataset_size = 128
+Xa = rdma.rand(dataset_size, 3)
+Xb = rdmb.rand(dataset_size, 3)</p>
+
+<p>Ya_temp = [[x1 + 5<em>x2+ 2</em>x3 + rdma.rand()/10.0-0.05] for (x1, x2,x3) in Xa]
+Yb_temp = [[2<em>x1 + 1</em>x2+ 3*x3 + rdmb.rand()/10.0-0.05] for (x1, x2,x3) in Xb]</p>
+
+<p>#tensor can not be used in feed_dict
+Ya=np.divide(np.exp(Ya_temp),1+np.exp(Ya_temp)+np.exp(Yb_temp))
+Yb=np.divide(np.exp(Yb_temp),1+np.exp(Ya_temp)+np.exp(Yb_temp))</p>
+
+<p>with tf.Session() as sess:
+	init = tf.global_variables_initializer()
+	sess.run(init)
+	steps = 50000
+	for i in range(steps):
+		start = (i * batch_size) % dataset_size
+		end = min(start + batch_size, dataset_size)
+		sess.run(train_step, feed_dict={xa:Xa[start:end], ya_:Ya[start:end],xb:Xb[start:end], yb_:Yb[start:end]})
+		if i%1000==0:
+			res=(sess.run(loss, feed_dict={xa:Xa[start:end], ya_:Ya[start:end],xb:Xb[start:end], yb_:Yb[start:end]}))
+			print(i,res)</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print(sess.run([wa,wb]))
+</code></pre>
+</div>
+
+<p>’’’
+48000 3.7348
+49000 2.38889
+[array([[ 1.32607698],
+       [ 5.57283545],
+       [ 2.3874886 ]], dtype=float32), array([[ 2.38537025],
+       [ 1.29027772],
+       [ 3.43826056]], dtype=float32)]
+‘’’
+```</p>
+
+<h2 id="section-1">总结</h2>
 
   </div>
+
+  <!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2094661"></script>
+<!-- UY END -->
+  <!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2094661" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  <!-- UJian Button BEGIN -->
+<div class="ujian-hook"></div>
+<script type="text/javascript">var ujian_config = {num:8,showType:3};</script>
+<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?uid=2094661"></script>
+
+<!-- UJian Button END -->
 
 </article>
 

@@ -6,14 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="ujianVerification" content="a37043dadd6e026d008e42f92eb1f47e" />
-  <title>分类</title>
-  <meta name="description" content="专注数学，机器学习和数据挖掘应用
-">
+  <title>2_AddTwoNums</title>
+  <meta name="description" content="">
 
 
   <link rel="shortcut icon" href="/favicon.ico?" type="image/x_icon"/>
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://sigmajiangcn.github.io/category/">
+  <link rel="canonical" href="http://sigmajiangcn.github.io/lettcode/2018/04/13/lettcode-2_AddTwoNumbers.html">
   <link rel="alternate" type="application/rss+xml" title="进无止境" href="http://sigmajiangcn.github.io/feed.xml">
   
   <!--MathJax数学公式-->
@@ -68,103 +67,124 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <article class="post">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title">分类</h1>
+    <h1 class="post-title" itemprop="name headline">2_AddTwoNums</h1>
+    <p class="post-meta"><time datetime="2018-04-13T23:22:28+08:00" itemprop="datePublished">Apr 13, 2018</time></p>
   </header>
 
-  <div class="post-content">
-    
-<h3>jekyll(1)</h3>
-<ul class="arc-list">
-    
-        <li>03/07/2016 <a href="/jekyll/2016/07/03/welcome-to-jekyll.html">Welcome to Jekyll!</a></li>
-    
+  <div class="post-content" itemprop="articleBody">
+    <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">问题</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">思路分析</a></li>
+  <li><a href="#section-2" id="markdown-toc-section-2">实际代码</a></li>
 </ul>
 
-<h3>adRecommend(1)</h3>
-<ul class="arc-list">
-    
-        <li>05/08/2016 <a href="/adrecommend/2016/08/05/adrecommend-gamesadrecommend.html">攻略推荐流程简介</a></li>
-    
-</ul>
+<p>[TOC]</p>
 
-<h3>DeepLearning(1)</h3>
-<ul class="arc-list">
-    
-        <li>12/03/2017 <a href="/deeplearning/2017/03/12/DeepLearning-Caffe-install.html">深度学习之一:Caffe环境搭建</a></li>
-    
-</ul>
+<h2 id="section">问题</h2>
+<p><a href="https://leetcode.com/problems/add-two-numbers/description//">两个非负非空单链表表示的逆序整数之和</a></p>
 
-<h3>math(3)</h3>
-<ul class="arc-list">
-    
-        <li>11/03/2018 <a href="/math/2018/03/11/math-convex-optimization.html">凸优化</a></li>
-    
-        <li>11/08/2017 <a href="/math/2017/08/11/math-The-concise-history-of-Statistics.html">统计学简史</a></li>
-    
-        <li>11/08/2017 <a href="/math/2017/08/11/math-P&amp;NP.html">P&amp;NP</a></li>
-    
-</ul>
+<p>You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.</p>
 
-<h3>timeseries(1)</h3>
-<ul class="arc-list">
-    
-        <li>11/11/2017 <a href="/timeseries/2017/11/11/timeseries-TimeSeriesAnalysis.html">时间序列分析</a></li>
-    
-</ul>
+<p>You may assume the two numbers do not contain any leading zero, except the number 0 itself.</p>
 
-<h3>Tools(5)</h3>
-<ul class="arc-list">
-    
-        <li>15/12/2017 <a href="/tools/2017/12/15/DataAnalysis-Spark.html">数据分析工具之五:Spark</a></li>
-    
-        <li>14/12/2017 <a href="/tools/2017/12/14/DataAnalysis-Pig.html">数据分析工具之四:Pig常用库</a></li>
-    
-        <li>13/12/2017 <a href="/tools/2017/12/13/DataAnalysis-R.html">数据分析工具之三:R常用库</a></li>
-    
-        <li>12/12/2017 <a href="/tools/2017/12/12/DataAnalysis-Python.html">数据分析工具之二:Python常用库</a></li>
-    
-        <li>11/12/2017 <a href="/tools/2017/12/11/DataAnalysis-Shell.html">数据分析工具之一:Shell常用命令</a></li>
-    
-</ul>
+<p>Examples：
+<code class="highlighter-rouge">python
+Input: (2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
+Output: 7 -&gt; 0 -&gt; 8
+Explanation: 342 + 465 = 807.
+</code></p>
 
-<h3>Future(1)</h3>
-<ul class="arc-list">
-    
-        <li>28/01/2018 <a href="/future/2018/01/28/Future-Blockchain.html">放眼未来之一:区块链</a></li>
-    
-</ul>
+<h2 id="section-1">思路分析</h2>
+<p>两个逆序整数链表求和，逆序链表的head是整数的低位，而两个整数相加本身就应该从低位相加。需要注意的是最后有可能有进位1.并且在初始化链表的表头以及最后返回时需要去掉表头。
+从lettcode的耗时看，当前解法python耗时很高。后面需要继续优化。</p>
 
-<h3>lettcode(6)</h3>
-<ul class="arc-list">
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-6_ZigZagConversion.html">6_ZigZagConversion</a></li>
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-5_LongestPalindomicSubstring.html">5_Longest Palindomic Substring</a></li>
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-4_MedianofTwoSortedArrays.html">4_MedianofTwoSortedArrays</a></li>
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-3_LongestSubStringWithoutRepeatingCharacter.html">3_LongestSubStringWithoutRepeatingCharacter</a></li>
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-2_AddTwoNumbers.html">2_AddTwoNums</a></li>
-    
-        <li>13/04/2018 <a href="/lettcode/2018/04/13/lettcode-1_TwoSum.html">1_TwoSum</a></li>
-    
-</ul>
+<h2 id="section-2">实际代码</h2>
+<p>Python
+```python
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def <strong>init</strong>(self, x):
+#         self.val = x
+#         self.next = None</p>
 
-<h3>strategy(2)</h3>
-<ul class="arc-list">
-    
-        <li>13/04/2018 <a href="/strategy/2018/04/13/strategy-multiLR&amp;Competition.html">多变量逻辑回归与竞争模型</a></li>
-    
-        <li>13/04/2018 <a href="/strategy/2018/04/13/strategy-Explore&amp;Exploit.html">Explore&amp;Exploit</a></li>
-    
-</ul>
+<p>class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        “””
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        “””
+        if(not l1):
+            return l2
+        if(not l2):
+            return l1
+        res=ListNode(0)
+        head=res
+        carry=0
+        while(l1 or l2):
+            sum=(l1.val if l1 else 0) +(l2.val if l2 else 0)+carry
+            node=ListNode(sum%10)
+            carry=sum/10
+            res.next=node
+            res=res.next
+            if l1:
+                l1=l1.next
+            if l2:
+                l2=l2.next
+        if carry:
+            res.next=ListNode(1)</p>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>    head=head.next
+    return head ```
+</code></pre>
+</div>
+
+<p>C++
+```code</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+JAVA
+```code
+
+</code></pre>
+</div>
+
+<p>GO
+```code</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+SCALA
+```code
+
+</code></pre>
+</div>
+<p>## 思路拓展
+1.如果是两个逆序整数相乘法？
+## 总结
+表面是逆序整数相加的问题，实际上就是正常的两个数从低位相加的过程。</p>
 
   </div>
+
+  <!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2094661"></script>
+<!-- UY END -->
+  <!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;uid=2094661" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  <!-- UJian Button BEGIN -->
+<div class="ujian-hook"></div>
+<script type="text/javascript">var ujian_config = {num:8,showType:3};</script>
+<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?uid=2094661"></script>
+
+<!-- UJian Button END -->
 
 </article>
 
